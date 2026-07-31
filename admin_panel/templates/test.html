@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}
+        Admin Dashboard
+        {% endblock %}
+    </title>
+
+    <link rel="icon" href="{% static 'images/favicon.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+
+
+    {% block extra_css %}{% endblock %}
+
+</head>
+
+
+<body class="min-h-screen bg-slate-100 flex flex-col">
+
+
+{% block body %}
+
+{% endblock %}
+
+
+{% block extra_js %}{% endblock %}
+
+
+</body>
+
+
+</html>

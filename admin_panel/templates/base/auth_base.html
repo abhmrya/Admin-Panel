@@ -1,0 +1,134 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+
+{% block body %}
+
+
+<div class="bg-slate-100 min-h-screen flex flex-col">
+
+
+    <!-- Navbar -->
+
+    <nav class="bg-indigo-900 text-white px-6 py-3 flex items-center justify-between shadow">
+
+
+        <a href="/" class="flex items-center gap-2 font-bold text-lg">
+
+
+            <span class="bg-indigo-600 w-7 h-7 rounded flex items-center justify-center text-sm">
+                🏢
+            </span>
+
+
+            Admin Panel
+
+
+        </a>
+
+
+
+        <span 
+        id="ipBadge"
+        class="text-xs bg-white/10 px-3 py-1 rounded-full font-mono text-indigo-200">
+
+            IP: --
+
+        </span>
+
+
+    </nav>
+
+
+
+
+
+    <!-- Alert -->
+
+    <div 
+    id="alertBox"
+    class="max-w-md w-full mx-auto mt-4 px-4 hidden">
+
+
+        <div 
+        id="alertInner"
+        class="rounded-md border px-4 py-3 text-sm flex items-start justify-between gap-3">
+
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+    <!-- Page Content -->
+
+    <main class="flex-1 flex items-center justify-center px-4 py-10">
+
+
+        {% block content %}
+
+
+        {% endblock %}
+
+
+    </main>
+
+
+
+
+
+
+    <!-- Footer -->
+
+    <footer class="bg-indigo-950 text-indigo-200 text-center text-xs py-4">
+
+
+        © {% now "Y" %} Admin Dashboard. All rights reserved.
+
+
+    </footer>
+
+
+
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+
+
+<script>
+
+
+document.getElementById("year")?.textContent = new Date().getFullYear();
+
+
+
+fetch("https://api.ipify.org?format=json")
+
+.then(response => response.json())
+
+.then(data => {
+
+document.getElementById("ipBadge").textContent = "IP: " + data.ip;
+
+})
+
+.catch(()=>{});
+
+
+
+</script>
+
+
+{% endblock %}

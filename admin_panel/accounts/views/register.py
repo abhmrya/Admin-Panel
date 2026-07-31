@@ -5,25 +5,34 @@ from rest_framework.views import APIView
 
 from accounts.serializers import RegisterSerializer
 from accounts.services.register import RegisterService
+from accounts.services.email import EmailService
 
 
 class RegisterAPIView(APIView):
 
     permission_classes = [AllowAny]
 
+
     def post(self, request):
 
         serializer = RegisterSerializer(
-            data=request.data,
+            data=request.data
         )
 
         serializer.is_valid(
-            raise_exception=True,
+            raise_exception=True
         )
 
+
         user = RegisterService.register(
-            serializer.validated_data,
+            serializer.validated_data
         )
+
+
+        EmailService.send_registration_email(
+            user
+        )
+
 
         return Response(
             {
@@ -33,7 +42,6 @@ class RegisterAPIView(APIView):
                     "email": user.email,
                     "username": user.username,
                     "first_name": user.first_name,
-                    "last_name": user.last_name,
                     "role": user.role,
                 },
             },
