@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from accounts.serializers import RegisterSerializer
 from accounts.services.register import RegisterService
 from accounts.services.email import EmailService
-
+from accounts.tasks import send_registration_email_task
 
 class RegisterAPIView(APIView):
 
@@ -29,9 +29,7 @@ class RegisterAPIView(APIView):
         )
 
 
-        EmailService.send_registration_email(
-            user
-        )
+        send_registration_email_task.delay(user.id,)
 
 
         return Response(

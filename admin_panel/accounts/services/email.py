@@ -13,21 +13,20 @@ class EmailService:
 
 
         message=f"""
-Hello {user.first_name},
+                    Hello {user.first_name},
 
-Your account has been created successfully.
+                    Your account has been created successfully.
 
-Username:
-{user.username}
+                    Username:
+                    {user.username}
 
-Email:
-{user.email}
+                    Email:
+                    {user.email}
 
 
-Thank you.
-Admin Panel Team
-"""
-
+                    Thank you.
+                    Admin Panel Team
+                    """
 
         send_mail(
 
