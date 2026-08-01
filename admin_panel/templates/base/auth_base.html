@@ -1,0 +1,33 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="min-h-screen flex flex-col bg-slate-100">
+
+    {% include "base/auth/navbar.html" %}
+
+    {% include "base/alert.html" %}
+
+    <main class="flex-1 flex items-center justify-center px-4 py-10">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    {% include "base/auth/footer.html" %}
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/core/config.js' %}"></script>
+<script src="{% static 'js/core/storage.js' %}"></script>
+<script src="{% static 'js/core/auth.js' %}"></script>
+<script src="{% static 'js/core/api.js' %}"></script>
+<script src="{% static 'js/core/alerts.js' %}"></script>
+<script src="{% static 'js/core/guard.js' %}"></script>
+
+<script src="{% static 'js/services/auth.service.js' %}"></script>
+{% endblock %}

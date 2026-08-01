@@ -1,0 +1,19 @@
+{
+  "name": "admin_panel",
+  "version": "1.0.0",
+  "description": "Admin Panel using Django, DRF and Tailwind CSS",
+  "private": true,
+  "license": "ISC",
+  "scripts": {
+    "build-css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css",
+    "watch-css": "tailwindcss -i ./static/css/input.css -o ./static/css/output.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1"
+  }
+}

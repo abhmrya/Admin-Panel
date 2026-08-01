@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Admin Dashboard{% endblock %}</title>
+  <link rel="icon" href="{% static 'images/favicon.png' %}">
+  <style>
+    :root {
+      --navy: #1a237e;
+      --navy-dark: #12185a;
+      --accent: #3949ab;
+      --bg: #f5f6fb;
+      --border: #e0e0e0;
+      --text: #1f2430;
+      --muted: #6b7280;
+      --danger-bg: #fdecea;
+      --danger-border: #f5c6cb;
+      --danger-text: #b3261e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- NAVBAR ---------- */
+    .navbar {
+      background: var(--navy);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+      color: #fff;
+    }
+    .navbar-brand .logo-box {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .navbar-ip {
+      font-size: 11px;
+      color: #c5cae9;
+      background: rgba(255,255,255,0.08);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-family: 'Consolas', monospace;
+    }
+    .navbar-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      position: relative;
+      padding: 4px 8px;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .navbar-user:hover { background: rgba(255,255,255,0.08); }
+    .navbar-user img.avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+    .navbar-user .avatar-fallback {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px;
+      border: 2px solid rgba(255,255,255,0.4);
+    }
+    .navbar-user-info { display: flex; flex-direction: column; line-height: 1.3; }
+    .navbar-user-info .name { font-size: 13px; font-weight: 600; }
+    .navbar-user-info .email { font-size: 11px; color: #c5cae9; }
+
+    /* Dropdown */
+    .user-dropdown {
+      position: absolute;
+      top: 46px; right: 0;
+      background: #fff;
+      color: var(--text);
+      min-width: 220px;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      display: none;
+      overflow: hidden;
+      z-index: 200;
+    }
+    .navbar-user.open .user-dropdown { display: block; }
+    .user-dropdown .dd-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .user-dropdown .dd-header .name { font-size: 13px; font-weight: 700; }
+    .user-dropdown .dd-header .email { font-size: 11.5px; color: var(--muted); }
+    .user-dropdown .dd-header .ip { font-size: 10.5px; color: var(--muted); margin-top: 4px; font-family: 'Consolas', monospace; }
+    .user-dropdown a {
+      display: block;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .user-dropdown a:hover { background: var(--bg); }
+    .user-dropdown a.logout { color: var(--danger-text); }
+
+    /* ---------- ERROR / MESSAGES (just below navbar) ---------- */
+    .alert-container {
+      max-width: 1200px;
+      margin: 14px auto 0 auto;
+      padding: 0 24px;
+      width: 100%;
+    }
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--danger-text);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .alert.alert-success { background: #e8f5e9; border-color: #c8e6c9; color: #2e7d32; }
+    .alert.alert-warning { background: #fff8e1; border-color: #ffe082; color: #8a6d00; }
+    .alert ul { margin: 0; padding-left: 18px; }
+    .alert .close-btn {
+      background: none; border: none; cursor: pointer;
+      font-size: 15px; line-height: 1; color: inherit; opacity: 0.6;
+    }
+    .alert .close-btn:hover { opacity: 1; }
+
+    /* ---------- MAIN ---------- */
+    main {
+      flex: 1;
+      max-width: 1200px;
+      width: 100%;
+      margin: 20px auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      background: var(--navy-dark);
+      color: #c5cae9;
+      text-align: center;
+      font-size: 12px;
+      padding: 16px 24px;
+      margin-top: auto;
+    }
+    footer a { color: #90a4ff; text-decoration: none; }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <nav class="navbar">
+    <a href="{% url 'dashboard:home' %}" class="navbar-brand">
+      <span class="logo-box">🏢</span> Admin Dashboard
+    </a>
+
+    <div class="navbar-right">
+      <!-- IP Address -->
+      <span class="navbar-ip" title="Aapka current IP address">
+        IP: {{ client_ip|default:"Unknown" }}
+      </span>
+
+      {% if user.is_authenticated %}
+      <div class="navbar-user" onclick="this.classList.toggle('open')">
+        {% if user.profile.avatar %}
+          <img class="avatar" src="{{ user.profile.avatar.url }}" alt="{{ user.username }}">
+        {% else %}
+          <div class="avatar-fallback">{{ user.username|slice:":1"|upper }}</div>
+        {% endif %}
+
+        <div class="navbar-user-info">
+          <span class="name">{{ user.username }}</span>
+          <span class="email">{{ user.email }}</span>
+        </div>
+
+        <!-- Dropdown -->
+        <div class="user-dropdown">
+          <div class="dd-header">
+            <div class="name">{{ user.username }}</div>
+            <div class="email">{{ user.email }}</div>
+            <div class="ip">Logged in from: {{ client_ip|default:"Unknown" }}</div>
+          </div>
+          <a href="{% url 'accounts:profile' %}">👤 My Profile</a>
+          <a href="{% url 'accounts:settings' %}">⚙️ Settings</a>
+          <a href="{% url 'accounts:logout' %}" class="logout">🚪 Logout</a>
+        </div>
+      </div>
+      {% else %}
+        <a href="{% url 'accounts:login' %}" style="color:#fff; font-size:13px; text-decoration:none;">Login</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- ============ ERROR / MESSAGES — right below navbar ============ -->
+  <div class="alert-container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+          <span>{{ message }}</span>
+          <button class="close-btn" onclick="this.parentElement.remove()">✕</button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {# Form-level field errors — username / email / password (e.g. login or register form) #}
+    {% if form %}
+      {% if form.non_field_errors %}
+        <div class="alert">
+          <ul>
+            {% for error in form.non_field_errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+          <button class="close-btn" onclick="this.parentElement.remove()">✕</button>
+        </div>
+      {% endif %}
+
+      {% for field in form %}
+        {% if field.errors %}
+          <div class="alert">
+            <span><strong>{{ field.label }}:</strong> {{ field.errors|striptags }}</span>
+            <button class="close-btn" onclick="this.parentElement.remove()">✕</button>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- ============ MAIN CONTENT ============ -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    &copy; {% now "Y" %} Admin Dashboard. All rights reserved. |
+    <a href="{% url 'dashboard:privacy' %}">Privacy</a> ·
+    <a href="{% url 'dashboard:terms' %}">Terms</a> ·
+    <a href="{% url 'dashboard:support' %}">Support</a>
+  </footer>
+
+  <script>
+    // Dropdown ke bahar click karne pe close ho jaaye
+    document.addEventListener("click", function (e) {
+      const userMenu = document.querySelector(".navbar-user");
+      if (userMenu && !userMenu.contains(e.target)) {
+        userMenu.classList.remove("open");
+      }
+    });
+  </script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

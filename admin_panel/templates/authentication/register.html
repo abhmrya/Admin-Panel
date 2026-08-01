@@ -1,0 +1,230 @@
+{% extends "base/auth_base.html" %}
+{% load static %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<div class="w-full max-w-lg">
+
+    <div class="rounded-2xl border border-slate-200 bg-white shadow-xl p-8">
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+
+            <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100">
+                <span class="text-3xl">👤</span>
+            </div>
+
+            <h1 class="text-3xl font-bold text-slate-800">
+                Create Account
+            </h1>
+
+            <p class="mt-2 text-sm text-slate-500">
+                Register to access the Admin Dashboard.
+            </p>
+
+        </div>
+
+        <form id="registerForm" class="space-y-5" novalidate>
+
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div>
+
+                <label
+                    for="username"
+                    class="mb-2 block text-sm font-medium text-slate-700"
+                >
+                    Username
+                </label>
+
+                <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    autocomplete="username"
+                    placeholder="Enter username"
+                    class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                >
+
+                <p
+                    class="field-error hidden mt-1 text-sm text-red-600"
+                    data-field="username"
+                ></p>
+
+            </div>
+
+            <!-- Name -->
+            <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+
+                <div>
+
+                    <label
+                        for="first_name"
+                        class="mb-2 block text-sm font-medium text-slate-700"
+                    >
+                        First Name
+                    </label>
+
+                    <input
+                        id="first_name"
+                        name="first_name"
+                        type="text"
+                        autocomplete="given-name"
+                        placeholder="First name"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                    >
+
+                    <p
+                        class="field-error hidden mt-1 text-sm text-red-600"
+                        data-field="first_name"
+                    ></p>
+
+                </div>
+
+                <div>
+
+                    <label
+                        for="last_name"
+                        class="mb-2 block text-sm font-medium text-slate-700"
+                    >
+                        Last Name
+                    </label>
+
+                    <input
+                        id="last_name"
+                        name="last_name"
+                        type="text"
+                        autocomplete="family-name"
+                        placeholder="Last name"
+                        class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                    >
+
+                    <p
+                        class="field-error hidden mt-1 text-sm text-red-600"
+                        data-field="last_name"
+                    ></p>
+
+                </div>
+
+            </div>
+
+            <!-- Email -->
+            <div>
+
+                <label
+                    for="email"
+                    class="mb-2 block text-sm font-medium text-slate-700"
+                >
+                    Email Address
+                </label>
+
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="john@example.com"
+                    class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                >
+
+                <p
+                    class="field-error hidden mt-1 text-sm text-red-600"
+                    data-field="email"
+                ></p>
+
+            </div>
+
+            <!-- Password -->
+            <div>
+
+                <label
+                    for="password"
+                    class="mb-2 block text-sm font-medium text-slate-700"
+                >
+                    Password
+                </label>
+
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Create password"
+                    class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                >
+
+                <p
+                    class="field-error hidden mt-1 text-sm text-red-600"
+                    data-field="password"
+                ></p>
+
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+
+                <label
+                    for="confirm_password"
+                    class="mb-2 block text-sm font-medium text-slate-700"
+                >
+                    Confirm Password
+                </label>
+
+                <input
+                    id="confirm_password"
+                    name="confirm_password"
+                    type="password"
+                    autocomplete="new-password"
+                    placeholder="Confirm password"
+                    class="w-full rounded-lg border border-slate-300 px-4 py-3 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 outline-none"
+                >
+
+                <p
+                    class="field-error hidden mt-1 text-sm text-red-600"
+                    data-field="confirm_password"
+                ></p>
+
+            </div>
+
+            <!-- Submit -->
+            <button
+                id="submitBtn"
+                type="submit"
+                class="w-full rounded-lg bg-indigo-600 py-3 font-semibold text-white transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+                Create Account
+            </button>
+
+        </form>
+
+        <p class="mt-8 text-center text-sm text-slate-600">
+
+            Already have an account?
+
+            <a
+                href="{% url 'accounts:login' %}"
+                class="font-semibold text-indigo-600 hover:underline"
+            >
+                Login
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+{{ block.super }}
+
+<script src="{% static 'js/core/auth.js' %}"></script>
+<script src="{% static 'js/services/auth.service.js' %}"></script>
+<script src="{% static 'js/pages/register.js' %}"></script>
+
+{% endblock %}
