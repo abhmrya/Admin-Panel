@@ -1,137 +1,43 @@
 {% extends "base/base.html" %}
+{% load static %}
 
+{% block page_title %}Dashboard{% endblock %}
 
 {% block body %}
 
+<div class="flex h-screen overflow-hidden bg-gray-50">
 
-<div class="min-h-screen flex bg-slate-100">
+    {% include "base/navbar.html" %}
 
+    {% include "base/sidebar.html" %}
 
-    <!-- Sidebar -->
+    <!-- Main content -->
+    <main class="flex-1 pt-16 lg:ml-64 overflow-y-auto flex flex-col">
 
-    <aside class="w-64 bg-indigo-900 text-white min-h-screen">
-
-
-        <div class="px-6 py-5 text-xl font-bold border-b border-indigo-800">
-
-            🏢 Admin Panel
-
+        <div class="flex-1 p-6">
+            {% block content %}
+            {% endblock %}
         </div>
 
-
-
-        <nav class="mt-5 px-3 space-y-2">
-
-
-            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-indigo-700">
-
-                Dashboard
-
-            </a>
-
-
-            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-indigo-700">
-
-                Users
-
-            </a>
-
-
-            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-indigo-700">
-
-                Roles
-
-            </a>
-
-
-            <a href="#" class="block px-4 py-2 rounded-lg hover:bg-indigo-700">
-
-                Settings
-
-            </a>
-
-
-        </nav>
-
-
-    </aside>
-
-
-
-
-
-    <!-- Right Section -->
-
-
-    <div class="flex-1 flex flex-col">
-
-
-
-        <!-- Top Navbar -->
-
-
-        <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
-
-
-            <h1 class="text-xl font-semibold text-slate-800">
-
-                {% block page_title %}
-
-                Dashboard
-
-                {% endblock %}
-
-            </h1>
-
-
-
-            <div class="flex items-center gap-3">
-
-
-                <span class="text-sm text-slate-600">
-
-                    Admin
-
-                </span>
-
-
-                <div class="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
-
-                    A
-
-                </div>
-
-
-            </div>
-
-
-        </header>
-
-
-
-
-
-        <!-- Page Content -->
-
-
-        <main class="flex-1 p-6">
-
-
-            {% block content %}
-
-
-            {% endblock %}
-
-
-        </main>
-
-
-
-    </div>
-
-
+        {% include "base/footer.html" %}
+    </main>
 
 </div>
 
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'js/core/config.js' %}"></script>
+<script src="{% static 'js/core/storage.js' %}"></script>
+<script src="{% static 'js/core/auth.js' %}"></script>
+<script src="{% static 'js/core/api.js' %}"></script>
+<script src="{% static 'js/core/guard.js' %}"></script>
+
+<script src="{% static 'js/services/auth.service.js' %}"></script>
+<script src="{% static 'js/services/user.service.js' %}"></script>
+
+<script src="{% static 'js/dashboard/dashboard_base.js' %}"></script>
 
 {% endblock %}

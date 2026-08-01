@@ -20,11 +20,16 @@ from django.shortcuts import render
 
 
 urlpatterns = [
-
+    
+    #Admin
     path('admin/', admin.site.urls),
 
-    # path("",lambda request: render(request,"test.html",)),
+    # API Version 1
     path("api/v1/auth/",include("accounts.urls")),
-    path("",include("accounts.web_urls")),
-    
+    path("api/v1/dashboard/",include("dashboard.api_urls")),   
+
+    # Web Pages
+    path("", include(("accounts.web_urls", "accounts"), namespace="accounts")), 
+    path("dashboard/",include(("dashboard.web_urls", "dashboard"),namespace="dashboard")),
+
 ]

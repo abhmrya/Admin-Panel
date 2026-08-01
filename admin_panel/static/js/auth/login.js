@@ -1,86 +1,110 @@
-const API_BASE="/api/v1/auth";
+/**
+ * login.js
+ * Handles the login form on the login page.
+ * Depends on: core/config.js, core/storage.js, core/auth.js, core/api.js, services/auth.service.js
+ */
 
-function showAlert(message,type="error"){
-    const box=document.getElementById("alertBox");
-    const inner=document.getElementById("alertInner");
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("loginForm");
+    if (!form) return;
 
-    const styles={
-        error:"bg-red-50 border-red-200 text-red-700",
-        success:"bg-green-50 border-green-200 text-green-700",
-    };
+    const submitBtn = document.getElementById("submitBtn");
 
-    inner.className="rounded-md border px-4 py-3 text-sm flex items-start justify-between gap-3 "+styles[type];
-    inner.innerHTML=`<span>${message}</span><button onclick="document.getElementById('alertBox').classList.add('hidden')" class="opacity-60 hover:opacity-100">✕</button>`;
-    box.classList.remove("hidden");
-}
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-function clearFieldErrors(){
-    document.querySelectorAll(".field-error").forEach(el=>{
-        el.classList.add("hidden");
-        el.textContent="";
-    });
-}
+        clearErrors();
 
-document.getElementById("loginForm").addEventListener("submit",async(e)=>{
-    e.preventDefault();
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
 
-    clearFieldErrors();
-    document.getElementById("alertBox").classList.add("hidden");
+        setLoading(true);
 
-    const submitBtn=document.getElementById("submitBtn");
-    submitBtn.disabled=true;
-    submitBtn.textContent="Logging in...";
+        try {
+            const data = await AuthService.login(email, password);
 
-    const payload={
-        email:document.getElementById("email").value.trim(),
-        password:document.getElementById("password").value,
-    };
-
-    try{
-        const res=await fetch(`${API_BASE}/login/`,{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify(payload),
-        });
-
-        const data=await res.json();
-
-        if(!res.ok){
-            let shownFieldError=false;
-
-            Object.keys(data).forEach(field=>{
-                const el=document.querySelector(`.field-error[data-field="${field}"]`);
-
-                if(el){
-                    el.textContent=Array.isArray(data[field])?data[field][0]:data[field];
-                    el.classList.remove("hidden");
-                    shownFieldError=true;
-                }
-            });
-
-            if(!shownFieldError){
-                showAlert(data.detail||"Email ya password galat hai.");
+            if (data) {
+                window.location.href = window.APP_CONFIG.ROUTES.DASHBOARD;
             }
-
-            return;
+        } catch (error) {
+            handleFormError(error);
+        } finally {
+            setLoading(false);
         }
+    });
 
-        localStorage.setItem("access_token",data.tokens.access);
-        localStorage.setItem("refresh_token",data.tokens.refresh);
-        localStorage.setItem("user",JSON.stringify(data.user));
-
-        showAlert("Login successful!","success");
-
-        setTimeout(()=>{
-            window.location.href="/dashboard/";
-        },800);
-
-    }catch(error){
-        showAlert("Server se connect nahi ho paya. Baad me try karo.");
-    }finally{
-        submitBtn.disabled=false;
-        submitBtn.textContent="Login";
+    function setLoading(isLoading) {
+        if (!submitBtn) return;
+        submitBtn.disabled = isLoading;
+        submitBtn.textContent = isLoading ? "Logging in..." : "Login";
     }
 });
+
+/* ---------------------------------- */
+/* Shared error-rendering helpers      */
+/* ---------------------------------- */
+function clearErrors() {
+    document.querySelectorAll(".field-error").forEach((el) => {
+        el.textContent = "";
+        el.classList.add("hidden");
+    });
+    hideAlert();
+}
+
+function showFieldError(fieldName, message) {
+    const el = document.querySelector(`.field-error[data-field="${fieldName}"]`);
+    if (el) {
+        el.textContent = message;
+        el.classList.remove("hidden");
+    } else {
+        showAlert(message);
+    }
+}
+
+function showAlert(message, type = "error") {
+    const alertBox = document.getElementById("alertBox");
+    const alertInner = document.getElementById("alertInner");
+    if (!alertBox || !alertInner) return;
+
+    const styles = {
+        error: "bg-red-50 border-red-200 text-red-700",
+        success: "bg-emerald-50 border-emerald-200 text-emerald-700",
+    };
+
+    alertInner.className =
+        "rounded-md border px-4 py-3 text-sm flex items-start justify-between gap-3 " +
+        (styles[type] || styles.error);
+    alertInner.textContent = message;
+    alertBox.classList.remove("hidden");
+}
+
+function hideAlert() {
+    const alertBox = document.getElementById("alertBox");
+    if (alertBox) alertBox.classList.add("hidden");
+}
+
+function handleFormError(error) {
+    const data = error && error.data;
+
+    if (!data || typeof data !== "object") {
+        showAlert((error && error.message) || "Something went wrong. Please try again.");
+        return;
+    }
+
+    let shownFieldError = false;
+
+    Object.entries(data).forEach(([field, messages]) => {
+        const message = Array.isArray(messages) ? messages[0] : messages;
+
+        if (field === "non_field_errors" || field === "detail") {
+            showAlert(message);
+        } else {
+            showFieldError(field, message);
+            shownFieldError = true;
+        }
+    });
+
+    if (!shownFieldError && !data.non_field_errors && !data.detail) {
+        showAlert("Invalid credentials. Please check your email and password.");
+    }
+}

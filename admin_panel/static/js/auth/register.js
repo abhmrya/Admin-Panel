@@ -1,3 +1,5 @@
+await Guard.guest();
+
 const API_BASE="/api/v1/auth";
 
 

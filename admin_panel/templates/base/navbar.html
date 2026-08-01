@@ -1,0 +1,113 @@
+{% load static %}
+
+<header class="fixed top-0 left-0 right-0 z-40 h-16 bg-white border-b border-gray-300 flex items-center px-4 shadow-sm">
+
+    <!-- Sidebar toggle (mobile) -->
+    <button
+        id="sidebarToggle"
+        type="button"
+        aria-label="Toggle sidebar"
+        aria-controls="sidebar"
+        aria-expanded="false"
+        class="lg:hidden p-2 rounded-lg hover:bg-gray-100 text-gray-600"
+    >
+        ☰
+    </button>
+
+    <!-- Logo + Title -->
+    <a href="{% url 'dashboard:index' %}" class="flex items-center gap-2 ml-3">
+        <img src="{% static 'img/logo.svg' %}" alt="Application logo" class="h-8 w-8">
+        <span class="font-bold text-gray-800 hidden sm:block">Admin Panel</span>
+    </a>
+
+    <!-- Desktop search box -->
+    <div class="flex-1 px-4 hidden lg:flex justify-center">
+        <div class="relative w-full max-w-md">
+            <label for="dashboardSearch" class="sr-only">Search</label>
+            <input
+                id="dashboardSearch"
+                type="search"
+                name="search"
+                placeholder="Search..."
+                class="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-4 pr-3 text-sm text-gray-700 placeholder-gray-400 focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            >
+        </div>
+    </div>
+
+    <div class="flex-1 lg:hidden"></div>
+
+    <!-- Right actions -->
+    <div class="flex items-center gap-2 sm:gap-4">
+
+        <!-- Notification placeholder -->
+        <button
+            id="notificationBtn"
+            type="button"
+            aria-label="Notifications"
+            class="relative p-2 rounded-lg hover:bg-amber-50 text-amber-500"
+        >
+            🔔
+            <span id="notificationDot" class="hidden absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"></span>
+        </button>
+
+        <!-- IP Badge -->
+        <span
+            id="ipBadge"
+            class="hidden sm:inline-block rounded-full bg-indigo-50 border border-indigo-100 px-3 py-1 text-xs font-medium text-indigo-600"
+        >
+            IP: --
+        </span>
+
+        <!-- Profile dropdown -->
+        <div class="relative">
+            <button
+                id="userMenuBtn"
+                type="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="userMenu"
+                class="flex items-center gap-2 rounded-full p-1 hover:bg-gray-100 focus:outline-none"
+            >
+                <div
+                    id="avatarCircle"
+                    class="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center text-sm font-semibold shadow-sm"
+                ></div>
+
+                <div class="hidden md:block text-left">
+                    <p id="navUsername" class="text-sm font-semibold text-gray-800"></p>
+                    <p id="navEmail" class="text-xs text-gray-500"></p>
+                </div>
+            </button>
+
+            <!-- Dropdown menu -->
+            <div
+                id="userMenu"
+                role="menu"
+                aria-labelledby="userMenuBtn"
+                class="hidden absolute right-0 z-50 mt-2 w-64 origin-top-right rounded-xl border border-gray-100 bg-white py-2 shadow-lg focus:outline-none"
+            >
+                <div class="border-b border-gray-100 px-4 py-3">
+                    <p id="ddUsername" class="truncate text-sm font-semibold text-gray-800"></p>
+                    <p id="ddEmail" class="truncate text-xs text-gray-500"></p>
+                </div>
+
+                <a href="#" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Profile
+                </a>
+                <a href="#" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    Settings
+                </a>
+
+                <button
+                    id="logoutBtn"
+                    type="button"
+                    role="menuitem"
+                    class="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50"
+                >
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+</header>

@@ -1,0 +1,99 @@
+{% load static %}
+
+<!-- Mobile overlay -->
+<div
+    id="sidebarOverlay"
+    class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300"
+    aria-hidden="true"
+></div>
+
+<aside
+    id="sidebar"
+    class="
+        fixed top-0 left-0
+        z-40
+        h-full
+        w-64
+        bg-slate-900
+        pt-16
+        flex flex-col
+        transform
+        -translate-x-full
+        transition-transform
+        duration-300
+        lg:translate-x-0
+        shadow-xl
+        lg:shadow-none
+    "
+>
+    <!-- Brand -->
+    <div class="px-5 py-5 border-b border-slate-800 flex-shrink-0">
+        <h2 class="font-bold text-lg text-white tracking-wide">Admin Panel</h2>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="p-3 space-y-1 overflow-y-auto flex-1">
+
+        <a
+            href="{% url 'dashboard:index' %}"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors duration-150"
+        >
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-white/15 text-base">🏠</span>
+            Dashboard
+        </a>
+
+        <a
+            href="#"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
+        >
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-sky-500/20 text-base">👥</span>
+            Users
+        </a>
+
+        <a
+            href="#"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
+        >
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-amber-500/20 text-base">🔐</span>
+            Roles
+        </a>
+
+        <a
+            href="#"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
+        >
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/20 text-base">🏢</span>
+            Departments
+        </a>
+
+        <a
+            href="#"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
+        >
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-violet-500/20 text-base">🛡</span>
+            Permissions
+        </a>
+
+        <a
+            href="#"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
+        >
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-rose-500/20 text-base">✉</span>
+            Email Logs
+        </a>
+
+        <a
+            href="#"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
+        >
+            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-slate-500/20 text-base">⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+    <!-- Bottom footer inside sidebar -->
+    <div class="px-5 py-4 border-t border-slate-800 text-xs text-slate-500">
+        v1.0.0
+    </div>
+</aside>
