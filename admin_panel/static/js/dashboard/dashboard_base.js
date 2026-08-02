@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadCurrentUser();
 
-    loadClientIp();
 
 });
 
@@ -371,39 +370,5 @@ function setText(id, value) {
     if (el)
 
         el.textContent = value;
-
-}
-
-
-/* =====================================================
-   Client IP
-===================================================== */
-
-function loadClientIp() {
-
-    const badge = document.getElementById("ipBadge");
-
-    if (!badge)
-        return;
-
-    fetch("https://api.ipify.org?format=json")
-
-        .then(response => response.json())
-
-        .then(data => {
-
-            badge.textContent =
-
-                `IP : ${data.ip}`;
-
-        })
-
-        .catch(() => {
-
-            badge.textContent =
-
-                "IP : Unknown";
-
-        });
 
 }

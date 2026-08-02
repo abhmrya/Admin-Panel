@@ -1,36 +1,30 @@
-document.addEventListener("DOMContentLoaded", async () => {
+/**
+ * admin.js
+ * Populates the Admin dashboard stat cards from the Dashboard Stats API.
+ * Depends on: core/config.js, core/api.js, services/dashboard.service.js
+ */
 
+document.addEventListener("DOMContentLoaded", () => {
     if (!await Guard.auth()) return;
-
-    loadDashboard();
-
+    loadAdminStats();
 });
 
-async function loadDashboard() {
-
+async function loadAdminStats() {
     try {
-
         const stats = await DashboardService.getStats();
+        if (!stats) return;
 
         setStat("statUsersCount", stats.users_count);
         setStat("statAdminsCount", stats.admins_count);
+        setStat("statHrCount", stats.hr_count);
         setStat("statManagersCount", stats.managers_count);
         setStat("statEmployeesCount", stats.employees_count);
-
     } catch (error) {
-
-        console.error(error);
-
+        console.error("Failed to load admin stats:", error);
     }
-
 }
 
-function setStat(id, value) {
-
-    const element = document.getElementById(id);
-
-    if (element) {
-        element.textContent = value;
-    }
-
+function setStat(elementId, value) {
+    const el = document.getElementById(elementId);
+    if (el) el.textContent = value ?? "0";
 }

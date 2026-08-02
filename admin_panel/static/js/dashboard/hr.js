@@ -1,26 +1,36 @@
-document.addEventListener("DOMContentLoaded", async () => {
+/**
+ * hr.js
+ * Populates the HR dashboard stat cards.
+ * Only "Total Employees" is backed by the real Dashboard Stats API right now.
+ * The other cards (Departments, On Leave, New Hires) stay at "--" until
+ * their backend endpoints exist — wire them up here once ready.
+ * Depends on: core/config.js, core/api.js, services/dashboard.service.js
+ */
 
+document.addEventListener("DOMContentLoaded", () => {
+        
     if (!await Guard.auth()) return;
 
-    loadDashboard();
-
+    loadHrStats();
 });
 
-async function loadDashboard() {
-
+async function loadHrStats() {
     try {
-
         const stats = await DashboardService.getStats();
+        if (!stats) return;
 
-        document.getElementById("statUsersCount").textContent = stats.users_count;
-        document.getElementById("statAdminsCount").textContent = stats.admins_count;
-        document.getElementById("statManagersCount").textContent = stats.managers_count;
-        document.getElementById("statEmployeesCount").textContent = stats.employees_count;
+        setStat("statEmployeesCount", stats.employees_count);
 
+        // TODO: replace with real data once these endpoints exist:
+        // setStat("statDepartmentsCount", stats.departments_count);
+        // setStat("statOnLeaveCount", stats.on_leave_count);
+        // setStat("statNewHiresCount", stats.new_hires_count);
     } catch (error) {
-
-        console.error(error);
-
+        console.error("Failed to load HR stats:", error);
     }
+}
 
+function setStat(elementId, value) {
+    const el = document.getElementById(elementId);
+    if (el) el.textContent = value ?? "0";
 }

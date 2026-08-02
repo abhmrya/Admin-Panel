@@ -5,37 +5,95 @@
 
 {% block content %}
 
-<h1 class="text-3xl font-bold mb-6">
-    Manager Dashboard
-</h1>
+<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Manager Dashboard</h1>
+        <p id="welcomeMessage" class="text-sm text-gray-500 mt-1">Team overview and approvals</p>
+    </div>
+</div>
 
+<!-- Stat cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
 
-    <div class="bg-white rounded-xl shadow p-6">
-        <p>Users</p>
-        <h2 id="statUsersCount">--</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">My Team</p>
+            <h2 id="statTeamCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">👥</span>
     </div>
 
-    <div class="bg-white rounded-xl shadow p-6">
-        <p>Admins</p>
-        <h2 id="statAdminsCount">--</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Pending Approvals</p>
+            <h2 id="statPendingApprovals" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-xl">⏳</span>
     </div>
 
-    <div class="bg-white rounded-xl shadow p-6">
-        <p>Managers</p>
-        <h2 id="statManagersCount">--</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">On Leave Today</p>
+            <h2 id="statOnLeaveCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-sky-50 text-sky-600 text-xl">📅</span>
     </div>
 
-    <div class="bg-white rounded-xl shadow p-6">
-        <p>Employees</p>
-        <h2 id="statEmployeesCount">--</h2>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Reports Due</p>
+            <h2 id="statReportsDue" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-xl">📊</span>
     </div>
 
 </div>
 
+<!-- Quick actions -->
+<div class="mt-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+
+        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-lg">👥</span>
+            <span class="text-sm font-medium text-gray-700">My Team</span>
+        </a>
+
+        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-lg">✅</span>
+            <span class="text-sm font-medium text-gray-700">Approvals</span>
+        </a>
+
+        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-lg">📊</span>
+            <span class="text-sm font-medium text-gray-700">Reports</span>
+        </a>
+
+        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-50 text-sky-600 text-lg">📅</span>
+            <span class="text-sm font-medium text-gray-700">Schedule</span>
+        </a>
+
+    </div>
+</div>
+
+<!-- Team list placeholder -->
+<div class="mt-8 bg-white rounded-xl border border-gray-100 shadow-sm">
+    <div class="px-6 py-4 border-b border-gray-100">
+        <h2 class="text-lg font-semibold text-gray-800">My Team</h2>
+    </div>
+    <div id="teamList" class="divide-y divide-gray-100">
+        <div class="px-6 py-10 text-center text-sm text-gray-400">
+            No data yet — connect the team API to populate this list.
+        </div>
+    </div>
+</div>
+
 {% endblock %}
+
 
 {% block extra_js %}
 {{ block.super }}
+<script src="{% static 'js/services/dashboard.service.js' %}"></script>
 <script src="{% static 'js/dashboard/manager.js' %}"></script>
 {% endblock %}
