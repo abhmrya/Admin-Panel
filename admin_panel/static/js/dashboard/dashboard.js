@@ -1,37 +1,81 @@
+/**
+ * =====================================================
+ * dashboard.js
+ * =====================================================
+ * Dashboard Entry Point
+ * =====================================================
+ */
+
 document.addEventListener("DOMContentLoaded", async () => {
 
-    await Guard.auth();
+    if (!await Guard.auth())
+        return;
 
-    loadDashboard();
+    let user = Auth.getCurrentUser();
 
-});
+    if (!user) {
 
-async function loadDashboard() {
+        try {
 
-    try {
+            user = await UserService.me();
 
-        const stats = await DashboardService.getStats();
+        } catch (error) {
 
-        setStat("statUsersCount", stats.users_count);
-        setStat("statAdminsCount", stats.admins_count);
-        setStat("statManagersCount", stats.managers_count);
-        setStat("statEmployeesCount", stats.employees_count);
+            console.error(error);
 
-    } catch (error) {
+            Auth.logout();
 
-        console.error(error);
+            return;
 
-        Alerts.show("Failed to load dashboard.");
+        }
 
     }
 
-}
+    redirectDashboard(user);
 
-function setStat(id, value) {
+});
 
-    const element = document.getElementById(id);
 
-    if (element)
-        element.textContent = value ?? 0;
+function redirectDashboard(user) {
+
+    switch (user.role) {
+
+        case "ADMIN":
+
+            window.location.replace(
+                window.APP_CONFIG.ROUTES.ADMIN
+            );
+
+            break;
+
+        case "HR":
+
+            window.location.replace(
+                window.APP_CONFIG.ROUTES.HR
+            );
+
+            break;
+
+        case "MANAGER":
+
+            window.location.replace(
+                window.APP_CONFIG.ROUTES.MANAGER
+            );
+
+            break;
+
+        case "EMPLOYEE":
+
+            window.location.replace(
+                window.APP_CONFIG.ROUTES.EMPLOYEE
+            );
+
+            break;
+
+        default:
+
+            Auth.logout();
+
+    }
 
 }

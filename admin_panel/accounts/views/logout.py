@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 from accounts.serializers import LogoutSerializer
 from accounts.services.logout import LogoutService
-
+from django.contrib.auth import logout
 
 class LogoutAPIView(APIView):
 
@@ -21,6 +21,8 @@ class LogoutAPIView(APIView):
         LogoutService.logout(
             serializer.validated_data["refresh"],
         )
+
+        logout(request)
 
         return Response(
             {

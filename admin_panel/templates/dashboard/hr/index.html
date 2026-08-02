@@ -1,0 +1,62 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}HR{% endblock %}
+
+{% block content %}
+
+<h1 class="text-2xl sm:text-3xl font-bold mb-6 text-gray-800">Dashboard</h1>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Users</p>
+            <h2 id="statUsersCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">
+            👥
+        </span>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Admins</p>
+            <h2 id="statAdminsCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-xl">
+            🛡
+        </span>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Managers</p>
+            <h2 id="statManagersCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-xl">
+            📋
+        </span>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Employees</p>
+            <h2 id="statEmployeesCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-xl">
+            🧑‍💼
+        </span>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+{{ block.super }}
+
+{% comment %} <script src="{% static 'js/dashboard/dashboard.js' %}"></script> {% endcomment %}
+
+{% endblock %}

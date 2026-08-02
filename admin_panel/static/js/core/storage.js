@@ -1,51 +1,90 @@
 /**
+ * ==========================================================
  * storage.js
- * Thin, safe wrapper around localStorage.
- * Centralizes JSON parsing and error handling.
+ * ==========================================================
+ * Local Storage Helper
+ * ==========================================================
  */
 
 const Storage = {
+
     set(key, value) {
+
         try {
-            const serialized = typeof value === "string" ? value : JSON.stringify(value);
-            window.localStorage.setItem(key, serialized);
-        } catch (error) {
-            console.error(`Storage.set failed for key "${key}":`, error);
+
+            const data =
+                typeof value === "string"
+                    ? value
+                    : JSON.stringify(value);
+
+            localStorage.setItem(key, data);
+
+            return true;
+
         }
+
+        catch (error) {
+
+            console.error("Storage.set()", error);
+
+            return false;
+
+        }
+
     },
 
     get(key, fallback = null) {
+
         try {
-            const raw = window.localStorage.getItem(key);
-            if (raw === null) return fallback;
+
+            const value =
+                localStorage.getItem(key);
+
+            if (value === null)
+                return fallback;
 
             try {
-                return JSON.parse(raw);
-            } catch {
-                // Not JSON, return raw string (e.g. plain tokens)
-                return raw;
+
+                return JSON.parse(value);
+
             }
-        } catch (error) {
-            console.error(`Storage.get failed for key "${key}":`, error);
-            return fallback;
+
+            catch {
+
+                return value;
+
+            }
+
         }
+
+        catch (error) {
+
+            console.error("Storage.get()", error);
+
+            return fallback;
+
+        }
+
+    },
+
+    has(key) {
+
+        return localStorage.getItem(key) !== null;
+
     },
 
     remove(key) {
-        try {
-            window.localStorage.removeItem(key);
-        } catch (error) {
-            console.error(`Storage.remove failed for key "${key}":`, error);
-        }
+
+        localStorage.removeItem(key);
+
     },
 
     clear() {
-        try {
-            window.localStorage.clear();
-        } catch (error) {
-            console.error("Storage.clear failed:", error);
-        }
+
+        localStorage.clear();
+
     },
+
 };
 
-window.Storage = Storage;
+window.Storage = Object.freeze(Storage);

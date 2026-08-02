@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
 ]
 
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/dashboard/"
+LOGOUT_REDIRECT_URL = "/login/"
+
 AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
