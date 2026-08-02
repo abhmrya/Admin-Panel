@@ -1,0 +1,98 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}My Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <div>
+        <h1 id="welcomeMessage" class="text-2xl sm:text-3xl font-bold text-gray-800">Welcome back</h1>
+        <p class="text-sm text-gray-500 mt-1">Here's your overview</p>
+    </div>
+</div>
+
+<!-- Stat cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Attendance (This Month)</p>
+            <h2 id="statAttendance" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-xl">📅</span>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Leave Balance</p>
+            <h2 id="statLeaveBalance" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">🌴</span>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Pending Requests</p>
+            <h2 id="statPendingRequests" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-xl">⏳</span>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
+        <div>
+            <p class="text-gray-500 text-sm">Documents</p>
+            <h2 id="statDocuments" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        </div>
+        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-xl">📄</span>
+    </div>
+
+</div>
+
+<!-- Profile summary + quick actions -->
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+    <div class="lg:col-span-1 bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col items-center text-center">
+        <div id="profileAvatar" class="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center text-xl font-semibold shadow-sm">
+        </div>
+        <h3 id="profileName" class="mt-4 font-semibold text-gray-800"></h3>
+        <p id="profileEmail" class="text-sm text-gray-500"></p>
+        <a href="#" class="mt-4 text-sm font-medium text-indigo-600 hover:underline">View Full Profile</a>
+    </div>
+
+    <div class="lg:col-span-2">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-2 gap-4">
+
+            <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-lg">📅</span>
+                <span class="text-sm font-medium text-gray-700">Apply for Leave</span>
+            </a>
+
+            <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-lg">📄</span>
+                <span class="text-sm font-medium text-gray-700">My Documents</span>
+            </a>
+
+            <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-lg">👤</span>
+                <span class="text-sm font-medium text-gray-700">Edit Profile</span>
+            </a>
+
+            <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-lg">🔒</span>
+                <span class="text-sm font-medium text-gray-700">Change Password</span>
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/dashboard/employee.js' %}"></script>
+{% endblock %}

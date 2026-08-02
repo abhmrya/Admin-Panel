@@ -1,23 +1,13 @@
 /**
- * -------------------------------------------------------
+ * =====================================================
  * login.js
- * -------------------------------------------------------
- * Login Page Controller
- *
- * Depends:
- * config.js
- * storage.js
- * auth.js
- * api.js
- * guard.js
- * alerts.js
- * auth.service.js
- * -------------------------------------------------------
+ * =====================================================
  */
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    await Guard.guest();
+    if (!Guard.guest())
+        return;
 
     initLoginForm();
 
@@ -31,11 +21,8 @@ function initLoginForm() {
         return;
 
     form.addEventListener(
-
         "submit",
-
         handleLogin
-
     );
 
 }
@@ -45,7 +32,6 @@ async function handleLogin(event) {
     event.preventDefault();
 
     Alerts.hide();
-
     Alerts.clearFieldErrors();
 
     const submitBtn =
@@ -63,27 +49,21 @@ async function handleLogin(event) {
             .value;
 
     setLoading(
-
         submitBtn,
-
         true,
-
         "Logging in..."
-
     );
 
     try {
 
         await AuthService.login(
-
             email,
-
             password
-
         );
 
-        window.location.href =
-            window.APP_CONFIG.ROUTES.DASHBOARD;
+        window.location.replace(
+            window.APP_CONFIG.ROUTES.DASHBOARD
+        );
 
     }
 
@@ -94,9 +74,7 @@ async function handleLogin(event) {
         if (error.data) {
 
             Alerts.handleValidationErrors(
-
                 error.data
-
             );
 
         }

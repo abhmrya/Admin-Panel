@@ -1,191 +1,374 @@
 /**
+ * =====================================================
  * dashboard_base.js
- * Wires up the shared dashboard shell:
- * - sidebar toggle (mobile) + overlay
- * - user dropdown menu
- * - navbar user info population
- * - IP badge
- * - logout
- * - footer year
- * - active nav link highlighting
+ * =====================================================
+ * Shared Dashboard Controller
+ *
+ * Features
+ * - Auth Guard
+ * - Sidebar Toggle
+ * - User Dropdown
+ * - Logout
+ * - Footer Year
+ * - Active Sidebar
+ * - Current User
+ * - Client IP
+ * =====================================================
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if (!Guard.auth())
+        return;
+
     initSidebarToggle();
+
     initUserMenu();
+
     initLogout();
+
     initFooterYear();
+
     initActiveNavLink();
-    loadCurrentUserIntoNavbar();
-    loadClientIp();
+
+    await loadCurrentUser();
+
+
 });
 
-/* ---------------------------------- */
-/* Sidebar toggle (mobile)             */
-/* ---------------------------------- */
+
+/* =====================================================
+   Sidebar
+===================================================== */
+
 function initSidebarToggle() {
+
     const sidebar = document.getElementById("sidebar");
     const overlay = document.getElementById("sidebarOverlay");
-    const toggleBtn = document.getElementById("sidebarToggle");
+    const toggle = document.getElementById("sidebarToggle");
 
-    if (!sidebar || !overlay || !toggleBtn) return;
+    if (!sidebar || !overlay || !toggle)
+        return;
 
-    const openSidebar = () => {
+    const open = () => {
+
         sidebar.classList.remove("-translate-x-full");
+
         overlay.classList.remove("hidden");
-        toggleBtn.setAttribute("aria-expanded", "true");
+
+        toggle.setAttribute("aria-expanded", "true");
+
     };
 
-    const closeSidebar = () => {
+    const close = () => {
+
         sidebar.classList.add("-translate-x-full");
+
         overlay.classList.add("hidden");
-        toggleBtn.setAttribute("aria-expanded", "false");
+
+        toggle.setAttribute("aria-expanded", "false");
+
     };
 
-    toggleBtn.addEventListener("click", () => {
-        const isOpen = !sidebar.classList.contains("-translate-x-full");
-        isOpen ? closeSidebar() : openSidebar();
+    toggle.addEventListener("click", () => {
+
+        sidebar.classList.contains("-translate-x-full")
+
+            ? open()
+
+            : close();
+
     });
 
-    overlay.addEventListener("click", closeSidebar);
+    overlay.addEventListener("click", close);
 
-    // Close sidebar automatically when resizing to desktop
     window.addEventListener("resize", () => {
-        if (window.innerWidth >= 1024) {
-            closeSidebar();
-        }
+
+        if (window.innerWidth >= 1024)
+
+            close();
+
     });
+
 }
 
-/* ---------------------------------- */
-/* User dropdown menu                  */
-/* ---------------------------------- */
-function initUserMenu() {
-    const menuBtn = document.getElementById("userMenuBtn");
-    const menu = document.getElementById("userMenu");
-    if (!menuBtn || !menu) return;
 
-    const closeMenu = () => {
+/* =====================================================
+   User Menu
+===================================================== */
+
+function initUserMenu() {
+
+    const btn = document.getElementById("userMenuBtn");
+    const menu = document.getElementById("userMenu");
+
+    if (!btn || !menu)
+        return;
+
+    const close = () => {
+
         menu.classList.add("hidden");
-        menuBtn.setAttribute("aria-expanded", "false");
+
+        btn.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
     };
 
-    menuBtn.addEventListener("click", (event) => {
+    btn.addEventListener("click", event => {
+
         event.stopPropagation();
-        const isOpen = !menu.classList.contains("hidden");
-        if (isOpen) {
-            closeMenu();
-        } else {
-            menu.classList.remove("hidden");
-            menuBtn.setAttribute("aria-expanded", "true");
-        }
+
+        menu.classList.toggle("hidden");
+
+        btn.setAttribute(
+
+            "aria-expanded",
+
+            !menu.classList.contains("hidden")
+
+        );
+
     });
 
-    document.addEventListener("click", (event) => {
-        if (!menu.contains(event.target) && !menuBtn.contains(event.target)) {
-            closeMenu();
+    document.addEventListener("click", event => {
+
+        if (
+
+            !menu.contains(event.target) &&
+
+            !btn.contains(event.target)
+
+        ) {
+
+            close();
+
         }
+
     });
 
-    document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") closeMenu();
+    document.addEventListener("keydown", event => {
+
+        if (event.key === "Escape")
+
+            close();
+
     });
+
 }
 
-/* ---------------------------------- */
-/* Logout                              */
-/* ---------------------------------- */
+
+/* =====================================================
+   Logout
+===================================================== */
+
 function initLogout() {
-    const logoutBtn = document.getElementById("logoutBtn");
-    if (!logoutBtn) return;
 
-    logoutBtn.addEventListener("click", async () => {
-        logoutBtn.disabled = true;
-        await AuthService.logout();
-    });
-}
+    const btn = document.getElementById("logoutBtn");
 
-/* ---------------------------------- */
-/* Footer year                         */
-/* ---------------------------------- */
-function initFooterYear() {
-    const yearEl = document.getElementById("year");
-    if (yearEl) {
-        yearEl.textContent = new Date().getFullYear();
-    }
-}
+    if (!btn)
+        return;
 
-/* ---------------------------------- */
-/* Active nav link highlighting        */
-/* ---------------------------------- */
-function initActiveNavLink() {
-    const currentPath = window.location.pathname;
-    const navLinks = document.querySelectorAll("#sidebar nav a[href]");
+    btn.addEventListener("click", async () => {
 
-    navLinks.forEach((link) => {
-        const href = link.getAttribute("href");
-        if (href && href !== "#" && href === currentPath) {
-            link.classList.add("bg-indigo-50", "text-indigo-700");
-            link.classList.remove("text-gray-600");
+        btn.disabled = true;
+
+        try {
+
+            await AuthService.logout();
+
         }
+
+        finally {
+
+            btn.disabled = false;
+
+        }
+
     });
+
 }
 
-/* ---------------------------------- */
-/* Navbar user info                    */
-/* ---------------------------------- */
-async function loadCurrentUserIntoNavbar() {
+
+/* =====================================================
+   Footer
+===================================================== */
+
+function initFooterYear() {
+
+    const year = document.getElementById("year");
+
+    if (year)
+
+        year.textContent =
+
+            new Date().getFullYear();
+
+}
+
+
+/* =====================================================
+   Active Sidebar Link
+===================================================== */
+
+function initActiveNavLink() {
+
+    const current = window.location.pathname;
+
+    document
+
+        .querySelectorAll("#sidebar nav a[href]")
+
+        .forEach(link => {
+
+            const href = link.getAttribute("href");
+
+            if (
+
+                href &&
+
+                href !== "#" &&
+
+                current.startsWith(href)
+
+            ) {
+
+                link.classList.add(
+
+                    "bg-indigo-50",
+
+                    "text-indigo-700"
+
+                );
+
+            }
+
+        });
+
+}
+
+
+/* =====================================================
+   Current User
+===================================================== */
+
+async function loadCurrentUser() {
+
     let user = Auth.getCurrentUser();
 
     if (!user) {
+
         try {
-            user = await AuthService.fetchCurrentUser();
-        } catch (error) {
-            console.error("Failed to load current user:", error);
-            return;
+
+            user =
+
+                await AuthService.fetchCurrentUser();
+
         }
+
+        catch (error) {
+
+            console.error(error);
+
+            Auth.logout();
+
+            return;
+
+        }
+
     }
 
-    if (!user) return;
+    if (!user)
+        return;
 
-    const username = user.username || user.name || "";
-    const email = user.email || "";
-    const initials = getInitials(username || email);
+    const username =
 
-    setText("navUsername", username);
-    setText("navEmail", email);
-    setText("ddUsername", username);
-    setText("ddEmail", email);
-    setText("avatarCircle", initials);
+        user.username ||
+
+        user.name ||
+
+        "User";
+
+    const email =
+
+        user.email ||
+
+        "";
+
+    setText(
+
+        "navUsername",
+
+        username
+
+    );
+
+    setText(
+
+        "navEmail",
+
+        email
+
+    );
+
+    setText(
+
+        "ddUsername",
+
+        username
+
+    );
+
+    setText(
+
+        "ddEmail",
+
+        email
+
+    );
+
+    setText(
+
+        "avatarCircle",
+
+        getInitials(username)
+
+    );
+
 }
 
-function getInitials(value) {
-    if (!value) return "?";
-    const parts = value.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-    return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+
+/* =====================================================
+   Helpers
+===================================================== */
+
+function getInitials(name = "") {
+
+    return name
+
+        .trim()
+
+        .split(/\s+/)
+
+        .map(x => x[0])
+
+        .join("")
+
+        .substring(0, 2)
+
+        .toUpperCase();
+
 }
 
-function setText(elementId, value) {
-    const el = document.getElementById(elementId);
-    if (el) el.textContent = value;
-}
+function setText(id, value) {
 
-/* ---------------------------------- */
-/* IP badge                            */
-/* ---------------------------------- */
-function loadClientIp() {
-    const ipBadge = document.getElementById("ipBadge");
-    if (!ipBadge) return;
+    const el =
 
-    fetch("https://api.ipify.org?format=json")
-        .then((response) => response.json())
-        .then((data) => {
-            if (data && data.ip) {
-                ipBadge.textContent = `IP: ${data.ip}`;
-            }
-        })
-        .catch((error) => {
-            console.error("Failed to load client IP:", error);
-        });
+        document.getElementById(id);
+
+    if (el)
+
+        el.textContent = value;
+
 }

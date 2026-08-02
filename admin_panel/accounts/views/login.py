@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from accounts.serializers import LoginSerializer,UserSerializer
 from accounts.services.login import LoginService
-
+from django.contrib.auth import login
 
 class LoginAPIView(APIView):
 
@@ -26,6 +26,8 @@ class LoginAPIView(APIView):
         )
 
         user = data["user"]
+
+        login(request,user)
 
         return Response(
             {

@@ -1,100 +1,73 @@
 /**
- * --------------------------------------------------------
+ * ==========================================================
  * alerts.js
- * --------------------------------------------------------
- * Global Alert & Form Error Handler
- *
- * Depends:
- * None
- *
- * --------------------------------------------------------
+ * ==========================================================
+ * Global Alert & Form Validation Helper
+ * ==========================================================
  */
 
 const Alerts = {
 
     show(message, type = "error") {
 
-        const alertBox =
+        const wrapper =
             document.getElementById("alertBox");
 
-        const alertInner =
+        const box =
             document.getElementById("alertInner");
 
-        if (!alertBox || !alertInner)
+        if (!wrapper || !box)
             return;
 
         const styles = {
 
-            success:
-                "bg-green-50 border-green-200 text-green-700",
-
             error:
-                "bg-red-50 border-red-200 text-red-700",
+                "border-red-200 bg-red-50 text-red-700",
+
+            success:
+                "border-green-200 bg-green-50 text-green-700",
 
             warning:
-                "bg-yellow-50 border-yellow-200 text-yellow-700",
+                "border-yellow-200 bg-yellow-50 text-yellow-700",
 
             info:
-                "bg-blue-50 border-blue-200 text-blue-700"
+                "border-blue-200 bg-blue-50 text-blue-700",
 
         };
 
-        alertInner.className =
-            "rounded-lg border px-4 py-3 text-sm flex items-center justify-between gap-3 " +
-            (styles[type] || styles.error);
+        box.className =
+            "rounded-lg border px-4 py-3 text-sm " +
+            styles[type];
 
-        alertInner.innerHTML = `
-            <span>${message}</span>
+        box.textContent = message;
 
-            <button
-                type="button"
-                id="closeAlert"
-                class="font-bold"
-            >
-                ✕
-            </button>
-        `;
-
-        alertBox.classList.remove("hidden");
-
-        document
-            .getElementById("closeAlert")
-            .onclick = () => this.hide();
+        wrapper.classList.remove("hidden");
 
     },
+
+
 
     hide() {
 
-        const box =
+        const wrapper =
             document.getElementById("alertBox");
 
-        if (box)
-            box.classList.add("hidden");
+        if (wrapper)
+            wrapper.classList.add("hidden");
 
     },
 
-    clearFieldErrors() {
 
-        document
-            .querySelectorAll(".field-error")
-            .forEach((field) => {
 
-                field.textContent = "";
+    showFieldError(field, message) {
 
-                field.classList.add("hidden");
+        const element = document.querySelector(
 
-            });
+            `.field-error[data-field="${field}"]`
 
-    },
+        );
 
-    showFieldError(fieldName, message) {
-
-        const field =
-            document.querySelector(
-                `.field-error[data-field="${fieldName}"]`
-            );
-
-        if (!field) {
+        if (!element) {
 
             this.show(message);
 
@@ -102,29 +75,56 @@ const Alerts = {
 
         }
 
-        field.textContent = message;
+        element.textContent = message;
 
-        field.classList.remove("hidden");
+        element.classList.remove("hidden");
 
     },
 
+
+
+    clearFieldErrors() {
+
+        document
+
+            .querySelectorAll(".field-error")
+
+            .forEach(el => {
+
+                el.textContent = "";
+
+                el.classList.add("hidden");
+
+            });
+
+    },
+
+
+
     handleValidationErrors(errors) {
 
-        let hasFieldError = false;
+        if (!errors)
+            return;
 
-        Object.entries(errors).forEach(
+        let fieldFound = false;
 
-            ([field, messages]) => {
+        Object.entries(errors)
+
+            .forEach(([field, value]) => {
 
                 const message =
 
-                    Array.isArray(messages)
-                        ? messages[0]
-                        : messages;
+                    Array.isArray(value)
+
+                        ? value[0]
+
+                        : value;
 
                 if (
 
                     field === "detail" ||
+
+                    field === "message" ||
 
                     field === "non_field_errors"
 
@@ -136,6 +136,8 @@ const Alerts = {
 
                 else {
 
+                    fieldFound = true;
+
                     this.showFieldError(
 
                         field,
@@ -144,32 +146,22 @@ const Alerts = {
 
                     );
 
-                    hasFieldError = true;
-
                 }
 
-            }
+            });
 
-        );
-
-        if (
-
-            !hasFieldError &&
-
-            !errors.detail &&
-
-            !errors.non_field_errors
-
-        ) {
+        if (!fieldFound && !errors.detail) {
 
             this.show(
+
                 "Something went wrong."
+
             );
 
         }
 
-    }
+    },
 
 };
 
-window.Alerts = Alerts;
+window.Alerts = Object.freeze(Alerts);

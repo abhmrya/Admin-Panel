@@ -8,6 +8,6 @@ app_name = "dashboard_api"
 
 urlpatterns = [
 
-    path("stats/",DashboardStatsAPIView.as_view(),name="stats"),
+    path("stats/",DashboardStatsAPIView.as_view(),name="dashboard_stats"),
 
 ]
