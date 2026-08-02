@@ -1,11 +1,11 @@
 {% load static %}
 
-<!-- Mobile overlay -->
+<!-- Mobile Overlay -->
 <div
     id="sidebarOverlay"
-    class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity duration-300"
-    aria-hidden="true"
+    class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden"
 ></div>
+
 
 <aside
     id="sidebar"
@@ -17,83 +17,186 @@
         bg-slate-900
         pt-16
         flex flex-col
-        transform
         -translate-x-full
+        lg:translate-x-0
         transition-transform
         duration-300
-        lg:translate-x-0
         shadow-xl
-        lg:shadow-none
     "
 >
+
+
     <!-- Brand -->
-    <div class="px-5 py-5 border-b border-slate-800 flex-shrink-0">
-        <h2 class="font-bold text-lg text-white tracking-wide">Admin Panel</h2>
+    <div class="px-5 py-5 border-b border-slate-800">
+
+        <h2 class="text-lg font-bold text-white">
+            Admin Panel
+        </h2>
+
+        <p class="text-xs text-slate-400 mt-1">
+            {{ request.user.role }}
+        </p>
+
     </div>
 
-    <!-- Navigation -->
-    <nav class="p-3 space-y-1 overflow-y-auto flex-1">
 
+
+    <!-- Menu -->
+    <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+
+
+        <!-- Common Dashboard -->
         <a
             href="{% url 'dashboard:index' %}"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-white bg-indigo-600 hover:bg-indigo-500 transition-colors duration-150"
+            class="sidebar-link"
         >
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-white/15 text-base">🏠</span>
+            🏠
             Dashboard
         </a>
 
-        <a
-            href="#"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
-        >
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-sky-500/20 text-base">👥</span>
-            Users
-        </a>
 
-        <a
-            href="#"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
-        >
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-amber-500/20 text-base">🔐</span>
-            Roles
-        </a>
 
-        <a
-            href="#"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
-        >
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-500/20 text-base">🏢</span>
-            Departments
-        </a>
+        {% if request.user.role == "ADMIN" %}
 
-        <a
-            href="#"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
-        >
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-violet-500/20 text-base">🛡</span>
-            Permissions
-        </a>
 
-        <a
-            href="#"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
-        >
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-rose-500/20 text-base">✉</span>
-            Email Logs
-        </a>
+            <a href="#" class="sidebar-link">
+                👥
+                Users
+            </a>
 
-        <a
-            href="#"
-            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white transition-colors duration-150"
-        >
-            <span class="flex h-7 w-7 items-center justify-center rounded-md bg-slate-500/20 text-base">⚙</span>
+
+            <a href="#" class="sidebar-link">
+                🔐
+                Roles
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                🛡
+                Permissions
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                🏢
+                Departments
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                ✉
+                Email Logs
+            </a>
+
+
+
+        {% elif request.user.role == "HR" %}
+
+
+            <a href="#" class="sidebar-link">
+                👥
+                Employees
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                🏢
+                Departments
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                📅
+                Attendance
+            </a>
+
+
+
+        {% elif request.user.role == "MANAGER" %}
+
+
+            <a href="#" class="sidebar-link">
+                👥
+                My Team
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                📊
+                Reports
+            </a>
+
+
+
+        {% elif request.user.role == "EMPLOYEE" %}
+
+
+            <a href="#" class="sidebar-link">
+                👤
+                My Profile
+            </a>
+
+
+            <a href="#" class="sidebar-link">
+                📄
+                Documents
+            </a>
+
+
+        {% endif %}
+
+
+
+        <!-- Common -->
+        <a href="#" class="sidebar-link">
+            ⚙
             Settings
         </a>
 
+
     </nav>
 
-    <!-- Bottom footer inside sidebar -->
-    <div class="px-5 py-4 border-t border-slate-800 text-xs text-slate-500">
+
+
+    <!-- Footer -->
+
+    <div class="
+        px-5
+        py-4
+        border-t
+        border-slate-800
+        text-xs
+        text-slate-500
+    ">
         v1.0.0
     </div>
+
+
 </aside>
+
+
+
+<style>
+
+.sidebar-link{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 12px;
+    border-radius:8px;
+    color:#cbd5e1;
+    font-weight:500;
+    transition:0.2s;
+
+}
+
+
+.sidebar-link:hover{
+
+    background:#1e293b;
+    color:white;
+
+}
+
+</style>

@@ -1,10 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
+from dashboard.mixins import RoleRequiredMixin
 
 
-class AdminDashboardView(
-    LoginRequiredMixin,
-    TemplateView,
-):
+class AdminDashboardView(RoleRequiredMixin,TemplateView):
+
+    allowed_roles = ["ADMIN"]
 
     template_name = "dashboard/admin/index.html"

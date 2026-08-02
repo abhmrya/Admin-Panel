@@ -8,14 +8,18 @@ class RoleRequiredMixin(LoginRequiredMixin):
 
     login_url = "accounts:login"
 
+
     def dispatch(self, request, *args, **kwargs):
 
         if request.user.role not in self.allowed_roles:
 
-            return redirect("dashboard:index")
+            return redirect(
+                "dashboard:index"
+            )
+
 
         return super().dispatch(
             request,
             *args,
-            **kwargs,
+            **kwargs
         )
