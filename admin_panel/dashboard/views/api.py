@@ -27,5 +27,6 @@ class DashboardStatsAPIView(APIView):
             "employees_count": User.objects.filter(role="EMPLOYEE").count(),
 
         }
+        print(f'dashboard data: {data}')
 
         return Response(data)
