@@ -1,64 +1,117 @@
-
 /**
+ * =====================================================
  * employee.js
- * Employee dashboard page behavior.
- * Populates the welcome heading and profile card from the current user.
- * The stat cards (attendance, leave balance, etc.) are placeholders until
- * their backend endpoints exist.
- * Depends on: core/config.js, core/api.js, core/auth.js, services/auth.service.js
+ * =====================================================
+ * Employee Dashboard Controller
+ *
+ * Features:
+ * - Route Protection
+ * - Load Current User
+ * - Welcome Message
+ * - Profile Card
+ * =====================================================
  */
 
-document.addEventListener("DOMContentLoaded", () => {
-        
-    if (!await Guard.auth()) return;
+document.addEventListener("DOMContentLoaded", async () => {
 
-    loadEmployeeProfile();
+    const authenticated = await Guard.auth();
 
-    // TODO: once attendance/leave/documents endpoints exist, populate:
-    // setStat("statAttendance", ...);
-    // setStat("statLeaveBalance", ...);
-    // setStat("statPendingRequests", ...);
-    // setStat("statDocuments", ...);
-});
-
-async function loadEmployeeProfile() {
-    let user = Auth.getCurrentUser();
-    if (!user) {
-        try {
-            user = await AuthService.fetchCurrentUser();
-        } catch (error) {
-            console.error("Failed to load current user:", error);
-            return;
-        }
+    if (!authenticated) {
+        return;
     }
 
-    if (!user) return;
+    await loadEmployeeProfile();
 
-    const fullName = [user.first_name, user.last_name].filter(Boolean).join(" ") || user.username || "";
-    const email = user.email || "";
+});
 
-    const welcomeEl = document.getElementById("welcomeMessage");
-    if (welcomeEl && fullName) {
-        welcomeEl.textContent = `Welcome back, ${fullName}`;
+
+async function loadEmployeeProfile() {
+
+    let user = Auth.getCurrentUser();
+
+    if (!user) {
+
+        try {
+
+            user = await AuthService.fetchCurrentUser();
+
+        } catch (error) {
+
+            console.error("Failed to load current user.", error);
+
+            Auth.logout();
+
+            return;
+
+        }
+
+    }
+
+    if (!user) {
+        return;
+    }
+
+    const fullName =
+        [
+            user.first_name,
+            user.last_name
+        ]
+            .filter(Boolean)
+            .join(" ")
+        || user.username
+        || "Employee";
+
+    const email =
+        user.email || "";
+
+    const welcome =
+        document.getElementById("welcomeMessage");
+
+    if (welcome) {
+
+        welcome.textContent =
+            `Welcome back, ${fullName}`;
+
     }
 
     setText("profileName", fullName);
     setText("profileEmail", email);
 
-    const avatarEl = document.getElementById("profileAvatar");
-    if (avatarEl) {
-        avatarEl.textContent = getInitials(fullName || email);
+    const avatar =
+        document.getElementById("profileAvatar");
+
+    if (avatar) {
+
+        avatar.textContent =
+            getInitials(fullName);
+
     }
+
 }
 
-function setText(elementId, value) {
-    const el = document.getElementById(elementId);
-    if (el) el.textContent = value;
+
+function setText(id, value) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.textContent = value;
+
+    }
+
 }
 
-function getInitials(value) {
-    if (!value) return "?";
-    const parts = value.trim().split(/\s+/);
-    if (parts.length === 1) return parts[0].charAt(0).toUpperCase();
-    return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+
+function getInitials(name = "") {
+
+    return name
+        .trim()
+        .split(/\s+/)
+        .map(word => word[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+
 }

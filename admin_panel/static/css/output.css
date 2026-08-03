@@ -40,7 +40,6 @@
     --color-violet-600: oklch(54.1% 0.281 293.009);
     --color-rose-50: oklch(96.9% 0.015 12.422);
     --color-rose-600: oklch(58.6% 0.253 17.585);
-    --color-slate-50: oklch(98.4% 0.003 247.858);
     --color-slate-100: oklch(96.8% 0.007 247.896);
     --color-slate-200: oklch(92.9% 0.013 255.508);
     --color-slate-300: oklch(86.9% 0.022 252.894);
@@ -367,9 +366,6 @@
   .h-2 {
     height: calc(var(--spacing) * 2);
   }
-  .h-5 {
-    height: calc(var(--spacing) * 5);
-  }
   .h-8 {
     height: calc(var(--spacing) * 8);
   }
@@ -399,9 +395,6 @@
   }
   .w-2 {
     width: calc(var(--spacing) * 2);
-  }
-  .w-5 {
-    width: calc(var(--spacing) * 5);
   }
   .w-8 {
     width: calc(var(--spacing) * 8);
@@ -560,9 +553,6 @@
   }
   .border-green-200 {
     border-color: var(--color-green-200);
-  }
-  .border-indigo-100 {
-    border-color: var(--color-indigo-100);
   }
   .border-red-200 {
     border-color: var(--color-red-200);
@@ -935,9 +925,6 @@
     }
     .hover\:bg-red-50:hover {
       background-color: var(--color-red-50);
-    }
-    .hover\:bg-slate-50:hover {
-      background-color: var(--color-slate-50);
     }
     .hover\:underline:hover {
       text-decoration-line: underline;

@@ -10,6 +10,7 @@ const APP_CONFIG = Object.freeze({
 
     ENDPOINTS: Object.freeze({
 
+        GOOGLE_LOGIN: "/auth/google/login/",
         LOGIN: "/auth/login/",
         REGISTER: "/auth/register/",
         LOGOUT: "/auth/logout/",

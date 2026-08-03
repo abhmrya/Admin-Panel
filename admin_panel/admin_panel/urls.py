@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from django.shortcuts import render
+from debug_toolbar.toolbar import debug_toolbar_urls
 
 
 urlpatterns = [
@@ -32,4 +32,4 @@ urlpatterns = [
     path("", include(("accounts.web_urls", "accounts"), namespace="accounts")), 
     path("dashboard/",include(("dashboard.web_urls", "dashboard"),namespace="dashboard")),
 
-]
+]+ debug_toolbar_urls()
