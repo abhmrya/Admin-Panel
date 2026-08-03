@@ -2,7 +2,7 @@ from django.views.generic import TemplateView
 from dashboard.mixins import RoleRequiredMixin
 
 
-class ManagerDashboardView(RoleRequiredMixin,TemplateView):
+class ManagerDashboardView(TemplateView):
 
     allowed_roles = ["MANAGER","ADMIN"]
 

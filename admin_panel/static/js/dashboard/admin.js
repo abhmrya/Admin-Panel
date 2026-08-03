@@ -4,9 +4,12 @@
  * Depends on: core/config.js, core/api.js, services/dashboard.service.js
  */
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (!await Guard.auth()) return;
+document.addEventListener("DOMContentLoaded", async () => {
+
+    if (!(await Guard.auth())) return;
+
     loadAdminStats();
+
 });
 
 async function loadAdminStats() {

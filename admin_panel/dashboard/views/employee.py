@@ -2,8 +2,6 @@ from django.views.generic import TemplateView
 from dashboard.mixins import RoleRequiredMixin
 
 
-class EmployeeDashboardView(RoleRequiredMixin,TemplateView):
-
-    allowed_roles = ["EMPLOYEE","MANAGER","HR","ADMIN"]
+class EmployeeDashboardView(TemplateView):
 
     template_name = "dashboard/employee/index.html"

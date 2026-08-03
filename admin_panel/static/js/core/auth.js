@@ -78,9 +78,48 @@ const Auth = {
 
     },
 
+    /**
+     * Returns true only if access token exists
+     * AND is not expired.
+     */
     isAuthenticated() {
 
-        return !!this.getAccessToken();
+        const token = this.getAccessToken();
+
+        if (!token)
+            return false;
+
+        try {
+
+            const payload = JSON.parse(
+                atob(token.split(".")[1])
+            );
+
+            const currentTime = Math.floor(Date.now() / 1000);
+
+            if (payload.exp <= currentTime) {
+
+                console.warn("Access token expired.");
+
+                this.clearTokens();
+
+                return false;
+
+            }
+
+            return true;
+
+        }
+
+        catch (error) {
+
+            console.error("Invalid JWT", error);
+
+            this.clearTokens();
+
+            return false;
+
+        }
 
     },
 
