@@ -10,36 +10,48 @@ const Api = {
 
     timeout: APP_CONFIG.REQUEST_TIMEOUT_MS,
 
+
+    /**
+     * Get CSRF Token
+     */
     getCsrfToken() {
 
-        const input = document.querySelector(
+        const csrfInput = document.querySelector(
             'input[name="csrfmiddlewaretoken"]'
         );
 
-        if (input)
-            return input.value;
+        if (csrfInput) {
+            return csrfInput.value;
+        }
 
-        const cookie = document.cookie
+
+        const csrfCookie = document.cookie
             .split("; ")
-            .find(row => row.startsWith("csrftoken="));
+            .find(cookie =>
+                cookie.startsWith("csrftoken=")
+            );
 
-        return cookie
-            ? decodeURIComponent(cookie.split("=")[1])
+
+        return csrfCookie
+            ? decodeURIComponent(
+                csrfCookie.split("=")[1]
+            )
             : null;
 
     },
 
 
-
+    /**
+     * Build Request Headers
+     */
     buildHeaders({
 
         method = "GET",
-
         auth = true,
-
         headers = {}
 
     } = {}) {
+
 
         const finalHeaders = {
 
@@ -47,17 +59,19 @@ const Api = {
 
             "Content-Type": "application/json",
 
-            ...headers,
+            ...headers
 
         };
 
 
-
+        /*
+         * JWT Authentication
+         */
         if (auth) {
 
             const token =
-
                 Auth.getAccessToken();
+
 
             if (token) {
 
@@ -70,17 +84,22 @@ const Api = {
 
 
 
-        if (
+        /*
+         * Django CSRF Protection
+         */
+        const csrfMethods = [
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+        ];
 
-            ["POST", "PUT", "PATCH", "DELETE"]
 
-                .includes(method)
-
-        ) {
+        if (csrfMethods.includes(method)) {
 
             const csrf =
-
                 this.getCsrfToken();
+
 
             if (csrf) {
 
@@ -91,19 +110,26 @@ const Api = {
 
         }
 
+
         return finalHeaders;
 
     },
 
 
 
+    /**
+     * Parse API Response
+     */
     async parseResponse(response) {
 
         const text =
             await response.text();
 
-        if (!text)
+
+        if (!text) {
             return null;
+        }
+
 
         try {
 
@@ -121,6 +147,9 @@ const Api = {
 
 
 
+    /**
+     * Main Request Handler
+     */
     async request(
 
         path,
@@ -133,28 +162,30 @@ const Api = {
 
             headers = {},
 
-            auth = true,
+            auth = true
 
         } = {}
 
     ) {
 
+
         const controller =
             new AbortController();
 
-        const timer =
-            setTimeout(
 
-                () => controller.abort(),
+        const timeout =
+            setTimeout(() => {
 
-                this.timeout
+                controller.abort();
 
-            );
+            }, this.timeout);
+
+
 
         try {
 
-            const response =
 
+            const response =
                 await fetch(
 
                     APP_CONFIG.API_BASE_URL + path,
@@ -163,38 +194,47 @@ const Api = {
 
                         method,
 
-                        headers: this.buildHeaders({
 
-                            method,
+                        headers:
+                            this.buildHeaders({
 
-                            auth,
+                                method,
 
-                            headers,
+                                auth,
 
-                        }),
+                                headers
+
+                            }),
+
 
                         body:
-
                             body
                                 ? JSON.stringify(body)
                                 : null,
 
+
                         signal:
-                            controller.signal,
+                            controller.signal
 
                     }
 
                 );
 
-            clearTimeout(timer);
+
+
+            clearTimeout(timeout);
+
+
 
             const data =
-
                 await this.parseResponse(
                     response
                 );
 
+
+
             if (!response.ok) {
+
 
                 const error =
                     new Error(
@@ -203,45 +243,58 @@ const Api = {
 
                         data?.message ||
 
-                        "Request failed."
+                        "Something went wrong."
 
                     );
+
 
                 error.status =
                     response.status;
 
+
                 error.data =
                     data;
+
 
                 throw error;
 
             }
 
+
+
             return data;
+
 
         }
 
-        catch (error) {
 
-            clearTimeout(timer);
+        catch(error) {
+
+
+            clearTimeout(timeout);
+
+
 
             if (
-
-                error.name ===
-                "AbortError"
-
+                error.name === "AbortError"
             ) {
+
 
                 const timeoutError =
                     new Error(
                         "Request timeout."
                     );
 
-                timeoutError.status = 408;
+
+                timeoutError.status =
+                    408;
+
 
                 throw timeoutError;
 
             }
+
+
 
             throw error;
 
@@ -251,6 +304,9 @@ const Api = {
 
 
 
+    /**
+     * GET Request
+     */
     get(path, options = {}) {
 
         return this.request(
@@ -261,7 +317,7 @@ const Api = {
 
                 ...options,
 
-                method: "GET",
+                method: "GET"
 
             }
 
@@ -271,6 +327,9 @@ const Api = {
 
 
 
+    /**
+     * POST Request
+     */
     post(
 
         path,
@@ -291,7 +350,7 @@ const Api = {
 
                 method: "POST",
 
-                body,
+                body
 
             }
 
@@ -301,6 +360,9 @@ const Api = {
 
 
 
+    /**
+     * PUT Request
+     */
     put(
 
         path,
@@ -321,7 +383,7 @@ const Api = {
 
                 method: "PUT",
 
-                body,
+                body
 
             }
 
@@ -331,6 +393,9 @@ const Api = {
 
 
 
+    /**
+     * PATCH Request
+     */
     patch(
 
         path,
@@ -351,7 +416,7 @@ const Api = {
 
                 method: "PATCH",
 
-                body,
+                body
 
             }
 
@@ -361,6 +426,9 @@ const Api = {
 
 
 
+    /**
+     * DELETE Request
+     */
     delete(
 
         path,
@@ -377,14 +445,16 @@ const Api = {
 
                 ...options,
 
-                method: "DELETE",
+                method: "DELETE"
 
             }
 
         );
 
-    },
+    }
+
 
 };
+
 
 window.Api = Object.freeze(Api);
