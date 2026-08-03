@@ -15,13 +15,28 @@
 <!-- Stat cards -->
 <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Total Users</p>
-            <h2 id="statUsersCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">👥</span>
+    <a 
+href="{% url 'users:list' %}"
+class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between 
+    hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer " >
+
+    <div>
+        <p class="text-gray-500 text-sm">
+            Total Users
+        </p>
+
+        <h2 
+        id="statUsersCount"
+        class="text-3xl font-bold mt-2 text-gray-800">
+        --
+        </h2>
+
     </div>
+
+
+    <span class=" flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">👥</span>
+
+</a>
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
         <div>

@@ -32,7 +32,7 @@ class LoginAPIView(APIView):
 
         user = data["user"]
 
-        # login(request,user)
+        login(request,user)
 
         return Response(
             {

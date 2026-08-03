@@ -27,9 +27,11 @@ urlpatterns = [
     # API Version 1
     path("api/v1/auth/",include("accounts.urls")),
     path("api/v1/dashboard/",include("dashboard.api_urls")),   
+    path("api/v1/",include("users.api_urls")),
 
     # Web Pages
     path("", include(("accounts.web_urls", "accounts"), namespace="accounts")), 
     path("dashboard/",include(("dashboard.web_urls", "dashboard"),namespace="dashboard")),
+    path("users/",include("users.web_urls"))
 
 ]+ debug_toolbar_urls()

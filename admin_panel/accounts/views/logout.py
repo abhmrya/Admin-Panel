@@ -22,7 +22,7 @@ class LogoutAPIView(APIView):
             serializer.validated_data["refresh"],
         )
 
-        # logout(request)
+        logout(request)
         # Session expiry = Access token expiry
         # request.session.set_expiry(60)
 

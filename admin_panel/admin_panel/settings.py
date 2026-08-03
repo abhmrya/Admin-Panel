@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     "accounts",
     "dashboard",
     'common',
+    'users',
 
     "rest_framework_simplejwt.token_blacklist",
+    "django_filters",
 
     # third party
     "debug_toolbar",
@@ -163,29 +165,36 @@ STATICFILES_DIRS = [
 ]
 
 REST_FRAMEWORK = {
+
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle'
+
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
     ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '10/day',
-        'user': '100/day',
 
-        "login": "100/hour",
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "10/day",
+        "user": "100/day",
+        "login": "10/hour",
         "register": "3/min",
+    },
 
-        # s / sec
-        # m / min
-        # h / hour
-        # d / day
-    }
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
+
+    "DEFAULT_PAGINATION_CLASS":
+        "common.pagination.StandardPagination",
 }
 
 CACHES = {
