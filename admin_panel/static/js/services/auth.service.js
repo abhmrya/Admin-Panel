@@ -1,9 +1,3 @@
-/**
- * =====================================================
- * auth.service.js
- * =====================================================
- */
-
 const AuthService = {
 
     async login(email, password) {
@@ -17,6 +11,35 @@ const AuthService = {
         Auth.setTokens({
             access: data.tokens.access,
             refresh: data.tokens.refresh
+        });
+
+        Auth.setCurrentUser(data.user);
+
+        return data;
+
+    },
+
+    async googleLogin(credential) {
+
+        const data = await Api.post(
+
+            window.APP_CONFIG.ENDPOINTS.GOOGLE_LOGIN,
+
+            {
+                credential
+            },
+
+            {
+                auth: false
+            }
+
+        );
+
+        Auth.setTokens({
+
+            access: data.tokens.access,
+            refresh: data.tokens.refresh
+
         });
 
         Auth.setCurrentUser(data.user);
@@ -50,10 +73,6 @@ const AuthService = {
 
             }
 
-        } catch (error) {
-
-            console.warn("Logout API failed.", error);
-
         } finally {
 
             Auth.clearTokens();
@@ -72,8 +91,7 @@ const AuthService = {
 
             const cached = Auth.getCurrentUser();
 
-            if (cached)
-                return cached;
+            if (cached) return cached;
 
         }
 
@@ -90,13 +108,17 @@ const AuthService = {
     refreshToken() {
 
         return Api.post(
+
             window.APP_CONFIG.ENDPOINTS.REFRESH_TOKEN,
+
             {
                 refresh: Auth.getRefreshToken()
             },
+
             {
                 auth: false
             }
+
         );
 
     },
@@ -104,9 +126,13 @@ const AuthService = {
     forgotPassword(email) {
 
         return Api.post(
+
             window.APP_CONFIG.ENDPOINTS.FORGOT_PASSWORD,
+
             { email },
+
             { auth: false }
+
         );
 
     },
@@ -114,9 +140,13 @@ const AuthService = {
     resetPassword(payload) {
 
         return Api.post(
+
             window.APP_CONFIG.ENDPOINTS.RESET_PASSWORD,
+
             payload,
+
             { auth: false }
+
         );
 
     },
@@ -124,9 +154,13 @@ const AuthService = {
     verifyOtp(payload) {
 
         return Api.post(
+
             window.APP_CONFIG.ENDPOINTS.VERIFY_OTP,
+
             payload,
+
             { auth: false }
+
         );
 
     }

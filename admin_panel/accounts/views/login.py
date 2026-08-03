@@ -7,9 +7,14 @@ from accounts.serializers import LoginSerializer,UserSerializer
 from accounts.services.login import LoginService
 from django.contrib.auth import login
 
+from rest_framework.throttling import UserRateThrottle
+from common.throttles import LoginThrottle
+
 class LoginAPIView(APIView):
 
     permission_classes = [AllowAny]
+    throttle_classes = [LoginThrottle]
+    # throttle_classes = [UserRateThrottle]
 
     def post(self, request):
 
