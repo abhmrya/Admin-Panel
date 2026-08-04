@@ -7,8 +7,11 @@
 document.addEventListener("DOMContentLoaded", initializeProfile);
 
 async function initializeProfile() {
+
     bindEvents();
+
     await loadProfile();
+
 }
 
 function bindEvents() {
@@ -26,6 +29,14 @@ function bindEvents() {
     document
         .getElementById("avatar")
         .addEventListener("change", previewAvatar);
+
+    document
+        .getElementById("first_name")
+        .addEventListener("input", validateNameInput);
+
+    document
+        .getElementById("last_name")
+        .addEventListener("input", validateNameInput);
 
 }
 
@@ -128,23 +139,69 @@ function previewAvatar(event) {
 
 }
 
+function validateNameInput(event) {
+
+    event.target.value =
+        event.target.value.replace(/[^A-Za-z\s]/g, "");
+
+}
+
+function validateName(name, fieldName) {
+
+    if (!name) {
+
+        throw new Error(`${fieldName} is required.`);
+
+    }
+
+    if (name.length < 2) {
+
+        throw new Error(
+            `${fieldName} must be at least 2 characters.`
+        );
+
+    }
+
+    if (name.length > 50) {
+
+        throw new Error(
+            `${fieldName} must not exceed 50 characters.`
+        );
+
+    }
+
+    const regex = /^[A-Za-z\s]+$/;
+
+    if (!regex.test(name)) {
+
+        throw new Error(
+            `${fieldName} can contain only letters and spaces.`
+        );
+
+    }
+
+}
+
 async function updateProfile(event) {
 
     event.preventDefault();
 
     try {
 
+        const firstName =
+            document.getElementById("first_name").value.trim();
+
+        const lastName =
+            document.getElementById("last_name").value.trim();
+
+        validateName(firstName, "First Name");
+        validateName(lastName, "Last Name");
+
         const formData = new FormData();
 
-        formData.append(
-            "first_name",
-            document.getElementById("first_name").value.trim()
-        );
+        formData.append("first_name", firstName);
 
-        formData.append(
-            "last_name",
-            document.getElementById("last_name").value.trim()
-        );
+        formData.append("last_name", lastName);
 
         formData.append(
             "phone_number",
@@ -171,10 +228,7 @@ async function updateProfile(event) {
 
         if (avatar) {
 
-            formData.append(
-                "avatar",
-                avatar
-            );
+            formData.append("avatar", avatar);
 
         }
 

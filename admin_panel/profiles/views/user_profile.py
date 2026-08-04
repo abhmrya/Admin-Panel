@@ -18,6 +18,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     )
 
     def get_object(self):
+            # print(dir(self.request.user.first_name))
 
             profile, created = Profile.objects.get_or_create(
                 user=self.request.user

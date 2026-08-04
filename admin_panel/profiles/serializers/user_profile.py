@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ..models import Profile
-
+from accounts.models import User
+import re
 
 class ProfileSerializer(serializers.ModelSerializer):
 
@@ -18,6 +19,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("user",)
 
+
     def get_user_data(self, obj):
         return {
             "id": obj.user.id,
@@ -32,6 +34,26 @@ class ProfileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
 
         user = instance.user
+
+        print(f'validate data,',validated_data)
+        print(f'user : ',user)
+
+        print(self.initial_data)
+
+        print(dir(self))
+
+        # if first_name:
+        #     if not re.fullmatch(r"[a-z ]+", first_name):
+        #         raise serializers.ValidationError({
+        #             "first_name": "Only lowercase letters and spaces are allowed."
+        #         })
+
+        # if last_name:
+        #     if not re.fullmatch(r"[a-z ]+", last_name):
+        #         raise serializers.ValidationError({
+        #             "last_name": "Only lowercase letters and spaces are allowed."
+        #         })
+
 
         user.first_name = self.initial_data.get(
             "first_name",
