@@ -24,13 +24,11 @@ const Api = {
             return csrfInput.value;
         }
 
-
         const csrfCookie = document.cookie
             .split("; ")
             .find(cookie =>
                 cookie.startsWith("csrftoken=")
             );
-
 
         return csrfCookie
             ? decodeURIComponent(
@@ -48,20 +46,30 @@ const Api = {
 
         method = "GET",
         auth = true,
-        headers = {}
+        headers = {},
+        body = null
 
     } = {}) {
-
 
         const finalHeaders = {
 
             Accept: "application/json",
 
-            "Content-Type": "application/json",
-
             ...headers
 
         };
+
+
+        /*
+         * JSON Requests
+         * FormData ke liye browser khud Content-Type set karega.
+         */
+        if (!(body instanceof FormData)) {
+
+            finalHeaders["Content-Type"] =
+                "application/json";
+
+        }
 
 
         /*
@@ -72,7 +80,6 @@ const Api = {
             const token =
                 Auth.getAccessToken();
 
-
             if (token) {
 
                 finalHeaders.Authorization =
@@ -81,7 +88,6 @@ const Api = {
             }
 
         }
-
 
 
         /*
@@ -94,12 +100,10 @@ const Api = {
             "DELETE"
         ];
 
-
         if (csrfMethods.includes(method)) {
 
             const csrf =
                 this.getCsrfToken();
-
 
             if (csrf) {
 
@@ -110,11 +114,9 @@ const Api = {
 
         }
 
-
         return finalHeaders;
 
     },
-
 
 
     /**
@@ -125,11 +127,9 @@ const Api = {
         const text =
             await response.text();
 
-
         if (!text) {
             return null;
         }
-
 
         try {
 
@@ -144,7 +144,6 @@ const Api = {
         }
 
     },
-
 
 
     /**
@@ -168,10 +167,8 @@ const Api = {
 
     ) {
 
-
         const controller =
             new AbortController();
-
 
         const timeout =
             setTimeout(() => {
@@ -180,9 +177,15 @@ const Api = {
 
             }, this.timeout);
 
-
-
         try {
+
+            const requestBody =
+
+                body
+                    ? body instanceof FormData
+                        ? body
+                        : JSON.stringify(body)
+                    : null;
 
 
             const response =
@@ -194,7 +197,6 @@ const Api = {
 
                         method,
 
-
                         headers:
                             this.buildHeaders({
 
@@ -202,16 +204,13 @@ const Api = {
 
                                 auth,
 
-                                headers
+                                headers,
+
+                                body
 
                             }),
 
-
-                        body:
-                            body
-                                ? JSON.stringify(body)
-                                : null,
-
+                        body: requestBody,
 
                         signal:
                             controller.signal
@@ -220,21 +219,14 @@ const Api = {
 
                 );
 
-
-
             clearTimeout(timeout);
-
-
 
             const data =
                 await this.parseResponse(
                     response
                 );
 
-
-
             if (!response.ok) {
-
 
                 const error =
                     new Error(
@@ -247,54 +239,39 @@ const Api = {
 
                     );
 
-
                 error.status =
                     response.status;
 
-
                 error.data =
                     data;
-
 
                 throw error;
 
             }
 
-
-
             return data;
-
 
         }
 
-
-        catch(error) {
-
+        catch (error) {
 
             clearTimeout(timeout);
-
-
 
             if (
                 error.name === "AbortError"
             ) {
-
 
                 const timeoutError =
                     new Error(
                         "Request timeout."
                     );
 
-
                 timeoutError.status =
                     408;
-
 
                 throw timeoutError;
 
             }
-
-
 
             throw error;
 
@@ -303,9 +280,8 @@ const Api = {
     },
 
 
-
     /**
-     * GET Request
+     * GET
      */
     get(path, options = {}) {
 
@@ -326,9 +302,8 @@ const Api = {
     },
 
 
-
     /**
-     * POST Request
+     * POST
      */
     post(
 
@@ -359,9 +334,8 @@ const Api = {
     },
 
 
-
     /**
-     * PUT Request
+     * PUT
      */
     put(
 
@@ -392,9 +366,8 @@ const Api = {
     },
 
 
-
     /**
-     * PATCH Request
+     * PATCH
      */
     patch(
 
@@ -425,9 +398,8 @@ const Api = {
     },
 
 
-
     /**
-     * DELETE Request
+     * DELETE
      */
     delete(
 
@@ -453,8 +425,6 @@ const Api = {
 
     }
 
-
 };
-
 
 window.Api = Object.freeze(Api);

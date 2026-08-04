@@ -84,8 +84,12 @@
                     <p id="ddEmail" class="truncate text-xs text-gray-500"></p>
                 </div>
 
-                <a href="#" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                    Profile
+                <a
+                    href="{% url 'profile:index' %}"
+                    role="menuitem"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                >
+                    My Profile
                 </a>
                 <a href="#" role="menuitem" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
                     Settings

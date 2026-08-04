@@ -25,6 +25,8 @@ const APP_CONFIG = Object.freeze({
         DASHBOARD_STATS: "/dashboard/stats/",
 
         USERS: "/users/",
+        PROFILE: "/profile/me/",
+
         ROLES: "/roles/",
         PERMISSIONS: "/permissions/",
         DEPARTMENTS: "/departments/",

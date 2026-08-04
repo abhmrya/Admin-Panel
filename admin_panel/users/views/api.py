@@ -54,13 +54,16 @@ class UserViewSet(ModelViewSet):
 
     def get_serializer_class(self):
 
-        if self.action == "list":
-            return UserListSerializer
+        # if self.action == "list":
+        #     return UserListSerializer
 
-        elif self.action == "retrieve":
-            return UserDetailSerializer
+        # elif self.action == "retrieve":
+        #     return UserDetailSerializer
 
-        elif self.action in ["update", "partial_update"]:
-            return UserUpdateSerializer
+        # elif self.action in ["update", "partial_update"]:
+        #     return UserUpdateSerializer
+
+        print(self.request.body)
+        print(self.action)
 
         return UserListSerializer

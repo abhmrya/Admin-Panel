@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path,include
 from debug_toolbar.toolbar import debug_toolbar_urls
 
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     
@@ -28,10 +30,17 @@ urlpatterns = [
     path("api/v1/auth/",include("accounts.urls")),
     path("api/v1/dashboard/",include("dashboard.api_urls")),   
     path("api/v1/",include("users.api_urls")),
+    path("api/v1/profile/",include("profiles.urls_api"),),
 
     # Web Pages
     path("", include(("accounts.web_urls", "accounts"), namespace="accounts")), 
     path("dashboard/",include(("dashboard.web_urls", "dashboard"),namespace="dashboard")),
-    path("users/",include("users.web_urls"))
+    path("users/",include("users.web_urls")),
+    path("profile/",include("profiles.urls_web"),),
 
 ]+ debug_toolbar_urls()
+
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT
+)

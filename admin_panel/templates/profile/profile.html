@@ -1,0 +1,276 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+
+<div class="max-w-5xl mx-auto">
+
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">
+            My Profile
+        </h1>
+
+        <p class="text-gray-500 mt-1">
+            Manage your personal information
+        </p>
+    </div>
+
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+
+        <!-- Profile Header -->
+        <div class="p-8 border-b border-gray-200">
+
+            <div class="flex flex-col md:flex-row items-center gap-8">
+
+                <div class="relative">
+
+                    <img
+                        id="avatarPreview"
+                        src="https://ui-avatars.com/api/?name=User&size=180"
+                        alt="Profile"
+                        class="w-24 h-24 rounded-full object-cover border-2 border-gray-200 shadow">
+
+                    <input
+                        id="avatar"
+                        type="file"
+                        accept="image/*"
+                        class="hidden">
+
+                </div>
+
+                <div class="flex-1">
+
+                    <h2
+                        id="profileName"
+                        class="text-2xl font-bold text-gray-900">
+                        User Name
+                    </h2>
+
+                    <p
+                        id="profileEmailText"
+                        class="mt-1 text-gray-500">
+                        user@example.com
+                    </p>
+
+                    <span
+                        id="profileRole"
+                        class="inline-block mt-3 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm font-medium">
+                        Employee
+                    </span>
+
+                    <div class="mt-5">
+
+                        <button
+                            id="chooseAvatar"
+                            type="button"
+                            class="px-5 py-2 rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition">
+
+                            Change Photo
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Profile Form -->
+        <form
+            id="profileForm"
+            class="p-8">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div>
+
+                    <label class="label">
+                        First Name
+                    </label>
+
+                    <input
+                        id="first_name"
+                        type="text"
+                        class="input">
+
+                </div>
+
+                <div>
+
+                    <label class="label">
+                        Last Name
+                    </label>
+
+                    <input
+                        id="last_name"
+                        type="text"
+                        class="input">
+
+                </div>
+
+                <div>
+
+                    <label class="label">
+                        Username
+                    </label>
+
+                    <input
+                        id="username"
+                        readonly
+                        class="input bg-gray-100">
+
+                </div>
+
+                <div>
+
+                    <label class="label">
+                        Email
+                    </label>
+
+                    <input
+                        id="email"
+                        readonly
+                        class="input bg-gray-100">
+
+                </div>
+
+                <div>
+
+                    <label class="label">
+                        Phone Number
+                    </label>
+
+                    <input
+                        id="phone_number"
+                        class="input">
+
+                </div>
+
+                <div>
+
+                    <label class="label">
+                        Role
+                    </label>
+
+                    <input
+                        id="role"
+                        readonly
+                        class="input bg-gray-100">
+
+                </div>
+
+                <div>
+
+                    <label class="label">
+                        Gender
+                    </label>
+
+                    <select
+                        id="gender"
+                        class="input">
+
+                        <option value="">
+                            Select Gender
+                        </option>
+
+                        <option value="MALE">
+                            Male
+                        </option>
+
+                        <option value="FEMALE">
+                            Female
+                        </option>
+
+                        <option value="OTHER">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label class="label">
+                        Date of Birth
+                    </label>
+
+                    <input
+                        id="dob"
+                        type="date"
+                        class="input">
+
+                </div>
+
+            </div>
+
+            <div class="mt-6">
+
+                <label class="label">
+                    Address
+                </label>
+
+                <textarea
+                    id="address"
+                    rows="4"
+                    class="input resize-none"></textarea>
+
+            </div>
+
+            <div class="mt-8 flex justify-end">
+
+                <button
+                    type="submit"
+                    class="px-6 py-3 rounded-lg bg-slate-900 text-white hover:bg-slate-800 transition">
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<style>
+
+.label{
+    display:block;
+    margin-bottom:6px;
+    font-size:14px;
+    font-weight:600;
+    color:#374151;
+}
+
+.input{
+    width:100%;
+    padding:12px;
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    outline:none;
+    transition:.2s;
+}
+
+.input:focus{
+    border-color:#0f172a;
+    box-shadow:0 0 0 3px rgba(15,23,42,.08);
+}
+
+</style>
+
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+
+<script src="{% static 'js/services/profile.service.js' %}"></script>
+<script src="{% static 'js/profile/profile.js' %}"></script>
+
+{% endblock %}
