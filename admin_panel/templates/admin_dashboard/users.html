@@ -1,4 +1,4 @@
-{% comment %} {% extends "base/dashboard_base.html" %}
+{% extends "base/dashboard_base.html" %}
 {% load static %}
 
 {% block page_title %}
@@ -7,260 +7,503 @@ Users
 
 {% block content %}
 
-<div class="mb-8 flex items-center justify-between">
+<div class="max-w-7xl mx-auto space-y-6">
 
-    <div>
+    <!-- Header -->
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
 
-        <h1 class="text-3xl font-bold text-slate-800">
-            Users
-        </h1>
+        <div>
 
-        <p class="mt-1 text-sm text-slate-500">
-            Manage organization users.
-        </p>
+            <a href="/dashboard/admin/"
+               class="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition hover:text-gray-900">
 
-    </div>
+                <svg class="h-4 w-4"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24">
 
-</div>
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 19l-7-7 7-7">
+                    </path>
 
+                </svg>
 
-<!-- Filters -->
+                Back to Dashboard
 
-<div class="bg-white border border-slate-200 p-5 mb-6">
+            </a>
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">
 
-        <!-- Search -->
+                Users Management
 
-        <div class="lg:col-span-5">
+            </h1>
 
-            <input
+            <p class="mt-1 text-gray-500 text-sm">
 
-                id="searchInput"
+                View and manage all organization users.
 
-                type="text"
-
-                placeholder="Search username, name or email..."
-
-                class="w-full h-11 px-4 border border-slate-300 focus:outline-none focus:border-indigo-500"
-
-            >
-
-        </div>
-
-        <!-- Role -->
-
-        <div class="lg:col-span-2">
-
-            <select
-
-                id="roleFilter"
-
-                class="w-full h-11 border border-slate-300 px-3"
-
-            >
-
-                <option value="">All Roles</option>
-
-                <option value="ADMIN">Admin</option>
-
-                <option value="HR">HR</option>
-
-                <option value="MANAGER">Manager</option>
-
-                <option value="EMPLOYEE">Employee</option>
-
-            </select>
-
-        </div>
-
-        <!-- Status -->
-
-        <div class="lg:col-span-2">
-
-            <select
-
-                id="statusFilter"
-
-                class="w-full h-11 border border-slate-300 px-3"
-
-            >
-
-                <option value="">All Status</option>
-
-                <option value="true">Active</option>
-
-                <option value="false">Inactive</option>
-
-            </select>
-
-        </div>
-
-        <!-- Buttons -->
-
-        <div class="lg:col-span-3 flex gap-2">
-
-            <button
-
-                id="refreshBtn"
-
-                class="flex-1 h-11 border border-slate-300 hover:bg-slate-50"
-
-            >
-
-                Refresh
-
-            </button>
-
-            <button
-
-                id="resetBtn"
-
-                class="flex-1 h-11 bg-indigo-600 text-white hover:bg-indigo-700"
-
-            >
-
-                Reset
-
-            </button>
+            </p>
 
         </div>
 
     </div>
 
-</div>
 
-<!-- Users Table -->
+    <!-- Alert -->
 
-<div class="bg-white border border-slate-200 overflow-hidden">
+    <div
+        id="alertBox"
+        class="hidden">
 
-    <div class="overflow-x-auto">
+        <div
+            id="alertInner"
+            class="rounded-xl border px-4 py-3 text-sm font-medium">
+        </div>
 
-        <table class="min-w-full">
+    </div>
 
-            <thead class="bg-slate-50 border-b border-slate-200">
 
-                <tr>
 
-                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-slate-600">
-                        Username
-                    </th>
+    <!-- Card -->
 
-                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-slate-600">
-                        Name
-                    </th>
+    <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
 
-                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-slate-600">
-                        Email
-                    </th>
 
-                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-slate-600">
-                        Role
-                    </th>
+        <!-- Filter Section -->
 
-                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-slate-600">
-                        Status
-                    </th>
+        <div class="border-b border-gray-100 bg-gray-50/70 px-6 py-5">
 
-                    <th class="px-5 py-3 text-left text-xs font-semibold uppercase text-slate-600">
-                        Created
-                    </th>
+            <div class="grid grid-cols-1 gap-3 lg:grid-cols-4">
 
-                    <th class="px-5 py-3 text-center text-xs font-semibold uppercase text-slate-600">
-                        Action
-                    </th>
 
-                </tr>
+                <!-- Search -->
 
-            </thead>
+                <div class="relative">
 
-            <tbody
+                    <svg
+                        class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
 
-                id="usersTable"
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-5-5m2-5a7 7 0 11-14 0a7 7 0 0114 0">
 
-                class="divide-y divide-slate-200"
+                        </path>
 
-            >
+                    </svg>
 
-                <!-- JS -->
+                    <input
+                        id="searchInput"
+                        type="text"
+                        placeholder="Search username or email..."
+                        class="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
 
-            </tbody>
+                </div>
 
-        </table>
+
+                <!-- Role -->
+
+                <select
+                    id="roleFilter"
+                    class="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                    <option value="">
+
+                        All Roles
+
+                    </option>
+
+                    <option value="ADMIN">
+
+                        Admin
+
+                    </option>
+
+                    <option value="HR">
+
+                        HR
+
+                    </option>
+
+                    <option value="MANAGER">
+
+                        Manager
+
+                    </option>
+
+                    <option value="EMPLOYEE">
+
+                        Employee
+
+                    </option>
+
+                </select>
+
+
+                <!-- Status -->
+
+                <select
+                    id="statusFilter"
+                    class="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                    <option value="">
+
+                        All Status
+
+                    </option>
+
+                    <option value="true">
+
+                        Active
+
+                    </option>
+
+                    <option value="false">
+
+                        Inactive
+
+                    </option>
+
+                </select>
+
+
+                <!-- Reset -->
+
+                <button
+                    id="resetFilters"
+                    type="button"
+                    class="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:border-gray-300 hover:bg-gray-100">
+
+                    Reset Filters
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Users Table -->
+
+        <div class="overflow-x-auto">
+
+            <table class="min-w-full text-sm">
+
+                <thead class="border-b border-gray-100 bg-gray-50/70">
+
+                    <tr>
+
+                        <th class="w-12 px-6 py-3.5">
+
+                            <input
+                                id="selectAll"
+                                type="checkbox"
+                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                        </th>
+
+                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
+
+                            Username
+
+                        </th>
+
+                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
+
+                            Name
+
+                        </th>
+
+                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
+
+                            Email
+
+                        </th>
+
+                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
+
+                            Role
+
+                        </th>
+
+                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
+
+                            Status
+
+                        </th>
+
+                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
+
+                            Joined
+
+                        </th>
+
+                        <th class="px-6 py-3.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-400">
+
+                            Action
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="usersTable"
+                    class="divide-y divide-gray-50 bg-white">
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="px-6 py-20 text-center text-sm text-gray-400">
+
+                            Loading Users...
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Footer -->
+
+        <div class="flex flex-col items-center justify-between gap-4 border-t border-gray-100 bg-gray-50/70 px-6 py-4 md:flex-row">
+
+            <div
+                id="paginationInfo"
+                class="text-sm text-gray-500">
+
+                Showing 0 of 0 users
+
+            </div>
+
+
+            <div
+                id="pagination"
+                class="flex items-center gap-1.5">
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
 
-
-<!-- Empty State -->
+<!-- User Modal -->
 
 <div
+    id="userModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
 
-    id="emptyState"
+    <div class="w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
 
-    class="hidden border border-slate-200 bg-white py-20 text-center"
+        <!-- Header -->
 
->
+        <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
 
-    <div class="text-5xl mb-3">
-        👥
+            <h2
+                id="modalTitle"
+                class="text-base font-bold text-gray-900">
+
+                Create User
+
+            </h2>
+
+            <button
+                id="closeModal"
+                type="button"
+                class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-red-500">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+        <!-- Form -->
+
+        <form
+            id="userForm"
+            class="p-6">
+
+            <input
+                id="userId"
+                type="hidden">
+
+
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+
+
+                <div>
+
+                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
+
+                        Username
+
+                    </label>
+
+                    <input
+                        id="username"
+                        type="text"
+                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                    <p
+                        class="field-error hidden text-xs text-red-500 mt-1"
+                        data-field="username"></p>
+
+                </div>
+
+
+                <div>
+
+                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
+
+                        Email
+
+                    </label>
+
+                    <input
+                        id="email"
+                        type="email"
+                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                    <p
+                        class="field-error hidden text-xs text-red-500 mt-1"
+                        data-field="email"></p>
+
+                </div>
+
+
+                <div>
+
+                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
+
+                        First Name
+
+                    </label>
+
+                    <input
+                        id="first_name"
+                        type="text"
+                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                </div>
+
+
+                <div>
+
+                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
+
+                        Last Name
+
+                    </label>
+
+                    <input
+                        id="last_name"
+                        type="text"
+                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                </div>
+
+
+                <div>
+
+                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
+
+                        Role
+
+                    </label>
+
+                    <select
+                        id="role"
+                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                        <option value="ADMIN">Admin</option>
+                        <option value="HR">HR</option>
+                        <option value="MANAGER">Manager</option>
+                        <option value="EMPLOYEE">Employee</option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
+
+                        Status
+
+                    </label>
+
+                    <select
+                        id="is_active"
+                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                        <option value="true">
+
+                            Active
+
+                        </option>
+
+                        <option value="false">
+
+                            Inactive
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Footer -->
+
+            <div class="mt-6 flex justify-end gap-3">
+
+                <button
+                    id="cancelBtn"
+                    type="button"
+                    class="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    id="saveUserBtn"
+                    type="submit"
+                    class="rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:opacity-95">
+
+                    Save User
+
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
-
-    <h3 class="text-lg font-semibold text-slate-700">
-        No Users Found
-    </h3>
-
-    <p class="text-slate-500 mt-2">
-        Try changing search or filters.
-    </p>
 
 </div>
-
-
-<!-- Pagination -->
-
-<div class="mt-6 flex items-center justify-between">
-
-    <div
-
-        id="paginationInfo"
-
-        class="text-sm text-slate-500"
-
-    >
-
-    </div>
-
-    <div
-
-        id="pagination"
-
-        class="flex items-center gap-2"
-
-    >
-
-    </div>
-
-</div>
-
-.menu-item{
-
-    width:100%;
-    padding:12px 16px;
-    text-align:left;
-    transition:.2s;
-
-}
-
-.menu-item:hover{
-
-    background:#f8fafc;
-
-}
 
 {% endblock %}
-
 
 {% block extra_js %}
 
@@ -268,310 +511,4 @@ Users
 
 <script src="{% static 'js/admin_dashboard/users.js' %}"></script>
 
-{% endblock %} {% endcomment %}
-
-
-
-
-
-
-
- <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Users Management</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-  body { font-family: 'Inter', system-ui, sans-serif; }
-  ::-webkit-scrollbar { height: 6px; width: 6px; }
-  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-</style>
-</head>
-<body class="bg-gray-50 min-h-screen">
-
-<div class="max-w-7xl mx-auto px-6 py-10">
-
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">Users Management</h1>
-            <p class="text-gray-500 mt-1">Manage organization users.</p>
-        </div>
-
-        <button class="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white text-sm font-medium rounded-lg shadow-sm hover:bg-slate-800 active:scale-[0.98] transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            Create User
-        </button>
-    </div>
-
-    <!-- Card -->
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-
-        <!-- Filters -->
-        <div class="p-5 border-b border-gray-200 bg-gray-50/60">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-
-                <div class="relative">
-                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11a6 6 0 11-12 0 6 6 0 0112 0z"/>
-                    </svg>
-                    <input id="searchInput" type="text" placeholder="Search username or email..."
-                        class="w-full border border-gray-300 rounded-lg pl-9 pr-3 py-2.5 text-sm outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition">
-                </div>
-
-                <select id="roleFilter" class="border border-gray-300 rounded-lg px-3 py-2.5 text-sm bg-white outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition">
-                    <option value="">All Roles</option>
-                    <option value="ADMIN">Admin</option>
-                    <option value="HR">HR</option>
-                    <option value="MANAGER">Manager</option>
-                    <option value="EMPLOYEE">Employee</option>
-                </select>
-
-                <select id="statusFilter" class="border border-gray-300 rounded-lg px-3 py-2.5 text-sm bg-white outline-none focus:border-slate-900 focus:ring-1 focus:ring-slate-900 transition">
-                    <option value="">All Status</option>
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                </select>
-
-                <button id="resetFilters" class="border border-gray-300 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition">
-                    Reset Filters
-                </button>
-
-            </div>
-        </div>
-
-        <!-- Table -->
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead>
-                    <tr class="bg-gray-50 border-b border-gray-200 text-xs uppercase tracking-wide text-gray-500">
-                        <th class="px-5 py-3 text-left w-10"><input type="checkbox" class="rounded border-gray-300"></th>
-                        <th class="px-5 py-3 text-left">Username</th>
-                        <th class="px-5 py-3 text-left">Name</th>
-                        <th class="px-5 py-3 text-left">Email</th>
-                        <th class="px-5 py-3 text-left">Role</th>
-                        <th class="px-5 py-3 text-left">Status</th>
-                        <th class="px-5 py-3 text-left">Joined</th>
-                        <th class="px-5 py-3 text-center">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="usersTable" class="divide-y divide-gray-100">
-                    <tr><td colspan="8" class="py-20 text-center text-gray-400">Loading Users...</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Footer -->
-        <div class="border-t border-gray-200 px-5 py-4 flex items-center justify-between bg-gray-50/60">
-            <div id="paginationInfo" class="text-sm text-gray-500">Showing 0 users</div>
-            <div id="pagination" class="flex items-center gap-2"></div>
-        </div>
-
-    </div>
-</div>
-
-<script>
-// ============ CONFIG ============
-// Apna real API endpoint yaha daal do. Agar galat/unreachable hua to neeche wala MOCK_DATA fallback ke roop me dikh jayega.
-const API_URL = "/api/v1/dashboard/users/";
-
-// Tumhare diye hue sample response - real API fail hone par isi se table bharega
-const MOCK_DATA = {
-    "count": 4,
-    "results": [
-        { "id": "06d60c06-ee92-41ed-a242-f5b7048f1d8a", "username": "akm", "first_name": "akm", "last_name": "akm", "email": "akm@ak.com", "role": "EMPLOYEE", "is_active": true, "created_at": "2026-08-03T09:13:00.778477Z" },
-        { "id": "04a04971-4a79-4a88-90a7-3924057c8f15", "username": "ak", "first_name": "ak", "last_name": "ak", "email": "ak@ak.com", "role": "EMPLOYEE", "is_active": true, "created_at": "2026-08-03T09:10:56.098578Z" },
-        { "id": "8149132c-e5c7-4c20-b5f2-df93429f16c9", "username": "abh.mrya", "first_name": "Abhay", "last_name": "", "email": "abh.mrya@gmail.com", "role": "ADMIN", "is_active": true, "created_at": "2026-08-02T13:44:48.187764Z" },
-        { "id": "3c02e1ec-42aa-4b83-ae4d-89230fa839a4", "username": "abhay", "first_name": "Abhay", "last_name": "Maurya", "email": "abhaymaurya54321@gmail.com", "role": "EMPLOYEE", "is_active": true, "created_at": "2026-08-02T13:21:45.616953Z" }
-    ]
-};
-
-// ============ ELEMENTS ============
-const usersTable = document.getElementById("usersTable");
-const paginationInfo = document.getElementById("paginationInfo");
-const pagination = document.getElementById("pagination");
-const searchInput = document.getElementById("searchInput");
-const roleFilter = document.getElementById("roleFilter");
-const statusFilter = document.getElementById("statusFilter");
-const resetFilters = document.getElementById("resetFilters");
-
-let currentPage = 1;
-let searchTimer = null;
-
-const ROLE_STYLES = {
-    ADMIN: "bg-purple-50 text-purple-700 ring-1 ring-purple-200",
-    HR: "bg-pink-50 text-pink-700 ring-1 ring-pink-200",
-    MANAGER: "bg-blue-50 text-blue-700 ring-1 ring-blue-200",
-    EMPLOYEE: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200",
-};
-
-const AVATAR_COLORS = ["bg-slate-800", "bg-indigo-600", "bg-rose-600", "bg-amber-600", "bg-teal-600", "bg-cyan-600"];
-
-function getInitials(first, last, username) {
-    const f = (first || "").trim();
-    const l = (last || "").trim();
-    if (f || l) return (`${f.charAt(0)}${l.charAt(0)}`).toUpperCase() || username.charAt(0).toUpperCase();
-    return username.charAt(0).toUpperCase();
-}
-
-function avatarColorFor(username) {
-    let hash = 0;
-    for (let i = 0; i < username.length; i++) hash = username.charCodeAt(i) + ((hash << 5) - hash);
-    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
-}
-
-function formatDate(isoString) {
-    return new Date(isoString).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
-}
-
-function roleBadge(role) {
-    const style = ROLE_STYLES[role] || "bg-gray-50 text-gray-700 ring-1 ring-gray-200";
-    return `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${style}">${role}</span>`;
-}
-
-function statusBadge(isActive) {
-    if (isActive) {
-        return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 ring-1 ring-green-200"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>Active</span>`;
-    }
-    return `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600 ring-1 ring-gray-200"><span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span>Inactive</span>`;
-}
-
-function renderRow(user) {
-    const fullName = `${user.first_name || ""} ${user.last_name || ""}`.trim() || "-";
-    const initials = getInitials(user.first_name, user.last_name, user.username);
-    const avatarColor = avatarColorFor(user.username);
-
-    return `
-        <tr class="hover:bg-gray-50 transition">
-            <td class="px-5 py-3"><input type="checkbox" class="rounded border-gray-300" data-id="${user.id}"></td>
-            <td class="px-5 py-3 font-medium text-gray-900">${user.username}</td>
-            <td class="px-5 py-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full ${avatarColor} text-white text-xs font-semibold flex items-center justify-center shrink-0">${initials}</div>
-                    <span class="text-gray-700">${fullName}</span>
-                </div>
-            </td>
-            <td class="px-5 py-3 text-gray-500">${user.email}</td>
-            <td class="px-5 py-3">${roleBadge(user.role)}</td>
-            <td class="px-5 py-3">${statusBadge(user.is_active)}</td>
-            <td class="px-5 py-3 text-gray-500">${formatDate(user.created_at)}</td>
-            <td class="px-5 py-3">
-                <div class="flex items-center justify-center gap-1">
-                    <button class="p-2 rounded-lg text-gray-500 hover:text-slate-900 hover:bg-gray-100 transition" title="Edit" data-action="edit" data-id="${user.id}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                    </button>
-                    <button class="p-2 rounded-lg text-gray-500 hover:text-red-600 hover:bg-red-50 transition" title="Delete" data-action="delete" data-id="${user.id}">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                    </button>
-                </div>
-            </td>
-        </tr>
-    `;
-}
-
-function renderEmptyState() {
-    usersTable.innerHTML = `
-        <tr><td colspan="8" class="py-16 text-center text-gray-400">
-            <div class="flex flex-col items-center gap-2">
-                <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-3a4 4 0 10-4-4 4 4 0 004 4zm6 4v-2a4 4 0 00-3-3.87"/></svg>
-                No users found
-            </div>
-        </td></tr>`;
-}
-
-function renderLoading() {
-    usersTable.innerHTML = `<tr><td colspan="8" class="py-20 text-center text-gray-400">Loading Users...</td></tr>`;
-}
-
-function renderPagination(count, page, pageSize) {
-    const totalPages = Math.max(1, Math.ceil(count / pageSize));
-    pagination.innerHTML = "";
-
-    const makeBtn = (label, targetPage, disabled = false, active = false) => {
-        const btn = document.createElement("button");
-        btn.textContent = label;
-        btn.disabled = disabled;
-        btn.className = `px-3 py-1.5 text-sm rounded-lg border transition ${active ? "bg-slate-900 text-white border-slate-900" : "border-gray-300 text-gray-600 hover:bg-gray-100"} ${disabled ? "opacity-40 cursor-not-allowed hover:bg-transparent" : ""}`;
-        btn.addEventListener("click", () => { if (!disabled) { currentPage = targetPage; fetchUsers(); } });
-        return btn;
-    };
-
-    pagination.appendChild(makeBtn("Prev", page - 1, page <= 1));
-    for (let i = 1; i <= totalPages; i++) pagination.appendChild(makeBtn(i, i, false, i === page));
-    pagination.appendChild(makeBtn("Next", page + 1, page >= totalPages));
-}
-
-function applyClientFilters(results) {
-    const search = searchInput.value.trim().toLowerCase();
-    const role = roleFilter.value;
-    const status = statusFilter.value;
-
-    return results.filter(u => {
-        const matchesSearch = !search || u.username.toLowerCase().includes(search) || u.email.toLowerCase().includes(search);
-        const matchesRole = !role || u.role === role;
-        const matchesStatus = !status || String(u.is_active) === status;
-        return matchesSearch && matchesRole && matchesStatus;
-    });
-}
-
-function renderData(data) {
-    const filtered = applyClientFilters(data.results || []);
-
-    if (filtered.length === 0) {
-        renderEmptyState();
-    } else {
-        usersTable.innerHTML = filtered.map(renderRow).join("");
-    }
-
-    paginationInfo.textContent = `Showing ${filtered.length} of ${data.count ?? filtered.length} users`;
-    renderPagination(filtered.length, currentPage, filtered.length || 10);
-}
-
-async function fetchUsers() {
-    renderLoading();
-    try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error("API not reachable, status " + response.status);
-        const data = await response.json();
-        renderData(data);
-    } catch (error) {
-        console.warn("Real API fetch failed, showing sample data instead:", error.message);
-        renderData(MOCK_DATA);
-    }
-}
-
-// Events
-searchInput.addEventListener("input", () => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(fetchUsers, 400);
-});
-roleFilter.addEventListener("change", fetchUsers);
-statusFilter.addEventListener("change", fetchUsers);
-resetFilters.addEventListener("click", () => {
-    searchInput.value = "";
-    roleFilter.value = "";
-    statusFilter.value = "";
-    fetchUsers();
-});
-
-usersTable.addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-action]");
-    if (!btn) return;
-    const id = btn.dataset.id;
-    const action = btn.dataset.action;
-    if (action === "edit") {
-        window.location.href = `/dashboard/users/${id}/edit/`;
-    } else if (action === "delete") {
-        if (confirm("Are you sure you want to delete this user?")) console.log("Delete user:", id);
-    }
-});
-
-fetchUsers();
-</script>
-
-</body>
-</html>
+{% endblock %}

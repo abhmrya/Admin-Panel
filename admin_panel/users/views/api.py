@@ -8,55 +8,45 @@ from accounts.models import User
 
 from ..serializers.list import UserListSerializer
 from ..serializers.detail import UserDetailSerializer
-
+from ..serializers.update import UserUpdateSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserViewSet(ModelViewSet):
 
+    permission_classes = [IsAuthenticated]
+
     queryset = User.objects.all()
 
-    permission_classes = [
-        IsAuthenticated
-    ]
 
 
     filter_backends = [
 
         DjangoFilterBackend,
-
         SearchFilter,
-
         OrderingFilter,
-
     ]
 
 
     filterset_fields = [
 
         "role",
-
         "is_active",
-
     ]
 
 
     search_fields = [
 
         "username",
-
         "email",
-
         "first_name",
-
         "last_name",
-
     ]
 
 
     ordering_fields = [
 
         "created_at",
-
         "username",
 
     ]
@@ -64,9 +54,13 @@ class UserViewSet(ModelViewSet):
 
     def get_serializer_class(self):
 
-        if self.action == "retrieve":
+        if self.action == "list":
+            return UserListSerializer
 
+        elif self.action == "retrieve":
             return UserDetailSerializer
 
+        elif self.action in ["update", "partial_update"]:
+            return UserUpdateSerializer
 
         return UserListSerializer

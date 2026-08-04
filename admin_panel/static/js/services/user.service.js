@@ -32,49 +32,104 @@ const UserService = {
         );
     },
 
-    list(params = "") {
+        list(params = "") {
 
         const url = params
-            ? `${window.APP_CONFIG.ENDPOINTS.USERS}?${params}`
-            : window.APP_CONFIG.ENDPOINTS.USERS;
+            ? `${APP_CONFIG.ENDPOINTS.USERS}?${params}`
+            : APP_CONFIG.ENDPOINTS.USERS;
 
         return Api.get(url);
 
     },
 
     retrieve(id) {
+
         return Api.get(
-            `${window.APP_CONFIG.ENDPOINTS.USERS}${id}/`
+            `${APP_CONFIG.ENDPOINTS.USERS}${id}/`
         );
+
     },
 
     create(data) {
+
         return Api.post(
-            window.APP_CONFIG.ENDPOINTS.USERS,
+            APP_CONFIG.ENDPOINTS.USERS,
             data
         );
+
     },
 
-    update(id, data) {
+    update(id,data){
+
         return Api.put(
-            `${window.APP_CONFIG.ENDPOINTS.USERS}${id}/`,
+            `${APP_CONFIG.ENDPOINTS.USERS}${id}/`,
             data
         );
+
     },
 
-    partialUpdate(id, data) {
+    partialUpdate(id,data){
+
         return Api.patch(
-            `${window.APP_CONFIG.ENDPOINTS.USERS}${id}/`,
+            `${APP_CONFIG.ENDPOINTS.USERS}${id}/`,
             data
         );
+
     },
 
-    delete(id) {
+    delete(id){
+
         return Api.delete(
-            `${window.APP_CONFIG.ENDPOINTS.USERS}${id}/`
+            `${APP_CONFIG.ENDPOINTS.USERS}${id}/`
         );
+
+    },
+
+
+    changeRole(id,role){
+
+        return Api.patch(
+
+            `${APP_CONFIG.ENDPOINTS.USERS}${id}/`,
+
+            {
+                role
+            }
+
+        );
+
+    },
+
+
+    activate(id){
+
+        return Api.patch(
+
+            `${APP_CONFIG.ENDPOINTS.USERS}${id}/`,
+
+            {
+                is_active:true
+            }
+
+        );
+
+    },
+
+    deactivate(id){
+
+        return Api.patch(
+
+            `${APP_CONFIG.ENDPOINTS.USERS}${id}/`,
+
+            {
+                is_active:false
+            }
+
+        );
+
     }
 
 };
+
 
 window.UserService = Object.freeze(UserService);
