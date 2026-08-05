@@ -191,12 +191,7 @@ function updatePaginationUI() {
 
 /**
  * ==========================================================
- * Audit Modal (Red for Old, Green for New Data Table)
- * ==========================================================
- *//**
- /**
- * ==========================================================
- * Audit Modal (Super Compact & Clean UI)
+ * Audit Modal (Super Compact & Clean UI with Forced Scroll)
  * ==========================================================
  */
 
@@ -221,6 +216,38 @@ function openAuditModal(log) {
 
     if (!modal || !tableBody) return;
 
+    // Force strict layout restrictions with larger width and height
+    modal.style.display = "flex";
+    modal.style.position = "fixed";
+    modal.style.inset = "0";
+    modal.style.zIndex = "50";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+    modal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    modal.style.padding = "1rem";
+
+    const modalContent = modal.querySelector(".bg-white") || modal.firstElementChild;
+    if (modalContent) {
+        modalContent.style.maxHeight = "90vh"; // Height thodi aur badha di
+        modalContent.style.height = "650px";    // Fixed bada size
+        modalContent.style.display = "flex";
+        modalContent.style.flexDirection = "column";
+        modalContent.style.overflow = "hidden";
+        modalContent.style.width = "100%";
+        modalContent.style.maxWidth = "48rem"; // Badi width (max-w-3xl equivalent)
+        modalContent.style.borderRadius = "0.75rem";
+        modalContent.style.backgroundColor = "#ffffff";
+        modalContent.style.boxShadow = "0 20px 25px -5px rgba(0, 0, 0, 0.1)";
+    }
+
+    // Force table container wrapper to scroll internally
+    const tableContainer = tableBody.closest("div") || tableBody.parentElement;
+    if (tableContainer) {
+        tableContainer.style.overflowY = "auto";
+        tableContainer.style.flex = "1";
+        tableContainer.style.maxHeight = "calc(90vh - 70px)";
+    }
+
     tableBody.innerHTML = "";
 
     // 1. Base fields (Super compact rows)
@@ -233,14 +260,14 @@ function openAuditModal(log) {
             if (typeof val === "object") val = JSON.stringify(val);
 
             row.innerHTML = `
-                <td class="px-2.5 py-1 font-medium text-gray-600 text-[11px] capitalize bg-gray-50/60 w-1/3">${field.replace(/_/g, " ")}</td>
-                <td class="px-2.5 py-1 text-gray-700 text-[11px] font-mono bg-white" colspan="2">${val}</td>
+                <td class="px-3.5 py-2 font-medium text-gray-600 text-xs capitalize bg-gray-50/60 w-1/3">${field.replace(/_/g, " ")}</td>
+                <td class="px-3.5 py-2 text-gray-700 text-xs font-mono bg-white" colspan="2">${val}</td>
             `;
             tableBody.appendChild(row);
         }
     });
 
-    // 2. Old and New values comparison breakdown (Compact Red & Green highlighting)
+    // 2. Old and New values comparison breakdown
     let oldVals = log.old_values || {};
     let newVals = log.new_values || {};
 
@@ -250,10 +277,9 @@ function openAuditModal(log) {
     const allKeys = [...new Set([...Object.keys(oldVals), ...Object.keys(newVals)])];
 
     if (allKeys.length > 0) {
-        // Section Header Row
         const headerRow = document.createElement("tr");
         headerRow.innerHTML = `
-            <td colspan="3" class="px-2.5 py-1.5 bg-indigo-50 font-bold text-[10px] uppercase tracking-wider text-indigo-700">
+            <td colspan="3" class="px-3.5 py-2.5 bg-indigo-50 font-bold text-xs uppercase tracking-wider text-indigo-700">
                 Changed Properties Breakdown
             </td>
         `;
@@ -269,19 +295,18 @@ function openAuditModal(log) {
             const oldFormatted = typeof oldVal === "object" ? JSON.stringify(oldVal) : oldVal;
             const newFormatted = typeof newVal === "object" ? JSON.stringify(newVal) : newVal;
 
-            // Compact Red and Green styling
             const oldStyleClass = isChanged 
-                ? "text-red-700 bg-red-50/80 font-semibold border-l-2 border-red-500" 
+                ? "text-red-700 bg-red-50/85 font-semibold border-l-2 border-red-500" 
                 : "text-gray-500 bg-white";
                 
             const newStyleClass = isChanged 
-                ? "text-green-700 bg-green-50/80 font-semibold border-l-2 border-green-500" 
+                ? "text-green-700 bg-green-50/85 font-semibold border-l-2 border-green-500" 
                 : "text-gray-500 bg-white";
 
             row.innerHTML = `
-                <td class="px-2.5 py-1 font-medium text-gray-700 text-[11px] capitalize bg-gray-50/30">↳ ${key.replace(/_/g, " ")}</td>
-                <td class="px-2.5 py-1 text-[11px] font-mono ${oldStyleClass}">${oldFormatted}</td>
-                <td class="px-2.5 py-1 text-[11px] font-mono ${newStyleClass}">${newFormatted}</td>
+                <td class="px-3.5 py-2 font-medium text-gray-700 text-xs capitalize bg-gray-50/30">↳ ${key.replace(/_/g, " ")}</td>
+                <td class="px-3.5 py-2 text-xs font-mono ${oldStyleClass}">${oldFormatted}</td>
+                <td class="px-3.5 py-2 text-xs font-mono ${newStyleClass}">${newFormatted}</td>
             `;
             tableBody.appendChild(row);
         });
@@ -294,4 +319,5 @@ function closeAuditModal() {
     const modal = document.getElementById("auditModal");
     if (!modal) return;
     modal.classList.add("hidden");
+    modal.style.display = ""; // Reset inline style on close
 }

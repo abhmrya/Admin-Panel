@@ -8,10 +8,10 @@ from users.permissions import IsAdmin
 
 from audit.services import AuditService
 from audit.constants import AuditAction
+from audit.mixins import AuditMixin
 
 
-
-class UserUpdateAdminViewSet(viewsets.ModelViewSet):
+class UserUpdateAdminViewSet(AuditMixin,viewsets.ModelViewSet):
 
     queryset = User.objects.all().order_by("-created_at")
 
@@ -20,6 +20,12 @@ class UserUpdateAdminViewSet(viewsets.ModelViewSet):
     permission_classes = [
         IsAdmin
     ]
+
+    audit_action_create = AuditAction.USER_CREATED
+
+    audit_action_update = AuditAction.USER_UPDATED
+
+    audit_action_delete = AuditAction.USER_DELETED
 
 
     def get_user_data(self, user):
@@ -35,56 +41,56 @@ class UserUpdateAdminViewSet(viewsets.ModelViewSet):
 
 
 
-    def update(self, request, *args, **kwargs):
+    # def update(self, request, *args, **kwargs):
 
-        user = self.get_object()
-
-
-        # Old data before update
-
-        old_data = self.get_user_data(user)
+    #     user = self.get_object()
 
 
+    #     # Old data before update
 
-        # DRF update
-
-        response = super().update(
-            request,
-            *args,
-            **kwargs
-        )
+    #     # old_data = self.get_user_data(user)
 
 
 
-        # latest database value
+    #     # DRF update
 
-        user.refresh_from_db()
-
-
-
-        # New data after update
-
-        new_data = self.get_user_data(user)
+    #     response = super().update(
+    #         request,
+    #         *args,
+    #         **kwargs
+    #     )
 
 
 
-        # Audit only if something changed
+    #     # latest database value
 
-        if old_data != new_data:
-
-            AuditService.log(
-
-                request=request,
-
-                action=AuditAction.USER_UPDATED,
-
-                instance=user,
-
-                old_data=old_data,
-
-                new_data=new_data
-
-            )
+    #     # user.refresh_from_db()
 
 
-        return response
+
+    #     # New data after update
+
+    #     # new_data = self.get_user_data(user)
+
+
+
+    #     # Audit only if something changed
+
+    #     # if old_data != new_data:
+
+    #     #     AuditService.log(
+
+    #     #         request=request,
+
+    #     #         action=AuditAction.USER_UPDATED,
+
+    #     #         instance=user,
+
+    #     #         old_data=old_data,
+
+    #     #         new_data=new_data
+
+    #     #     )
+
+
+    #     return response

@@ -1,8 +1,66 @@
+import json
+from django.forms.models import model_to_dict
+from django.core.serializers.json import DjangoJSONEncoder
 from .models import AuditLog
-
+from .config import AUDIT_FIELDS
 
 
 class AuditService:
+
+    # @staticmethod
+    # def serialize_instance(instance):
+
+    #     data = model_to_dict(instance)
+
+    #     return json.loads(
+    #         json.dumps(
+    #             data,
+    #             cls=DjangoJSONEncoder
+    #         )
+    #     )
+
+    @staticmethod
+    def serialize_instance(instance):
+
+        fields = AUDIT_FIELDS.get(
+            instance.__class__,
+            []
+        )
+
+        data = {}
+
+        for field_name in fields:
+
+            value = getattr(
+                instance,
+                field_name,
+                None
+            )
+
+            data[field_name] = value
+
+        return json.loads(
+            json.dumps(
+                data,
+                cls=DjangoJSONEncoder
+            )
+        )
+
+    @staticmethod
+    def get_changes(old_data, new_data):
+
+        changes = {}
+
+        for key in new_data:
+
+            if old_data.get(key) != new_data.get(key):
+
+                changes[key] = {
+                    "old": old_data.get(key),
+                    "new": new_data.get(key)
+                }
+
+        return changes
 
 
     @staticmethod
@@ -32,7 +90,6 @@ class AuditService:
         old_data=None,
         new_data=None,
     ):
-
 
         AuditLog.objects.create(
 

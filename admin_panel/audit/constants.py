@@ -1,20 +1,16 @@
-class AuditAction:
-
-    LOGIN_SUCCESS = "LOGIN_SUCCESS"
-
-    LOGIN_FAILED = "LOGIN_FAILED"
-
-    LOGOUT = "LOGOUT"
+from django.db import models
 
 
-    USER_CREATED = "USER_CREATED"
+class AuditAction(models.TextChoices):
 
-    USER_UPDATED = "USER_UPDATED"
+    USER_CREATED = "USER_CREATED", "User Created"
 
-    USER_DELETED = "USER_DELETED"
+    USER_UPDATED = "USER_UPDATED", "User Updated"
 
-    ROLE_CHANGED = "ROLE_CHANGED"
+    USER_DELETED = "USER_DELETED", "User Deleted"
 
-    USER_ACTIVATED = "USER_ACTIVATED"
+    LOGIN_SUCCESS = "LOGIN_SUCCESS", "Login Success"
 
-    USER_DEACTIVATED = "USER_DEACTIVATED"
+    LOGIN_FAILED = "LOGIN_FAILED", "Login Failed"
+
+    LOGOUT = "LOGOUT", "Logout"
