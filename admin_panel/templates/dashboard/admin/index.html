@@ -5,130 +5,178 @@
 
 {% block content %}
 
-<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+<div class="max-w-7xl mx-auto space-y-8">
+
+    <!-- ================= Header ================= -->
+    <div class="flex items-center justify-between flex-wrap gap-4">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p class="mt-1 text-sm text-gray-500">Organization overview, analytics and recent activities.</p>
+        </div>
+    </div>
+
+    <!-- ================= Statistics ================= -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
+        <!-- Total Users -->
+        <a href="{% url 'users:list' %}" class="group bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-lg transition">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Total Users</p>
+                    <h2 id="statUsersCount" class="mt-2 text-3xl font-bold text-gray-900">--</h2>
+                </div>
+                <div class="h-12 w-12 rounded-lg bg-indigo-100 flex items-center justify-center text-xl">👥</div>
+            </div>
+        </a>
+
+        <!-- Admins -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Admins</p>
+                    <h2 id="statAdminsCount" class="mt-2 text-3xl font-bold">--</h2>
+                </div>
+                <div class="h-12 w-12 rounded-lg bg-red-100 flex items-center justify-center text-xl">🛡️</div>
+            </div>
+        </div>
+
+        <!-- HR -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">HR</p>
+                    <h2 id="statHrCount" class="mt-2 text-3xl font-bold">--</h2>
+                </div>
+                <div class="h-12 w-12 rounded-lg bg-sky-100 flex items-center justify-center text-xl">🗂️</div>
+            </div>
+        </div>
+
+        <!-- Managers -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Managers</p>
+                    <h2 id="statManagersCount" class="mt-2 text-3xl font-bold">--</h2>
+                </div>
+                <div class="h-12 w-12 rounded-lg bg-yellow-100 flex items-center justify-center text-xl">📋</div>
+            </div>
+        </div>
+
+        <!-- Employees -->
+        <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Employees</p>
+                    <h2 id="statEmployeesCount" class="mt-2 text-3xl font-bold">--</h2>
+                </div>
+                <div class="h-12 w-12 rounded-lg bg-emerald-100 flex items-center justify-center text-xl">👨‍💼</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= Quick Actions ================= -->
     <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-        <p class="text-sm text-gray-500 mt-1">Organization-wide overview and controls</p>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+            <a href="{% url 'profile:index' %}" class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition text-center">
+                <div class="text-3xl">👤</div>
+                <p class="mt-3 font-medium">My Profile</p>
+            </a>
+            <a href="#" class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition text-center">
+                <div class="text-3xl">➕</div>
+                <p class="mt-3 font-medium">Add User</p>
+            </a>
+            <a href="#" class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition text-center">
+                <div class="text-3xl">🔐</div>
+                <p class="mt-3 font-medium">Manage Roles</p>
+            </a>
+            <a href="#" class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition text-center">
+                <div class="text-3xl">🏢</div>
+                <p class="mt-3 font-medium">Departments</p>
+            </a>
+        </div>
     </div>
+
+    <!-- ================= Recent Audit Activity ================= -->
+    <section class="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+        <div class="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-800">Recent Audit Activity</h2>
+                <p class="text-sm text-gray-500 mt-1">Latest system actions performed by users.</p>
+            </div>
+            
+            <!-- Rows per page selector -->
+            <div class="flex items-center gap-2">
+                <label for="rowsPerPage" class="text-sm text-gray-600">Show:</label>
+                <select id="rowsPerPage" class="border border-gray-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="5" selected>5</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead class="bg-gray-100 text-xs uppercase tracking-wider text-gray-600">
+                    <tr>
+                        <th class="px-6 py-3 text-left">User</th>
+                        <th class="px-6 py-3 text-left">Action</th>
+                        <th class="px-6 py-3 text-left">Resource</th>
+                        <th class="px-6 py-3 text-left">IP Address</th>
+                        <th class="px-6 py-3 text-left">Time</th>
+                        <th class="px-6 py-3 text-center">Details</th>
+                    </tr>
+                </thead>
+                <tbody id="recentActivityTable" class="divide-y divide-gray-200 bg-white"></tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Footer -->
+        <div class="flex items-center justify-between px-6 py-4 border-t bg-gray-50">
+            <span id="paginationInfo" class="text-sm text-gray-500">Showing 0 to 0 of 0 entries</span>
+            <div class="flex items-center gap-2">
+                <button id="prevPageBtn" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-55 disabled:cursor-not-allowed">Previous</button>
+                <span id="pageNumberDisplay" class="text-sm font-medium text-gray-700 px-2">Page 1 of 1</span>
+                <button id="nextPageBtn" class="px-3 py-1 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-55 disabled:cursor-not-allowed">Next</button>
+            </div>
+        </div>
+    </section>
+
 </div>
 
-<!-- Stat cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-6">
-
-    <a 
-href="{% url 'users:list' %}"
-class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between 
-    hover:shadow-md hover:-translate-y-1 transition-all cursor-pointer " >
-
-    <div>
-        <p class="text-gray-500 text-sm">
-            Total Users
-        </p>
-
-        <h2 
-        id="statUsersCount"
-        class="text-3xl font-bold mt-2 text-gray-800">
-        --
-        </h2>
-
-    </div>
-
-
-    <span class=" flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">👥</span>
-
-</a>
-
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Admins</p>
-            <h2 id="statAdminsCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-xl">🛡</span>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">HR</p>
-            <h2 id="statHrCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-sky-50 text-sky-600 text-xl">🗂</span>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Managers</p>
-            <h2 id="statManagersCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-xl">📋</span>
-    </div>
-
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Employees</p>
-            <h2 id="statEmployeesCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-xl">🧑‍💼</span>
-    </div>
-
-</div>
-
-<!-- Quick actions -->
-<div class="mt-8">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-
-    <a
-    href="{% url 'profile:index' %}"
-    class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
->
-    <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-50 text-violet-600 text-lg">
-        👤
-    </span>
-
-    <span class="text-sm font-medium text-gray-700">
-        My Profile
-    </span>
-</a>
-
-        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-lg">➕</span>
-            <span class="text-sm font-medium text-gray-700">Add User</span>
-        </a>
-
-        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-lg">🔐</span>
-            <span class="text-sm font-medium text-gray-700">Manage Roles</span>
-        </a>
-
-        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-50 text-sky-600 text-lg">🏢</span>
-            <span class="text-sm font-medium text-gray-700">Departments</span>
-        </a>
-
-        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-lg">🛡</span>
-            <span class="text-sm font-medium text-gray-700">Permissions</span>
-        </a>
-
-    </div>
-</div>
-
-<!-- Recent activity -->
-<div class="mt-8 bg-white rounded-xl border border-gray-100 shadow-sm">
-    <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-800">Recent Activity</h2>
-    </div>
-    <div id="recentActivityList" class="divide-y divide-gray-100">
-        <div class="px-6 py-10 text-center text-sm text-gray-400">
-            No recent activity yet.
+<!-- ================= Audit Details Modal (Table Format with Red/Green) ================= -->
+<div id="auditModal" class="hidden fixed inset-0 z-50">
+    <div id="auditOverlay" class="absolute inset-0 bg-black/50"></div>
+    <div class="relative flex items-center justify-center h-full p-6">
+        <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl overflow-hidden flex flex-col max-h-[90vh]">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b bg-gray-50">
+                <h2 class="text-xl font-semibold text-gray-800">Audit Details</h2>
+                <button id="closeAuditBtn" class="text-gray-500 hover:text-red-600 text-2xl font-bold">&times;</button>
+            </div>
+            <!-- Body: Table view for changes -->
+            <div class="p-6 overflow-y-auto flex-1">
+                <table class="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg overflow-hidden">
+                    <thead class="bg-gray-100 text-xs uppercase tracking-wider text-gray-700">
+                        <tr>
+                            <th class="px-4 py-3 text-left">Field / Property</th>
+                            <th class="px-4 py-3 text-left text-red-600">Old Value (Purana)</th>
+                            <th class="px-4 py-3 text-left text-green-600">New Value (Naya)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="auditTableBody" class="divide-y divide-gray-200 bg-white text-sm">
+                        <!-- Dynamically filled via JS -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
 {% endblock %}
 
-
 {% block extra_js %}
 {{ block.super }}
+<script src="{% static 'js/services/audit.service.js' %}"></script>
 <script src="{% static 'js/dashboard/admin.js' %}"></script>
 {% endblock %}

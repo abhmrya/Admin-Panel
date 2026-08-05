@@ -31,7 +31,7 @@ urlpatterns = [
     path("api/v1/dashboard/",include("dashboard.api_urls")),   
     path("api/v1/",include("users.api_urls")),
     path("api/v1/profile/",include("profiles.urls_api"),),
-
+    path("api/v1/audit/",include("audit.urls",)),
     # Web Pages
     path("", include(("accounts.web_urls", "accounts"), namespace="accounts")), 
     path("dashboard/",include(("dashboard.web_urls", "dashboard"),namespace="dashboard")),

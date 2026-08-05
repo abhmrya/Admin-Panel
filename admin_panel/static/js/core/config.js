@@ -33,6 +33,8 @@ const APP_CONFIG = Object.freeze({
         EMAIL_LOGS: "/email-logs/",
         SETTINGS: "/settings/",
 
+        AUDIT_LOGS: "/audit/logs/",
+
     }),
 
     STORAGE_KEYS: Object.freeze({
