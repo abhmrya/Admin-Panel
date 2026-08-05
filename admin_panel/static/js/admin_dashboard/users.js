@@ -198,9 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
             <td class="px-6 py-4 text-center">
 
                 <button
-                    class="rounded-lg border px-3 py-1 text-sm hover:bg-gray-100">
+                    class="editUser rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 hover:bg-indigo-100"
+                    data-id="${user.id}">
 
-                    View
+                    Edit
 
                 </button>
 
@@ -398,6 +399,44 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    loadUsers();
+/*
+|--------------------------------------------------------------------------
+| Edit User
+|--------------------------------------------------------------------------
+*/
+
+document.addEventListener("click", async (e) => {
+
+    const button = e.target.closest(".editUser");
+
+    if (!button)
+        return;
+
+    try {
+
+        const user =
+            await UserUpdateService.retrieve(
+                button.dataset.id
+            );
+
+        UserUpdate.open(user);
+
+    }
+
+    catch (error) {
+
+        Alerts.show(
+            error.message
+        );
+
+    }
 
 });
+
+
+    loadUsers();
+    window.loadUsers = loadUsers;
+
+});
+
+
