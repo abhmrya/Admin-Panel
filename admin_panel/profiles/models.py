@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import User
-
+from departments.models import Department
 
 class Gender(models.TextChoices):
     MALE = "MALE", "Male"
@@ -14,6 +14,14 @@ class Profile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="profile"
+    )
+
+    department = models.ForeignKey(
+        Department,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employees"
     )
 
     avatar = models.ImageField(

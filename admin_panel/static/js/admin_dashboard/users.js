@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         usersTable.innerHTML = `
             <tr>
-                <td colspan="8" class="px-6 py-16 text-center text-gray-400">
+                <td colspan="9" class="px-6 py-16 text-center text-gray-400">
                     Loading users...
                 </td>
             </tr>
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         usersTable.innerHTML = `
             <tr>
-                <td colspan="8" class="px-6 py-16 text-center text-gray-400">
+                <td colspan="9" class="px-6 py-16 text-center text-gray-400">
                     No users found.
                 </td>
             </tr>
@@ -183,6 +183,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
             </td>
 
+            <td class="px-6 py-4 text-gray-600">
+
+    ${
+        user.department?.name
+            ? `
+                <div>
+                    <p class="font-medium text-gray-800">
+                        ${user.department.name}
+                    </p>
+
+                    <p class="text-xs text-gray-400">
+                        ${user.department.code || ""}
+                    </p>
+                </div>
+            `
+            : `
+                <span class="text-gray-400">
+                    No Department
+                </span>
+            `
+    }
+
+</td>
+
             <td class="px-6 py-4">
 
                 ${statusBadge(user.is_active)}
@@ -215,6 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     function renderTable(data) {
+
+        console.log("USER DATA:", data);
 
         if (!data.results.length) {
 

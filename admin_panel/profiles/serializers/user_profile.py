@@ -1,26 +1,41 @@
 from rest_framework import serializers
+
 from ..models import Profile
 from accounts.models import User
-import re
+from departments.models import Department
+
 
 class ProfileSerializer(serializers.ModelSerializer):
 
     user_data = serializers.SerializerMethodField()
 
+    department = serializers.PrimaryKeyRelatedField(
+        queryset=Department.objects.all(),
+        required=False,
+        allow_null=True
+    )
+
     class Meta:
         model = Profile
+
         fields = (
             "id",
             "avatar",
             "gender",
             "dob",
             "address",
+            "department",
             "user_data",
         )
-        read_only_fields = ("user",)
+
+        read_only_fields = (
+            "id",
+            "user",
+        )
 
 
     def get_user_data(self, obj):
+
         return {
             "id": obj.user.id,
             "username": obj.user.username,
@@ -31,29 +46,13 @@ class ProfileSerializer(serializers.ModelSerializer):
             "role": obj.user.role,
         }
 
+
     def update(self, instance, validated_data):
 
         user = instance.user
 
-        print(f'validate data,',validated_data)
-        print(f'user : ',user)
 
-        print(self.initial_data)
-
-        print(dir(self))
-
-        # if first_name:
-        #     if not re.fullmatch(r"[a-z ]+", first_name):
-        #         raise serializers.ValidationError({
-        #             "first_name": "Only lowercase letters and spaces are allowed."
-        #         })
-
-        # if last_name:
-        #     if not re.fullmatch(r"[a-z ]+", last_name):
-        #         raise serializers.ValidationError({
-        #             "last_name": "Only lowercase letters and spaces are allowed."
-        #         })
-
+        # Update User fields
 
         user.first_name = self.initial_data.get(
             "first_name",
@@ -71,6 +70,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         )
 
         user.save()
+
+
+        # Update Profile fields
 
         instance.gender = validated_data.get(
             "gender",
@@ -91,6 +93,12 @@ class ProfileSerializer(serializers.ModelSerializer):
             "avatar",
             instance.avatar,
         )
+
+        instance.department = validated_data.get(
+            "department",
+            instance.department,
+        )
+
 
         instance.save()
 

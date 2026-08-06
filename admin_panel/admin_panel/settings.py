@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'users',
     'profiles',
     'audit',
+    'departments',
 
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
