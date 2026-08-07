@@ -1,0 +1,45 @@
+[33mcommit 2ef810c043f5b2a0153af235786e3dbd80257729[m[33m ([m[1;36mHEAD[m[33m, [m[1;32mAI[m[33m)[m
+Author: abhaymaurya57 <abhaymaurya54321@gmail.com>
+Date:   Fri Aug 7 16:02:11 2026 +0530
+
+    add chatbot implementation without secrets
+
+ .env                                               |  53 [31m---[m
+ .gitignore                                         |  25 [32m+[m[31m-[m
+ admin_panel/admin_panel/settings.py                |   9 [32m+[m
+ admin_panel/admin_panel/urls.py                    |   4 [32m+[m[31m-[m
+ admin_panel/chatbot/__init__.py                    |   0
+ admin_panel/chatbot/admin.py                       |  43 [32m++[m
+ admin_panel/chatbot/apps.py                        |   5 [32m+[m
+ admin_panel/chatbot/clients/__init__.py            |   0
+ admin_panel/chatbot/clients/gemini_client.py       |   6 [32m+[m
+ admin_panel/chatbot/clients/openai_client.py       |   6 [32m+[m
+ admin_panel/chatbot/migrations/0001_initial.py     |  75 [32m++++[m
+ admin_panel/chatbot/migrations/__init__.py         |   0
+ admin_panel/chatbot/models.py                      |  84 [32m++++[m
+ admin_panel/chatbot/serializers/__init__.py        |   1 [32m+[m
+ admin_panel/chatbot/serializers/chat.py            |  42 [32m++[m
+ admin_panel/chatbot/serializers/conversation.py    |  13 [32m+[m
+ admin_panel/chatbot/services/__init__.py           |   2 [32m+[m
+ admin_panel/chatbot/services/ai_service.py         |  49 [32m+++[m
+ admin_panel/chatbot/services/conversation_query.py |   0
+ .../chatbot/services/conversation_service.py       |  36 [32m++[m
+ admin_panel/chatbot/services/prompt_service.py     |  27 [32m++[m
+ admin_panel/chatbot/tests.py                       |   3 [32m+[m
+ admin_panel/chatbot/urls_api.py                    |   9 [32m+[m
+ admin_panel/chatbot/urls_web.py                    |  16 [32m+[m
+ admin_panel/chatbot/views.py                       |   3 [32m+[m
+ admin_panel/chatbot/views/__init__.py              |   0
+ admin_panel/chatbot/views/chat.py                  |  51 [32m+++[m
+ admin_panel/chatbot/views/conversation.py          |  50 [32m+++[m
+ admin_panel/chatbot/views/pages.py                 |   6 [32m+[m
+ admin_panel/static/css/output.css                  | 488 [32m++++++++++++++++++++[m[31m-[m
+ admin_panel/static/js/chatbot/chatbot.js           | 300 [32m+++++++++++++[m
+ admin_panel/static/js/core/config.js               |   3 [32m+[m
+ admin_panel/static/js/services/chatbot.service.js  |  87 [32m++++[m
+ admin_panel/templates/authentication/register.html |   2 [31m-[m
+ admin_panel/templates/base/base.html               |  10 [32m+[m[31m-[m
+ admin_panel/templates/base/sidebar.html            |  10 [32m+[m
+ admin_panel/templates/chatbot/chatbot.html         | 139 [32m++++++[m
+ admin_panel/templates/dashboard/admin/index.html   | 142 [32m+++++[m[31m-[m
+ 38 files changed, 1701 insertions(+), 98 deletions(-)
