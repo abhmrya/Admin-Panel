@@ -82,10 +82,17 @@ const Chatbot = {
 
     async loadConversations() {
         try {
-            const conversations = await ChatbotService.getConversations();
+            const data = await ChatbotService.getConversations();
+            // Handle DRF Pagination (results array) or direct array fallback
+            const conversations = data.results ? data.results : data;
             this.renderConversationList(conversations);
         } catch (error) {
             console.error("Failed to load conversations.", error);
+            this.elements.conversationList.innerHTML = `
+                <div class="p-4 text-center text-xs text-red-500">
+                    Failed to load chats.
+                </div>
+            `;
         }
     },
 
@@ -124,7 +131,7 @@ const Chatbot = {
         const list = this.elements.conversationList;
         list.innerHTML = "";
 
-        if (!conversations || !conversations.length) {
+        if (!conversations || !Array.isArray(conversations) || conversations.length === 0) {
             list.innerHTML = `
                 <div class="p-5 text-center text-xs text-gray-400">
                     No conversations found.
