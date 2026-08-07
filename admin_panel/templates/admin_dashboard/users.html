@@ -2,541 +2,266 @@
 {% load static %}
 
 {% block page_title %}
-Users
+Users Management
 {% endblock %}
 
 {% block content %}
 
-<div class="max-w-7xl mx-auto space-y-6">
+<div class="mx-auto max-w-7xl space-y-8 pb-12">
 
-    <!-- Header -->
-    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-
+    <!-- Header Section -->
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-
             <a href="/dashboard/admin/"
-               class="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition hover:text-gray-900">
-
-                <svg class="h-4 w-4"
+               class="group mb-2 inline-flex items-center gap-1.5 text-xs font-semibold text-gray-500 transition-colors hover:text-indigo-600">
+                <svg class="h-4 w-4 transition-transform group-hover:-translate-x-0.5"
                      fill="none"
                      stroke="currentColor"
                      viewBox="0 0 24 24">
-
                     <path stroke-linecap="round"
                           stroke-linejoin="round"
                           stroke-width="2"
                           d="M15 19l-7-7 7-7">
                     </path>
-
                 </svg>
-
                 Back to Dashboard
-
             </a>
-
-            <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">
-
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
                 Users Management
-
             </h1>
-
-            <p class="mt-1 text-gray-500 text-sm">
-
-                View and manage all organization users.
-
+            <p class="mt-1 text-sm text-gray-500">
+                View, search, and manage all organization users efficiently.
             </p>
-
         </div>
-
     </div>
 
-
-    <!-- Alert -->
-
-    <div
-        id="alertBox"
-        class="hidden">
-
-        <div
-            id="alertInner"
-            class="rounded-xl border px-4 py-3 text-sm font-medium">
+    <!-- Alert Box -->
+    <div id="alertBox" class="hidden transition-all duration-300">
+        <div id="alertInner" class="flex items-center gap-3 rounded-2xl border px-5 py-4 text-sm font-medium shadow-sm">
+            <!-- Alert content injected dynamically -->
         </div>
-
     </div>
 
+    <!-- Main Container Card -->
+    <div class="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-xl shadow-gray-100/80">
 
+        <!-- Filter Toolbar -->
+        <div class="border-b border-gray-100 bg-gray-50/50 px-6 py-4">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
 
-    <!-- Card -->
-
-    <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-
-
-        <!-- Filter Section -->
-
-        <div class="border-b border-gray-100 bg-gray-50/70 px-6 py-5">
-
-            <div class="grid grid-cols-1 gap-3 lg:grid-cols-4">
-
-
-                <!-- Search -->
-
+                <!-- Search Bar -->
                 <div class="relative">
-
-                    <svg
-                        class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M21 21l-5-5m2-5a7 7 0 11-14 0a7 7 0 0114 0">
-
-                        </path>
-
-                    </svg>
-
-                    <input
-                        id="searchInput"
-                        type="text"
-                        placeholder="Search username or email..."
-                        class="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-3 text-sm text-gray-700 placeholder-gray-400 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
+                    <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-5-5m2-5a7 7 0 11-14 0a7 7 0 0114 0"></path>
+                        </svg>
+                    </span>
+                    <input id="searchInput"
+                           type="text"
+                           placeholder="Search username or email..."
+                           class="w-full rounded-2xl border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-800 placeholder-gray-400 shadow-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
                 </div>
 
-
-                <!-- Role -->
-
-                <select
-                    id="roleFilter"
-                    class="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
-                    <option value="">
-
-                        All Roles
-
-                    </option>
-
-                    <option value="ADMIN">
-
-                        Admin
-
-                    </option>
-
-                    <option value="HR">
-
-                        HR
-
-                    </option>
-
-                    <option value="MANAGER">
-
-                        Manager
-
-                    </option>
-
-                    <option value="EMPLOYEE">
-
-                        Employee
-
-                    </option>
-
+                <!-- Role Filter -->
+                <select id="roleFilter"
+                        class="w-full rounded-2xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 shadow-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
+                    <option value="">All Roles</option>
+                    <option value="ADMIN">Admin</option>
+                    <option value="HR">HR</option>
+                    <option value="MANAGER">Manager</option>
+                    <option value="EMPLOYEE">Employee</option>
                 </select>
 
-
-                <!-- Status -->
-
-                <select
-                    id="statusFilter"
-                    class="rounded-xl border border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-700 outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
-                    <option value="">
-
-                        All Status
-
-                    </option>
-
-                    <option value="true">
-
-                        Active
-
-                    </option>
-
-                    <option value="false">
-
-                        Inactive
-
-                    </option>
-
+                <!-- Status Filter -->
+                <select id="statusFilter"
+                        class="w-full rounded-2xl border border-gray-200 bg-white px-3.5 py-2.5 text-sm text-gray-800 shadow-sm outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
+                    <option value="">All Status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
                 </select>
 
-
-                <!-- Reset -->
-
-                <button
-                    id="resetFilters"
-                    type="button"
-                    class="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:border-gray-300 hover:bg-gray-100">
-
+                <!-- Reset Button -->
+                <button id="resetFilters"
+                        type="button"
+                        class="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 shadow-sm transition-all hover:border-gray-300 hover:bg-gray-50 active:scale-95">
+                    <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
                     Reset Filters
-
                 </button>
 
             </div>
-
         </div>
 
         <!-- Users Table -->
-
         <div class="overflow-x-auto">
-
-            <table class="min-w-full text-sm">
-
-                <thead class="border-b border-gray-100 bg-gray-50/70">
-
+            <table class="min-w-full text-left text-sm text-gray-600">
+                <thead class="border-b border-gray-100 bg-gray-50/80 text-[11px] font-bold uppercase tracking-wider text-gray-400">
                     <tr>
-
-                        <th class="w-12 px-6 py-3.5">
-
-                            <input
-                                id="selectAll"
-                                type="checkbox"
-                                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
+                        <th scope="col" class="w-12 px-6 py-4">
+                            <input id="selectAll"
+                                   type="checkbox"
+                                   class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                         </th>
-
-                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
-
-                            Username
-
-                        </th>
-
-                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
-
-                            Name
-
-                        </th>
-
-                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
-
-                            Email
-
-                        </th>
-
-                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
-
-                            Role
-
-                        </th>
-
-                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
-                            Department
-                        </th>
-
-                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
-
-                            Status
-
-                        </th>
-
-                        <th class="px-4 py-3.5 text-left text-[11px] font-bold uppercase tracking-wider text-gray-400">
-
-                            Joined
-
-                        </th>
-
-                        <th class="px-6 py-3.5 text-center text-[11px] font-bold uppercase tracking-wider text-gray-400">
-
-                            Action
-
-                        </th>
-
+                        <th scope="col" class="px-4 py-4">Username</th>
+                        <th scope="col" class="px-4 py-4">Name</th>
+                        <th scope="col" class="px-4 py-4">Email</th>
+                        <th scope="col" class="px-4 py-4">Role</th>
+                        <th scope="col" class="px-4 py-4">Department</th>
+                        <th scope="col" class="px-4 py-4">Status</th>
+                        <th scope="col" class="px-4 py-4">Joined</th>
+                        <th scope="col" class="px-6 py-4 text-center">Action</th>
                     </tr>
-
                 </thead>
-
-
-                <tbody
-                    id="usersTable"
-                    class="divide-y divide-gray-50 bg-white">
-
+                <tbody id="usersTable" class="divide-y divide-gray-100 bg-white">
                     <tr>
-
-                        <td
-                            colspan="9"
-                            class="px-6 py-20 text-center text-sm text-gray-400">
-
-                            Loading Users...
-
+                        <td colspan="9" class="px-6 py-16 text-center text-sm text-gray-400">
+                            <div class="flex flex-col items-center justify-center gap-2">
+                                <svg class="h-8 w-8 animate-spin text-indigo-500" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span>Loading Users...</span>
+                            </div>
                         </td>
-
                     </tr>
-
                 </tbody>
-
             </table>
-
         </div>
 
-
-        <!-- Footer -->
-
-        <div class="flex flex-col items-center justify-between gap-4 border-t border-gray-100 bg-gray-50/70 px-6 py-4 md:flex-row">
-
-            <div
-                id="paginationInfo"
-                class="text-sm text-gray-500">
-
+        <!-- Table Footer / Pagination -->
+        <div class="flex flex-col items-center justify-between gap-4 border-t border-gray-100 bg-gray-50/50 px-6 py-4 sm:flex-row">
+            <div id="paginationInfo" class="text-sm font-medium text-gray-500">
                 Showing 0 of 0 users
-
             </div>
-
-
-            <div
-                id="pagination"
-                class="flex items-center gap-1.5">
-
+            <div id="pagination" class="flex items-center gap-1.5">
+                <!-- Pagination Buttons dynamically injected -->
             </div>
-
         </div>
 
     </div>
 
 </div>
 
-<!-- User Modal -->
+<!-- Modern User Modal / Drawer Style Overlay -->
+<div id="userModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity">
+    <div class="w-full max-w-2xl transform overflow-hidden rounded-3xl bg-white shadow-2xl transition-all">
 
-<div
-    id="userModal"
-    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-
-    <div class="w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
-
-        <!-- Header -->
-
-        <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
-
-            <h2
-                id="modalTitle"
-                class="text-base font-bold text-gray-900">
-
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between border-b border-gray-100 px-6 py-5">
+            <h2 id="modalTitle" class="text-lg font-bold text-gray-900">
                 Create User
-
             </h2>
-
-            <button
-                id="closeModal"
-                type="button"
-                class="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 hover:text-red-500">
-
-                &times;
-
+            <button id="closeModal"
+                    type="button"
+                    class="flex h-9 w-9 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-gray-100 hover:text-red-500">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
             </button>
-
         </div>
 
+        <!-- Modal Form Content -->
+        <form id="userForm" class="p-6 space-y-4">
+            <input id="userId" type="hidden">
 
-        <!-- Form -->
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-        <form
-            id="userForm"
-            class="p-6">
-
-            <input
-                id="userId"
-                type="hidden">
-
-
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-
+                <!-- Username -->
                 <div>
-
-                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
-
-                        Username
-
-                    </label>
-
-                    <input
-                        id="username"
-                        type="text"
-                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
-                    <p
-                        class="field-error hidden text-xs text-red-500 mt-1"
-                        data-field="username"></p>
-
+                    <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500">Username</label>
+                    <input id="username"
+                           type="text"
+                           placeholder="johndoe"
+                           class="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm text-gray-800 outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
+                    <p class="field-error hidden text-xs font-medium text-red-500 mt-1" data-field="username"></p>
                 </div>
 
-
+                <!-- Email -->
                 <div>
-
-                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
-
-                        Email
-
-                    </label>
-
-                    <input
-                        id="email"
-                        type="email"
-                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
-                    <p
-                        class="field-error hidden text-xs text-red-500 mt-1"
-                        data-field="email"></p>
-
+                    <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500">Email Address</label>
+                    <input id="email"
+                           type="email"
+                           placeholder="john@example.com"
+                           class="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm text-gray-800 outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
+                    <p class="field-error hidden text-xs font-medium text-red-500 mt-1" data-field="email"></p>
                 </div>
 
-
+                <!-- First Name -->
                 <div>
-
-                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
-
-                        First Name
-
-                    </label>
-
-                    <input
-                        id="first_name"
-                        type="text"
-                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
+                    <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500">First Name</label>
+                    <input id="first_name"
+                           type="text"
+                           placeholder="John"
+                           class="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm text-gray-800 outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
                 </div>
 
-
+                <!-- Last Name -->
                 <div>
-
-                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
-
-                        Last Name
-
-                    </label>
-
-                    <input
-                        id="last_name"
-                        type="text"
-                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
+                    <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500">Last Name</label>
+                    <input id="last_name"
+                           type="text"
+                           placeholder="Doe"
+                           class="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm text-gray-800 outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
                 </div>
 
-
+                <!-- Role -->
                 <div>
-
-                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
-
-                        Role
-
-                    </label>
-
-                    <select
-                        id="role"
-                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
+                    <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500">Role</label>
+                    <select id="role"
+                            class="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm text-gray-800 outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
                         <option value="ADMIN">Admin</option>
                         <option value="HR">HR</option>
                         <option value="MANAGER">Manager</option>
                         <option value="EMPLOYEE">Employee</option>
-
                     </select>
-
                 </div>
 
+                <!-- Department -->
                 <div>
-
-                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
-                        Department
-                    </label>
-
-
-                    <select
-                        id="department"
-                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
-                        <option value="">
-                            Select Department
-                        </option>
-
+                    <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500">Department</label>
+                    <select id="department"
+                            class="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm text-gray-800 outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
+                        <option value="">Select Department</option>
                     </select>
-
                 </div>
 
-
-                <div>
-
-                    <label class="mb-1.5 block text-xs font-semibold text-gray-600">
-
-                        Status
-
-                    </label>
-
-                    <select
-                        id="is_active"
-                        class="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-
-                        <option value="true">
-
-                            Active
-
-                        </option>
-
-                        <option value="false">
-
-                            Inactive
-
-                        </option>
-
+                <!-- Status -->
+                <div class="sm:col-span-2">
+                    <label class="mb-1.5 block text-xs font-bold uppercase tracking-wider text-gray-500">Account Status</label>
+                    <select id="is_active"
+                            class="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm text-gray-800 outline-none transition-all focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
                     </select>
-
                 </div>
 
             </div>
 
-
-            <!-- Footer -->
-
-            <div class="mt-6 flex justify-end gap-3">
-
-                <button
-                    id="cancelBtn"
-                    type="button"
-                    class="rounded-xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition hover:bg-gray-50">
-
+            <!-- Modal Footer -->
+            <div class="mt-8 flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+                <button id="cancelBtn"
+                        type="button"
+                        class="rounded-2xl border border-gray-200 px-5 py-2.5 text-sm font-semibold text-gray-600 transition-all hover:bg-gray-50 active:scale-95">
                     Cancel
-
                 </button>
-
-                <button
-                    id="saveUserBtn"
-                    type="submit"
-                    class="rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-indigo-200 transition hover:opacity-95">
-
+                <button id="saveUserBtn"
+                        type="submit"
+                        class="rounded-2xl bg-indigo-600 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition-all hover:bg-indigo-700 active:scale-95">
                     Save User
-
                 </button>
-
             </div>
-
         </form>
 
     </div>
-
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
-
 {{ block.super }}
-
 <script src="{% static 'js/services/department.service.js' %}"></script>
-
 <script src="{% static 'js/services/user-update.service.js' %}"></script>
-
 <script src="{% static 'js/admin_dashboard/user-update.js' %}"></script>
-
 <script src="{% static 'js/admin_dashboard/users.js' %}"></script>
 {% endblock %}
