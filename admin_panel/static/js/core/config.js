@@ -35,6 +35,9 @@ const APP_CONFIG = Object.freeze({
 
         AUDIT_LOGS: "/audit/logs/",
 
+        CHAT: "/chat/",
+        CHAT_CONVERSATIONS: "/chat/conversations/",
+
     }),
 
     STORAGE_KEYS: Object.freeze({
