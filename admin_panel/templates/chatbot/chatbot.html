@@ -1,0 +1,139 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}
+AI Assistant
+{% endblock %}
+
+{% block content %}
+
+<div class="h-[calc(100vh-110px)] w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+    <div class="flex h-full w-full">
+
+        <!-- ====================================== -->
+        <!-- Sidebar -->
+        <!-- ====================================== -->
+        <aside class="flex h-full w-80 flex-shrink-0 flex-col border-r border-slate-200 bg-slate-50/70 backdrop-blur-md">
+            
+            <!-- Sidebar Header -->
+            <div class="border-b border-slate-200/80 p-4 space-y-3">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-sm font-bold text-slate-800 tracking-tight">
+                            Conversations
+                        </h2>
+                        <p class="text-[11px] text-slate-500">
+                            Your active & past sessions
+                        </p>
+                    </div>
+                    <button
+                        id="new-chat-btn"
+                        class="flex items-center gap-1.5 rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow active:scale-95 focus:outline-none">
+                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path></svg>
+                        New Chat
+                    </button>
+                </div>
+
+                <!-- Search Input -->
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path></svg>
+                    </span>
+                    <input
+                        id="conversation-search"
+                        type="text"
+                        placeholder="Search chats..."
+                        class="w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-xs text-slate-700 outline-none transition-all focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20">
+                </div>
+            </div>
+
+            <!-- Conversation List Container -->
+            <div
+                id="conversation-list"
+                class="flex-1 overflow-y-auto p-2 space-y-1">
+                <div class="p-6 text-center text-xs text-slate-400 animate-pulse">
+                    Loading conversations...
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ====================================== -->
+        <!-- Chat Area -->
+        <!-- ====================================== -->
+        <section class="flex h-full flex-1 flex-col bg-white overflow-hidden min-h-0">
+
+            <!-- Chat Header -->
+            <header class="flex h-16 items-center justify-between border-b border-slate-200/80 bg-white/80 backdrop-blur px-6 flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold text-xs shadow-md shadow-blue-500/20">
+                        AI
+                    </div>
+                    <div>
+                        <h1 class="text-sm font-bold text-slate-800 leading-tight">
+                            Admin AI Assistant
+                        </h1>
+                        <p class="text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5">
+                            <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Gemini Engine Ready
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Chat Messages Box -->
+            <main
+                id="chat-container"
+                class="flex-1 overflow-y-auto p-6 space-y-6 bg-gradient-to-b from-slate-50/50 to-white min-h-0">
+
+                <!-- Default Welcome Message -->
+                <div class="flex items-start gap-3.5">
+                    <div class="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white text-xs font-bold shadow-md shadow-blue-600/20">
+                        AI
+                    </div>
+                    <div class="max-w-2xl rounded-2xl rounded-tl-sm border border-slate-100 bg-white px-5 py-4 shadow-sm">
+                        <p class="text-xs sm:text-sm leading-relaxed text-slate-700">
+                            👋 <strong class="text-slate-900 font-semibold">Welcome!</strong>
+                            <br><br>
+                            Ask anything about your Admin Panel, Users, Roles, Permissions, Django, APIs, Database or anything else.
+                        </p>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- Footer Input -->
+            <footer class="border-t border-slate-200/80 bg-white p-4 flex-shrink-0">
+                <div class="mx-auto flex max-w-4xl items-end gap-3">
+                    <textarea
+                        id="message-input"
+                        rows="1"
+                        placeholder="Type your message here..."
+                        class="max-h-32 flex-1 resize-none rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3 text-xs sm:text-sm text-slate-800 outline-none transition-all focus:border-blue-600 focus:bg-white focus:ring-2 focus:ring-blue-600/20"></textarea>
+
+                    <button
+                        id="send-btn"
+                        class="inline-flex h-11 items-center justify-center rounded-xl bg-blue-600 px-5 text-xs sm:text-sm font-semibold text-white shadow-md shadow-blue-600/20 transition-all hover:bg-blue-700 active:scale-95 focus:outline-none">
+                        <span>Send</span>
+                        <svg class="ml-1.5 h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"></path></svg>
+                    </button>
+                </div>
+            </footer>
+
+        </section>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script src="{% static 'js/services/chatbot.service.js' %}"></script>
+<script src="{% static 'js/chatbot/chatbot.js' %}"></script>
+
+{% endblock %}

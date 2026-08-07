@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'profiles',
     'audit',
     'departments',
+    'chatbot',
 
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
@@ -245,3 +246,11 @@ CELERY_TIMEZONE = "Asia/Kolkata"
 
 
 INTERNAL_IPS = ["127.0.0.1",]
+
+
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.5")
+
+
+GEMINI_API_KEY = config("GEMINI_API_KEY")
+GEMINI_MODEL = config("GEMINI_MODEL", default="gemini-2.5-flash")

@@ -1,30 +1,27 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
 
 # Virtual Environment
 .venv/
 venv/
 
-# Environment
-.env
-.env.*
-
-# Database
+# Django
+*.log
 db.sqlite3
+media/
+staticfiles/
 
 # IDE
 .vscode/
 .idea/
 
-# Logs
-*.log
-
 # OS
 .DS_Store
 Thumbs.db
-
-
-.env
-.env.*
-!.env.example
