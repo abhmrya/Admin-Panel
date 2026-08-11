@@ -1,0 +1,83 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}Department Management{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Header Section -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Department Management</h1>
+            <p class="text-sm text-gray-500">Manage organizational departments, codes, and status.</p>
+        </div>
+        <button type="button" id="openAddModalBtn" class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg shadow transition">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add Department
+        </button>
+    </div>
+
+    <!-- Data Table Card -->
+    <div class="bg-white shadow-sm rounded-xl border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+                <thead class="bg-gray-50 text-gray-700 uppercase font-semibold text-xs tracking-wider">
+                    <tr>
+                        <th class="px-6 py-3">Name</th>
+                        <th class="px-6 py-3">Code</th>
+                        <th class="px-6 py-3">Description</th>
+                        <th class="px-6 py-3">Status</th>
+                        <th class="px-6 py-3 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="departmentTableBody" class="divide-y divide-gray-200 bg-white">
+                    <!-- Dynamic Rows Loaded via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Department Modal (Add / Edit) -->
+<div id="departmentModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-gray-900 bg-opacity-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl shadow-xl max-w-lg w-full overflow-hidden transform transition-all">
+        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+            <h3 id="modalTitle" class="text-lg font-bold text-gray-800">Add Department</h3>
+            <button type="button" id="closeModalBtn" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+        </div>
+        <form id="departmentForm" class="p-6 space-y-4">
+            <input type="hidden" id="departmentId">
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Department Name *</label>
+                <input type="text" id="name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="e.g. Human Resources">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Department Code *</label>
+                <input type="text" id="code" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="e.g. HR-001">
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                <textarea id="description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-sm" placeholder="Brief details about department..."></textarea>
+            </div>
+
+            <div class="flex items-center">
+                <input type="checkbox" id="isActive" checked class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                <label for="isActive" class="ml-2 block text-sm text-gray-900 font-medium">Is Active</label>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                <button type="button" id="cancelModalBtn" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 shadow">Save Department</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/admin_dashboard/add_departments.js' %}"></script>
+{% endblock %}

@@ -29,7 +29,12 @@ const APP_CONFIG = Object.freeze({
 
         ROLES: "/roles/",
         PERMISSIONS: "/permissions/",
+
+        
         DEPARTMENTS: "/departments/",
+        ADD_DEPARTMENT: "/departments/add-departmet/",
+
+
         EMAIL_LOGS: "/email-logs/",
         SETTINGS: "/settings/",
 
