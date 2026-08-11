@@ -38,6 +38,8 @@ const APP_CONFIG = Object.freeze({
         CHAT: "/chat/",
         CHAT_CONVERSATIONS: "/chat/conversations/",
 
+        ADD_USERS:"/add-users/"
+
     }),
 
     STORAGE_KEYS: Object.freeze({

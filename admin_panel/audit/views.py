@@ -6,8 +6,7 @@ from rest_framework import viewsets
 from .models import AuditLog
 from .serializers import AuditLogSerializer
 
-from users.permissions import IsAdmin
-
+from common.permission import IsAdmin
 
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
 

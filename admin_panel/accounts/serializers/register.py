@@ -1,14 +1,21 @@
+import re
+
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+
 User = get_user_model()
-import re
+
 
 class RegisterSerializer(serializers.ModelSerializer):
-    confirm_password = serializers.CharField(write_only=True)
+
+    confirm_password = serializers.CharField(
+        write_only=True
+    )
 
     class Meta:
         model = User
+
         fields = (
             "email",
             "username",
@@ -23,11 +30,32 @@ class RegisterSerializer(serializers.ModelSerializer):
                 "write_only": True,
             }
         }
-    def validate_username(self,value):
-        if any(char.isupper() for char in value):
+
+    def validate_username(self, value):
+
+        value = value.strip()
+
+        if not value:
             raise serializers.ValidationError(
-                "First name must contain only lowercase letters."
+                "Username is required."
             )
+
+        if User.objects.filter(
+            username=value
+        ).exists():
+
+            raise serializers.ValidationError(
+                "Username already exists."
+            )
+
+        if any(
+            char.isupper()
+            for char in value
+        ):
+            raise serializers.ValidationError(
+                "Username must contain only lowercase letters."
+            )
+
         return value
 
     def validate_first_name(self, value):
@@ -49,38 +77,64 @@ class RegisterSerializer(serializers.ModelSerializer):
                 "First name must not exceed 50 characters."
             )
 
-        if not re.fullmatch(r"[A-Za-z ]+", value):
+        if not re.fullmatch(
+            r"[A-Za-z ]+",
+            value
+        ):
             raise serializers.ValidationError(
                 "First name can contain only letters and spaces."
             )
 
-        if any(char.isupper() for char in value):
+        if any(
+            char.isupper()
+            for char in value
+        ):
             raise serializers.ValidationError(
                 "First name must contain only lowercase letters."
             )
-        return value
 
         return value
 
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+
+        value = value.strip().lower()
+
+        if User.objects.filter(
+            email=value
+        ).exists():
+
             raise serializers.ValidationError(
                 "Email already exists."
             )
-        return value
 
-    def validate_username(self, value):
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError(
-                "Username already exists."
-            )
         return value
 
     def validate(self, attrs):
+
         if attrs["password"] != attrs["confirm_password"]:
+
             raise serializers.ValidationError(
                 {
-                    "confirm_password": "Passwords do not match."
+                    "confirm_password":
+                    "Passwords do not match."
                 }
             )
+
         return attrs
+
+    def create(self, validated_data):
+
+        validated_data.pop(
+            "confirm_password"
+        )
+
+        password = validated_data.pop(
+            "password"
+        )
+
+        user = User.objects.create_user(
+            password=password,
+            **validated_data
+        )
+
+        return user

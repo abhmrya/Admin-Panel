@@ -4,7 +4,7 @@ from accounts.models import User
 
 from ..serializers.userupdateadmin import UserUpdateAdminSerializer
 
-from users.permissions import IsAdmin
+from common.permission import IsAdmin
 
 from audit.services import AuditService
 from audit.constants import AuditAction
