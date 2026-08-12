@@ -9,10 +9,10 @@ class AuditMixin:
 
     def perform_create(self, serializer):
 
-
         instance = serializer.save()
 
         if self.audit_action_create:
+
             AuditService.log(
                 request=self.request,
                 action=self.audit_action_create,
@@ -24,18 +24,25 @@ class AuditMixin:
 
         instance = serializer.instance
 
-        old_data = AuditService.serialize_instance(instance)
+        old_data = AuditService.serialize_instance(
+            instance
+        )
 
         instance = serializer.save()
 
-        new_data = AuditService.serialize_instance(instance)
+        new_data = AuditService.serialize_instance(
+            instance
+        )
 
         changes = AuditService.get_changes(
             old_data,
             new_data
         )
 
-        if changes:
+        if (
+            changes
+            and self.audit_action_update
+        ):
 
             AuditService.log(
                 request=self.request,
@@ -47,7 +54,9 @@ class AuditMixin:
 
     def perform_destroy(self, instance):
 
-        old_data = AuditService.serialize_instance(instance)
+        old_data = AuditService.serialize_instance(
+            instance
+        )
 
         if self.audit_action_delete:
 

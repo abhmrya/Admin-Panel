@@ -1,0 +1,65 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}Attendance Management{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Header Section -->
+    <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-800">Daily Attendance</h1>
+        <p class="text-sm text-gray-500 mt-1">Record your daily check-in and check-out timestamps securely.</p>
+    </div>
+
+    <!-- Attendance Control Card -->
+    bg-white shadow-sm rounded-2xl border border-gray-200 p-6 mb-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <span id="attendanceStatusBadge" class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                    Loading Status...
+                </span>
+                <h2 id="currentDateDisplay" class="text-lg font-bold text-gray-800 mt-2">--</h2>
+                <p id="timeInfoText" class="text-sm text-gray-500 mt-1">Not checked in yet today.</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex space-x-4">
+                <button id="checkInBtn" onclick="handleCheckIn()" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-xl shadow transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    Check In
+                </button>
+                <button id="checkOutBtn" onclick="handleCheckOut()" class="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold rounded-xl shadow transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    Check Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History / Recent Logs Card -->
+    <div class="bg-white shadow-sm rounded-2xl border border-gray-200 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-800">Recent Attendance History</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 text-left text-sm">
+                <thead class="bg-gray-50 text-gray-700 uppercase font-semibold text-xs tracking-wider">
+                    <tr>
+                        <th class="px-6 py-3">Date</th>
+                        <th class="px-6 py-3">Check In</th>
+                        <th class="px-6 py-3">Check Out</th>
+                        <th class="px-6 py-3">Working Hours</th>
+                        <th class="px-6 py-3">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceHistoryBody" class="divide-y divide-gray-200 bg-white">
+                    <!-- Populated via JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ block.super }}
+<script src="{% static 'js/dashboard/attendance.js' %}"></script>
+{% endblock %}

@@ -1,17 +1,15 @@
 /**
  * hr.js
  * Populates the HR dashboard stat cards.
- * Only "Total Employees" is backed by the real Dashboard Stats API right now.
- * The other cards (Departments, On Leave, New Hires) stay at "--" until
- * their backend endpoints exist — wire them up here once ready.
  * Depends on: core/config.js, core/api.js, services/dashboard.service.js
  */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
         
-    if (!await Guard.auth()) return;
+    if (!(await Guard.auth())) return;
 
-    loadHrStats();
+    await loadHrStats();
+    await loadHrAttendanceOverview();
 });
 
 async function loadHrStats() {
@@ -20,13 +18,25 @@ async function loadHrStats() {
         if (!stats) return;
 
         setStat("statEmployeesCount", stats.employees_count);
-
-        // TODO: replace with real data once these endpoints exist:
-        // setStat("statDepartmentsCount", stats.departments_count);
-        // setStat("statOnLeaveCount", stats.on_leave_count);
-        // setStat("statNewHiresCount", stats.new_hires_count);
+        setStat("statDepartmentsCount", stats.departments_count);
+        setStat("statNewHiresCount", stats.new_hires_count);
     } catch (error) {
         console.error("Failed to load HR stats:", error);
+    }
+}
+
+async function loadHrAttendanceOverview() {
+    try {
+        const endpoint = APP_CONFIG.ENDPOINTS.ATTENDANCE || "/attendance/";
+        const data = await Api.get(endpoint);
+        const records = Array.isArray(data) ? data : (data.results || []);
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        const onLeaveCount = records.filter(r => r.date === todayStr && r.status === 'ON_LEAVE').length;
+
+        setStat("statOnLeaveCount", onLeaveCount);
+    } catch (error) {
+        console.error("Failed to load HR attendance overview:", error);
     }
 }
 
