@@ -15,7 +15,8 @@ from ..services.attendance_service import AttendanceService
 from audit.mixins import AuditMixin
 from audit.constants import AuditAction
 
-class AttendanceViewSet(AuditMixin,viewsets.ModelViewSet):
+
+class AttendanceViewSet(AuditMixin, viewsets.ModelViewSet):
     """
     Attendance API.
 
@@ -35,17 +36,10 @@ class AttendanceViewSet(AuditMixin,viewsets.ModelViewSet):
     serializer_class = AttendanceSerializer
 
     audit_action_create = AuditAction.ATTENDANCE_CREATED
-
     audit_action_update = AuditAction.ATTENDANCE_UPDATED
-
     audit_action_delete = AuditAction.ATTENDANCE_DELETED
 
-    
     def get_permissions(self):
-        """
-        Apply role-based permissions according to action.
-        """
-
         admin_hr_actions = {
             "create",
             "update",
@@ -54,111 +48,85 @@ class AttendanceViewSet(AuditMixin,viewsets.ModelViewSet):
         }
 
         if self.action in admin_hr_actions:
-            return [
-                IsAuthenticated(),
-                IsAdminOrHR(),
-            ]
+            return [IsAuthenticated(), IsAdminOrHR()]
 
-        return [
-            IsAuthenticated(),
-        ]
+        return [IsAuthenticated()]
 
     def get_queryset(self):
         user = self.request.user
 
-        queryset = (
-            Attendance.objects
-            .select_related("employee")
-            .order_by("-date", "-created_at")
-        )
+        queryset = Attendance.objects.select_related("employee").order_by("-date", "-created_at")
 
-        # Admin and HR can see everything
-        if (
-            user.is_superuser
-            or user.role in {
-                UserRole.ADMIN,
-                UserRole.HR,
-            }
-        ):
-            return queryset
+        if user.is_superuser or user.role in {UserRole.ADMIN, UserRole.HR}:
+            pass
+        else:
+            queryset = queryset.filter(employee=user)
 
-        # Employees / managers can see only their own records
-        return queryset.filter(employee=user)
+        year = self.request.query_params.get("year")
+        month = self.request.query_params.get("month")
 
-    @action(
-        detail=False,
-        methods=["post"],
-        url_path="check-in",
-    )
+        if year:
+            try:
+                year = int(year)
+            except ValueError:
+                raise ValidationError({
+                    "year": "Year must be a valid number."
+                })
+
+            if year < 2000 or year > 2100:
+                raise ValidationError({
+                    "year": "Year must be between 2000 and 2100."
+                })
+
+            queryset = queryset.filter(date__year=year)
+
+        if month:
+            try:
+                month = int(month)
+            except ValueError:
+                raise ValidationError({
+                    "month": "Month must be a valid number."
+                })
+
+            if month < 1 or month > 12:
+                raise ValidationError({
+                    "month": "Month must be between 1 and 12."
+                })
+
+            queryset = queryset.filter(date__month=month)
+
+        return queryset
+
+    @action(detail=False, methods=["post"], url_path="check-in")
     def check_in(self, request):
         try:
-            attendance = AttendanceService.check_in(
-                request.user
-            )
+            attendance = AttendanceService.check_in(request.user)
+            serializer = self.get_serializer(attendance)
 
-            serializer = self.get_serializer(
-                attendance
-            )
-
-            return Response(
-                {
-                    "message": "Checked in successfully.",
-                    "data": serializer.data,
-                },
-                status=status.HTTP_201_CREATED,
-            )
+            return Response({
+                "message": "Checked in successfully.",
+                "data": serializer.data,
+            }, status=status.HTTP_201_CREATED)
 
         except ValidationError as e:
-            return Response(
-                {
-                    "detail": e.message,
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            return Response(
-                {
-                    "detail": str(e),
-                },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    @action(
-        detail=False,
-        methods=["post"],
-        url_path="check-out",
-    )
+    @action(detail=False, methods=["post"], url_path="check-out")
     def check_out(self, request):
         try:
-            attendance = AttendanceService.check_out(
-                request.user
-            )
+            attendance = AttendanceService.check_out(request.user)
+            serializer = self.get_serializer(attendance)
 
-            serializer = self.get_serializer(
-                attendance
-            )
-
-            return Response(
-                {
-                    "message": "Checked out successfully.",
-                    "data": serializer.data,
-                },
-                status=status.HTTP_200_OK,
-            )
+            return Response({
+                "message": "Checked out successfully.",
+                "data": serializer.data,
+            }, status=status.HTTP_200_OK)
 
         except ValidationError as e:
-            return Response(
-                {
-                    "detail": e.message,
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+            return Response({"detail": e.message}, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
-            return Response(
-                {
-                    "detail": str(e),
-                },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

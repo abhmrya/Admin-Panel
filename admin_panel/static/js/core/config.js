@@ -1,9 +1,3 @@
-/**
- * =====================================================
- * config.js
- * =====================================================
- */
-
 const APP_CONFIG = Object.freeze({
 
     API_BASE_URL: "/api/v1",
@@ -30,10 +24,8 @@ const APP_CONFIG = Object.freeze({
         ROLES: "/roles/",
         PERMISSIONS: "/permissions/",
 
-        
         DEPARTMENTS: "/departments/",
         ADD_DEPARTMENT: "/departments/add-departmet/",
-
 
         EMAIL_LOGS: "/email-logs/",
         SETTINGS: "/settings/",
@@ -43,10 +35,9 @@ const APP_CONFIG = Object.freeze({
         CHAT: "/chat/",
         CHAT_CONVERSATIONS: "/chat/conversations/",
 
-        ADD_USERS:"/add-users/",
+        ADD_USERS: "/add-users/",
 
         ATTENDANCE: "/attendance/",
-
     }),
 
     STORAGE_KEYS: Object.freeze({
@@ -69,12 +60,15 @@ const APP_CONFIG = Object.freeze({
         MANAGER: "/dashboard/manager/",
         EMPLOYEE: "/dashboard/employee/",
 
+        EMPLOYEE_MONTHLY_ATTENDANCE:"/attendance/employee-monthly-attendance/",
+
+        ADMIN_ATTENDANCE:"/attendance/admin-view/",
+
         FORBIDDEN: "/403/",
 
     }),
 
     REQUEST_TIMEOUT_MS: 15000,
-
 });
 
 window.APP_CONFIG = APP_CONFIG;
