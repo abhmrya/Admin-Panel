@@ -7,4 +7,5 @@ urlpatterns = [
     path("", AttendanceWebView.as_view(), name="index"),
     path("admin-view/", AdminAttendanceWebView.as_view(), name="admin-attendance-page"),
     path("employee-monthly-attendance/", EmployeeMonthlyAttendanceView.as_view(), name="employee-monthly-attendance"),
+    # path("admin-employee-monthly/", AdminEmployeeMonthlyAttendanceView.as_view(), name="admin-employee-monthly-attendance"),
 ]

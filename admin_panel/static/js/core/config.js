@@ -61,6 +61,7 @@ const APP_CONFIG = Object.freeze({
         EMPLOYEE: "/dashboard/employee/",
 
         EMPLOYEE_MONTHLY_ATTENDANCE:"/attendance/employee-monthly-attendance/",
+        ATTENDANCE_MONTHLY_REPORT: "/attendance/reports/monthly/",
 
         ADMIN_ATTENDANCE:"/attendance/admin-view/",
 
