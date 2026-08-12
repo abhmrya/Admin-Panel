@@ -67,34 +67,40 @@
 
     <div class="lg:col-span-2">
         <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
-        <div class="grid grid-cols-2 gap-4">
+        <!-- Updated grid to auto-fit more items nicely -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+
+            <!-- Mark Attendance / Clock In -->
+            <a href="{% url 'attendance:index' %}" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-50 text-teal-600 text-lg">⏱️</span>
+                <span class="text-sm font-medium text-gray-700 text-center">Mark Attendance</span>
+            </a>
 
             <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                 <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-lg">📅</span>
-                <span class="text-sm font-medium text-gray-700">Apply for Leave</span>
+                <span class="text-sm font-medium text-gray-700 text-center">Apply for Leave</span>
             </a>
 
             <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                 <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-lg">📄</span>
-                <span class="text-sm font-medium text-gray-700">My Documents</span>
+                <span class="text-sm font-medium text-gray-700 text-center">My Documents</span>
             </a>
 
             <a
-    href="{% url 'profile:index' %}"
-    class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
->
-    <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-lg">
-        👤
-    </span>
-
-    <span class="text-sm font-medium text-gray-700">
-        Edit Profile
-    </span>
-</a>
+                href="{% url 'profile:index' %}"
+                class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+            >
+                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-lg">
+                    👤
+                </span>
+                <span class="text-sm font-medium text-gray-700 text-center">
+                    Edit Profile
+                </span>
+            </a>
 
             <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
                 <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-lg">🔒</span>
-                <span class="text-sm font-medium text-gray-700">Change Password</span>
+                <span class="text-sm font-medium text-gray-700 text-center">Change Password</span>
             </a>
 
         </div>
@@ -103,7 +109,6 @@
 </div>
 
 {% endblock %}
-
 
 {% block extra_js %}
 {{ block.super }}

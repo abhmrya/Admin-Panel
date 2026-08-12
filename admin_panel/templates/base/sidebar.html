@@ -65,6 +65,8 @@
                 Users
             </a>
 
+
+
         
 
             <a href="#" class="sidebar-link">
@@ -107,7 +109,7 @@
             </a>
 
 
-            <a href="#" class="sidebar-link">
+            <a href="{% url 'attendance:admin-attendance-page' %}" class="sidebar-link">
                 📅
                 Attendance
             </a>
@@ -136,6 +138,11 @@
             <a href="#" class="sidebar-link">
                 👤
                 My Profile
+            </a>
+
+            <a href="{% url 'attendance:index' %}" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition">
+                <span class="mr-3 text-lg">📅</span>
+                <span>Attendance</span>
             </a>
 
 

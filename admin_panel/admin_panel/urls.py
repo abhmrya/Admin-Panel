@@ -33,7 +33,8 @@ urlpatterns = [
     path("api/v1/profile/",include("profiles.urls_api")),
     path("api/v1/audit/",include("audit.urls")),
     path("api/v1/departments/",include("departments.urls_api")),
-    path("api/v1/chat/",include("chatbot.urls_api"),),
+    path("api/v1/chat/",include("chatbot.urls_api")),
+    path("api/v1/attendance/", include("attendance.urls_api")),
 
     # Web Pages
     path("", include(("accounts.web_urls", "accounts"), namespace="accounts")), 
@@ -41,7 +42,8 @@ urlpatterns = [
     path("users/",include("users.web_urls")),
     path("profile/",include("profiles.urls_web"),),
     path("chat/",include("chatbot.urls_web")),
-    path("departmet/",include("departments.urls_web"))
+    path("departmet/",include("departments.urls_web")),
+    path("attendance/", include(("attendance.urls_web", "attendance"), namespace="attendance")),
 
 
 ]+ debug_toolbar_urls()

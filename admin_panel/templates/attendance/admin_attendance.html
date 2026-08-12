@@ -1,0 +1,505 @@
+{% extends "base/dashboard_base.html" %}
+
+{% load static %}
+
+{% block page_title %}Employee Attendance Management{% endblock %}
+
+{% block content %}
+
+<div class="mx-auto max-w-7xl space-y-8 pb-12">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                Attendance Logs
+            </h1>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Monitor, review and manage employee attendance records.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+
+            <!-- Date Filter -->
+
+            <input
+                type="date"
+                id="filterDate"
+                class="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs text-slate-700 shadow-xs outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+            >
+
+            <button
+                id="clearDateFilter"
+                type="button"
+                class="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 shadow-xs transition hover:bg-slate-50"
+            >
+                Clear
+            </button>
+
+            <button
+                id="refreshAttendanceBtn"
+                type="button"
+                class="rounded-xl bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-indigo-700"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ATTENDANCE TABLE ================= -->
+
+    <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+        <div class="overflow-x-auto">
+
+            <table class="min-w-full text-left text-sm">
+
+                <thead class="border-b border-slate-100 bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+
+                    <tr>
+
+                        <th class="px-5 py-4">
+                            ID
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Employee
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Email
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Date
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Check-In
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Check-Out
+                        </th>
+
+                        <th class="px-5 py-4 text-center">
+                            Working
+                        </th>
+
+                        <th class="px-5 py-4 text-center">
+                            Status
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Created
+                        </th>
+
+                        <th class="px-5 py-4">
+                            Updated
+                        </th>
+
+                        <th class="px-5 py-4 text-center">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody
+                    id="attendanceTableBody"
+                    class="divide-y divide-slate-100 bg-white"
+                >
+                    <!-- Dynamic rows -->
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ================= PAGINATION ================= -->
+
+        <div class="flex flex-col items-center justify-between gap-4 border-t border-slate-100 bg-slate-50/50 px-6 py-4 sm:flex-row">
+
+            <span
+                id="attendancePaginationInfo"
+                class="text-xs font-medium text-slate-500"
+            >
+                Showing 0 to 0 of 0 entries
+            </span>
+
+            <div class="flex items-center gap-2">
+
+                <button
+                    id="attPrevBtn"
+                    type="button"
+                    class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-xs transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                    Previous
+                </button>
+
+                <span
+                    id="attPageDisplay"
+                    class="px-2 text-xs font-semibold text-slate-700"
+                >
+                    Page 1 of 1
+                </span>
+
+                <button
+                    id="attNextBtn"
+                    type="button"
+                    class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-xs transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                    Next
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- EDIT ATTENDANCE MODAL -->
+<!-- ========================================================= -->
+
+<div
+    id="attendanceEditModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <!-- Overlay -->
+
+    <div
+        id="attendanceEditOverlay"
+        class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+    ></div>
+
+
+    <!-- Modal -->
+
+    <div
+        class="relative flex w-full max-w-2xl max-h-[90vh] flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+    >
+
+        <!-- Header -->
+
+        <div class="flex items-center justify-between border-b border-slate-100 bg-slate-50/70 px-6 py-5">
+
+            <div>
+
+                <h2 class="text-lg font-bold text-slate-900">
+                    Edit Attendance
+                </h2>
+
+                <p class="mt-1 text-xs text-slate-500">
+                    Update attendance timing or status.
+                </p>
+
+            </div>
+
+            <button
+                id="closeAttendanceModal"
+                type="button"
+                class="flex h-9 w-9 items-center justify-center rounded-xl text-xl font-bold text-slate-400 transition hover:bg-slate-100 hover:text-red-500"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- Body -->
+
+        <div class="overflow-y-auto p-6">
+
+            <form id="attendanceEditForm" class="space-y-5">
+
+                <!-- Hidden ID -->
+
+                <input
+                    type="hidden"
+                    id="editAttendanceId"
+                >
+
+
+                <!-- Employee Information -->
+
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+
+                    <p class="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Employee
+                    </p>
+
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+                        <div>
+
+                            <label class="text-xs font-semibold text-slate-500">
+                                Name
+                            </label>
+
+                            <input
+                                id="editEmployeeName"
+                                type="text"
+                                readonly
+                                class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2.5 text-sm text-slate-600 outline-none"
+                            >
+
+                        </div>
+
+                        <div>
+
+                            <label class="text-xs font-semibold text-slate-500">
+                                Email
+                            </label>
+
+                            <input
+                                id="editEmployeeEmail"
+                                type="text"
+                                readonly
+                                class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2.5 text-sm text-slate-600 outline-none"
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Date -->
+
+                <div>
+
+                    <label
+                        for="editAttendanceDate"
+                        class="text-xs font-semibold text-slate-600"
+                    >
+                        Attendance Date
+                    </label>
+
+                    <input
+                        id="editAttendanceDate"
+                        type="date"
+                        readonly
+                        class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2.5 text-sm text-slate-600 outline-none"
+                    >
+
+                    <p class="mt-1 text-[11px] text-slate-400">
+                        Attendance date cannot be changed.
+                    </p>
+
+                </div>
+
+
+                <!-- Check In / Check Out -->
+
+                <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+                    <div>
+
+                        <label
+                            for="editCheckIn"
+                            class="text-xs font-semibold text-slate-600"
+                        >
+                            Check-In
+                        </label>
+
+                        <input
+                            id="editCheckIn"
+                            type="datetime-local"
+                            class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                        >
+
+                    </div>
+
+
+                    <div>
+
+                        <label
+                            for="editCheckOut"
+                            class="text-xs font-semibold text-slate-600"
+                        >
+                            Check-Out
+                        </label>
+
+                        <input
+                            id="editCheckOut"
+                            type="datetime-local"
+                            class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div>
+
+                    <label
+                        for="editAttendanceStatus"
+                        class="text-xs font-semibold text-slate-600"
+                    >
+                        Status
+                    </label>
+
+                    <select
+                        id="editAttendanceStatus"
+                        class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                    >
+
+                        <option value="PRESENT">
+                            Present
+                        </option>
+
+                        <option value="ABSENT">
+                            Absent
+                        </option>
+
+                        <option value="HALF_DAY">
+                            Half Day
+                        </option>
+
+                        <option value="ON_LEAVE">
+                            On Leave
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Current Working Time -->
+
+                <div class="rounded-2xl border border-indigo-100 bg-indigo-50 p-4">
+
+                    <div class="flex items-center justify-between">
+
+                        <div>
+
+                            <p class="text-xs font-semibold text-indigo-500">
+                                Current Working Time
+                            </p>
+
+                            <p
+                                id="editWorkingTime"
+                                class="mt-1 text-lg font-bold text-indigo-700"
+                            >
+                                0h 0m
+                            </p>
+
+                        </div>
+
+                        <div class="text-2xl">
+                            ⏱️
+                        </div>
+
+                    </div>
+
+                    <p class="mt-2 text-[11px] text-indigo-500">
+                        Working minutes are automatically recalculated after saving.
+                    </p>
+
+                </div>
+
+
+                <!-- System Information -->
+
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+                    <div>
+
+                        <label class="text-xs font-semibold text-slate-500">
+                            Created At
+                        </label>
+
+                        <input
+                            id="editCreatedAt"
+                            type="text"
+                            readonly
+                            class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-xs text-slate-500"
+                        >
+
+                    </div>
+
+                    <div>
+
+                        <label class="text-xs font-semibold text-slate-500">
+                            Updated At
+                        </label>
+
+                        <input
+                            id="editUpdatedAt"
+                            type="text"
+                            readonly
+                            class="mt-1 w-full rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 text-xs text-slate-500"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Error -->
+
+                <div
+                    id="attendanceEditError"
+                    class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                ></div>
+
+
+                <!-- Actions -->
+
+                <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
+
+                    <button
+                        id="cancelAttendanceEdit"
+                        type="button"
+                        class="rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        id="saveAttendanceEdit"
+                        type="submit"
+                        class="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                        Save Changes
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+{{ block.super }}
+
+<script src="{% static 'js/dashboard/admin_attendance.js' %}"></script>
+
+{% endblock %}
