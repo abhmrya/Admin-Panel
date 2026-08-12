@@ -12,8 +12,10 @@ from ..models import Attendance
 from ..serializers.attendance import AttendanceSerializer
 from ..services.attendance_service import AttendanceService
 
+from audit.mixins import AuditMixin
+from audit.constants import AuditAction
 
-class AttendanceViewSet(viewsets.ModelViewSet):
+class AttendanceViewSet(AuditMixin,viewsets.ModelViewSet):
     """
     Attendance API.
 
@@ -32,6 +34,13 @@ class AttendanceViewSet(viewsets.ModelViewSet):
 
     serializer_class = AttendanceSerializer
 
+    audit_action_create = AuditAction.ATTENDANCE_CREATED
+
+    audit_action_update = AuditAction.ATTENDANCE_UPDATED
+
+    audit_action_delete = AuditAction.ATTENDANCE_DELETED
+
+    
     def get_permissions(self):
         """
         Apply role-based permissions according to action.
