@@ -38,6 +38,13 @@ const APP_CONFIG = Object.freeze({
         ADD_USERS: "/add-users/",
 
         ATTENDANCE: "/attendance/",
+
+        LEAVE_TYPES: "/leave/types/",
+        LEAVE_BALANCES: "/leave/balances/",
+        LEAVE_REQUESTS: "/leave/requests/",
+        LEAVE_POLICIES: "/leave/policies/",
+        LEAVE_APPROVALS: "/leave/approvals/",
+        LEAVE_DASHBOARD: "/leave/dashboard/",
     }),
 
     STORAGE_KEYS: Object.freeze({

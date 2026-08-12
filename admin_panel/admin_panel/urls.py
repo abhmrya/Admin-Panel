@@ -35,6 +35,8 @@ urlpatterns = [
     path("api/v1/departments/",include("departments.urls_api")),
     path("api/v1/chat/",include("chatbot.urls_api")),
     path("api/v1/attendance/", include("attendance.urls_api")),
+    path("api/v1/leave/", include("leave.urls_api")),
+
 
     # Web Pages
     path("", include(("accounts.web_urls", "accounts"), namespace="accounts")), 
@@ -44,6 +46,7 @@ urlpatterns = [
     path("chat/",include("chatbot.urls_web")),
     path("departmet/",include("departments.urls_web")),
     path("attendance/", include(("attendance.urls_web", "attendance"), namespace="attendance")),
+    path("leave/",include(("leave.urls_web", "leave"),namespace="leave")),
 
 
 ]+ debug_toolbar_urls()

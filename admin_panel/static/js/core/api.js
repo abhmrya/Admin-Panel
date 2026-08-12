@@ -12,23 +12,32 @@ const Api = {
 
 
     /**
-     * Get CSRF Token
+     * ==========================================================
+     * GET CSRF TOKEN
+     * ==========================================================
      */
+
     getCsrfToken() {
 
-        const csrfInput = document.querySelector(
-            'input[name="csrfmiddlewaretoken"]'
-        );
+        const csrfInput =
+            document.querySelector(
+                'input[name="csrfmiddlewaretoken"]'
+            );
 
         if (csrfInput) {
+
             return csrfInput.value;
+
         }
 
-        const csrfCookie = document.cookie
-            .split("; ")
-            .find(cookie =>
-                cookie.startsWith("csrftoken=")
-            );
+
+        const csrfCookie =
+            document.cookie
+                .split("; ")
+                .find(cookie =>
+                    cookie.startsWith("csrftoken=")
+                );
+
 
         return csrfCookie
             ? decodeURIComponent(
@@ -40,8 +49,11 @@ const Api = {
 
 
     /**
-     * Build Request Headers
+     * ==========================================================
+     * BUILD REQUEST HEADERS
+     * ==========================================================
      */
+
     buildHeaders({
 
         method = "GET",
@@ -61,9 +73,12 @@ const Api = {
 
 
         /*
-         * JSON Requests
-         * FormData ke liye browser khud Content-Type set karega.
+         * JSON Request
+         *
+         * FormData ke case mein browser khud
+         * Content-Type + boundary set karega.
          */
+
         if (!(body instanceof FormData)) {
 
             finalHeaders["Content-Type"] =
@@ -75,6 +90,7 @@ const Api = {
         /*
          * JWT Authentication
          */
+
         if (auth) {
 
             const token =
@@ -91,14 +107,16 @@ const Api = {
 
 
         /*
-         * Django CSRF Protection
+         * Django CSRF
          */
+
         const csrfMethods = [
             "POST",
             "PUT",
             "PATCH",
             "DELETE"
         ];
+
 
         if (csrfMethods.includes(method)) {
 
@@ -114,22 +132,30 @@ const Api = {
 
         }
 
+
         return finalHeaders;
 
     },
 
 
     /**
-     * Parse API Response
+     * ==========================================================
+     * PARSE RESPONSE
+     * ==========================================================
      */
+
     async parseResponse(response) {
 
         const text =
             await response.text();
 
+
         if (!text) {
+
             return null;
+
         }
+
 
         try {
 
@@ -147,8 +173,11 @@ const Api = {
 
 
     /**
-     * Main Request Handler
+     * ==========================================================
+     * MAIN REQUEST
+     * ==========================================================
      */
+
     async request(
 
         path,
@@ -156,11 +185,8 @@ const Api = {
         {
 
             method = "GET",
-
             body = null,
-
             headers = {},
-
             auth = true
 
         } = {}
@@ -170,6 +196,7 @@ const Api = {
         const controller =
             new AbortController();
 
+
         const timeout =
             setTimeout(() => {
 
@@ -177,11 +204,12 @@ const Api = {
 
             }, this.timeout);
 
+
         try {
 
             const requestBody =
-
-                body
+                body !== null &&
+                body !== undefined
                     ? body instanceof FormData
                         ? body
                         : JSON.stringify(body)
@@ -201,11 +229,8 @@ const Api = {
                             this.buildHeaders({
 
                                 method,
-
                                 auth,
-
                                 headers,
-
                                 body
 
                             }),
@@ -219,35 +244,52 @@ const Api = {
 
                 );
 
+
             clearTimeout(timeout);
+
 
             const data =
                 await this.parseResponse(
                     response
                 );
 
+
             if (!response.ok) {
 
+                let message =
+                    "Something went wrong.";
+
+
+                if (
+                    data &&
+                    typeof data === "object"
+                ) {
+
+                    message =
+                        data.detail ||
+                        data.message ||
+                        data.error ||
+                        message;
+
+                }
+
+
                 const error =
-                    new Error(
+                    new Error(message);
 
-                        data?.detail ||
-
-                        data?.message ||
-
-                        "Something went wrong."
-
-                    );
 
                 error.status =
                     response.status;
 
+
                 error.data =
                     data;
+
 
                 throw error;
 
             }
+
 
             return data;
 
@@ -257,8 +299,10 @@ const Api = {
 
             clearTimeout(timeout);
 
+
             if (
-                error.name === "AbortError"
+                error.name ===
+                "AbortError"
             ) {
 
                 const timeoutError =
@@ -266,12 +310,15 @@ const Api = {
                         "Request timeout."
                     );
 
+
                 timeoutError.status =
                     408;
+
 
                 throw timeoutError;
 
             }
+
 
             throw error;
 
@@ -281,8 +328,11 @@ const Api = {
 
 
     /**
+     * ==========================================================
      * GET
+     * ==========================================================
      */
+
     get(path, options = {}) {
 
         return this.request(
@@ -303,14 +353,15 @@ const Api = {
 
 
     /**
+     * ==========================================================
      * POST
+     * ==========================================================
      */
+
     post(
 
         path,
-
         body = null,
-
         options = {}
 
     ) {
@@ -324,7 +375,6 @@ const Api = {
                 ...options,
 
                 method: "POST",
-
                 body
 
             }
@@ -335,14 +385,15 @@ const Api = {
 
 
     /**
+     * ==========================================================
      * PUT
+     * ==========================================================
      */
+
     put(
 
         path,
-
         body = null,
-
         options = {}
 
     ) {
@@ -356,7 +407,6 @@ const Api = {
                 ...options,
 
                 method: "PUT",
-
                 body
 
             }
@@ -367,14 +417,15 @@ const Api = {
 
 
     /**
+     * ==========================================================
      * PATCH
+     * ==========================================================
      */
+
     patch(
 
         path,
-
         body = null,
-
         options = {}
 
     ) {
@@ -388,7 +439,6 @@ const Api = {
                 ...options,
 
                 method: "PATCH",
-
                 body
 
             }
@@ -399,12 +449,14 @@ const Api = {
 
 
     /**
+     * ==========================================================
      * DELETE
+     * ==========================================================
      */
+
     delete(
 
         path,
-
         options = {}
 
     ) {
@@ -427,4 +479,6 @@ const Api = {
 
 };
 
-window.Api = Object.freeze(Api);
+
+window.Api =
+    Object.freeze(Api);

@@ -96,6 +96,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         related_name="updated_users",
     )
 
+    manager = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="team_members",
+    )
+
     objects = UserManager()
 
     USERNAME_FIELD = "email"

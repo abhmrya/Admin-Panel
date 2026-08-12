@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'departments',
     'chatbot',
     "attendance",
+    "leave",
 
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
