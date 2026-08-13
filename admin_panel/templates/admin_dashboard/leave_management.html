@@ -27,21 +27,19 @@
 
 
     <!-- ======================================================
-         ALERT
+         GLOBAL ALERT
     ======================================================= -->
 
-    <div id="alertBox" class="hidden mb-5">
-        <div id="alertInner"
-             class="px-4 py-3 rounded-lg text-sm font-medium">
-        </div>
+    <div id="alertBox" class="hidden mb-5" role="alert">
+        <div id="alertInner" class="px-4 py-3 rounded-lg text-sm font-medium"></div>
     </div>
 
 
     <!-- ======================================================
-         LEAVE TYPE SECTION
+         LEAVE TYPES
     ======================================================= -->
 
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+    <section class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
 
         <!-- HEADER -->
 
@@ -74,9 +72,7 @@
         </div>
 
 
-        <!-- ==================================================
-             FILTERS
-        =================================================== -->
+        <!-- FILTERS -->
 
         <div class="p-5 border-b border-gray-200 dark:border-gray-700">
 
@@ -89,18 +85,17 @@
                     <label
                         for="leaveTypeSearch"
                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
                         Search
+
                     </label>
 
-                    <div class="relative">
-
-                        <input
-                            type="text"
-                            id="leaveTypeSearch"
-                            placeholder="Search leave type..."
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-
-                    </div>
+                    <input
+                        type="text"
+                        id="leaveTypeSearch"
+                        autocomplete="off"
+                        placeholder="Search leave type..."
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
                 </div>
 
@@ -112,16 +107,26 @@
                     <label
                         for="leaveTypeStatus"
                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
                         Status
+
                     </label>
 
                     <select
                         id="leaveTypeStatus"
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
-                        <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option value="active">
+                            Active
+                        </option>
+
+                        <option value="inactive">
+                            Inactive
+                        </option>
 
                     </select>
 
@@ -148,9 +153,7 @@
         </div>
 
 
-        <!-- ==================================================
-             TABLE
-        =================================================== -->
+        <!-- TABLE -->
 
         <div class="overflow-x-auto">
 
@@ -192,9 +195,8 @@
 
                 </thead>
 
-                <tbody id="leaveTypesTableBody">
 
-                    <!-- Loading -->
+                <tbody id="leaveTypesTableBody">
 
                     <tr id="leaveTypeLoadingRow">
 
@@ -204,7 +206,9 @@
 
                                 <div class="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
 
-                                Loading leave types...
+                                <span>
+                                    Loading leave types...
+                                </span>
 
                             </div>
 
@@ -219,12 +223,11 @@
         </div>
 
 
-        <!-- ==================================================
-             EMPTY STATE
-        =================================================== -->
+        <!-- EMPTY STATE -->
 
-        <div id="leaveTypeEmptyState"
-             class="hidden px-5 py-12 text-center">
+        <div
+            id="leaveTypeEmptyState"
+            class="hidden px-5 py-12 text-center">
 
             <div class="text-gray-400 text-4xl mb-3">
                 📋
@@ -241,9 +244,7 @@
         </div>
 
 
-        <!-- ==================================================
-             PAGINATION
-        =================================================== -->
+        <!-- PAGINATION -->
 
         <div
             id="leaveTypePaginationWrapper"
@@ -265,225 +266,908 @@
 
         </div>
 
-    </div>
-
-</div>
+    </section>
 
 
-<!-- ==========================================================
-     LEAVE TYPE MODAL
-=========================================================== -->
+    <!-- ======================================================
+         LEAVE BALANCES
+    ======================================================= -->
 
-<div
-    id="leaveTypeModal"
-    class="hidden fixed inset-0 z-50 overflow-y-auto">
+    <section class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
 
-    <!-- BACKDROP -->
+        <!-- HEADER -->
 
-    <div
-        id="leaveTypeModalBackdrop"
-        class="fixed inset-0 bg-black/50">
-    </div>
+        <div class="p-5 border-b border-gray-200 dark:border-gray-700">
 
-
-    <!-- MODAL -->
-
-    <div class="relative min-h-screen flex items-center justify-center p-4">
-
-        <div
-            class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
-
-            <!-- MODAL HEADER -->
-
-            <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
 
                 <div>
 
-                    <h2
-                        id="leaveTypeModalTitle"
-                        class="text-lg font-semibold text-gray-900 dark:text-white">
-                        Add Leave Type
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Leave Balances
                     </h2>
 
                     <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                        Enter leave type information
+                        Manage employee leave balances and allocations
                     </p>
 
                 </div>
 
+
                 <button
                     type="button"
-                    id="closeLeaveTypeModal"
-                    class="w-9 h-9 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 text-xl">
+                    id="addLeaveBalanceBtn"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
 
-                    ×
+                    <span class="text-lg leading-none">+</span>
+                    Add Leave Balance
 
                 </button>
 
             </div>
 
-
-            <!-- FORM -->
-
-            <form id="leaveTypeForm" class="p-5">
-
-                <input
-                    type="hidden"
-                    id="leaveTypeId">
+        </div>
 
 
-                <!-- NAME -->
+        <!-- FILTERS -->
 
-                <div class="mb-4">
+        <div class="p-5 border-b border-gray-200 dark:border-gray-700">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                <!-- SEARCH -->
+
+                <div>
 
                     <label
-                        for="leaveTypeName"
+                        for="leaveBalanceSearch"
                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
 
-                        Leave Type Name
-                        <span class="text-red-500">*</span>
+                        Search
 
                     </label>
 
                     <input
                         type="text"
-                        id="leaveTypeName"
-                        maxlength="100"
-                        placeholder="e.g. Casual Leave"
+                        id="leaveBalanceSearch"
+                        autocomplete="off"
+                        placeholder="Search employee or leave type..."
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
-                    <p
-                        id="leaveTypeNameError"
-                        class="hidden text-xs text-red-500 mt-1">
-                    </p>
-
                 </div>
 
 
-                <!-- CODE -->
+                <!-- LEAVE TYPE -->
 
-                <div class="mb-4">
+                <div>
 
                     <label
-                        for="leaveTypeCode"
+                        for="leaveBalanceLeaveType"
                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
 
-                        Leave Code
-                        <span class="text-red-500">*</span>
+                        Leave Type
 
                     </label>
 
-                    <input
-                        type="text"
-                        id="leaveTypeCode"
-                        maxlength="30"
-                        placeholder="e.g. CL"
-                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none uppercase">
+                    <select
+                        id="leaveBalanceLeaveType"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
-                    <p
-                        id="leaveTypeCodeError"
-                        class="hidden text-xs text-red-500 mt-1">
-                    </p>
+                        <option value="">
+                            All Leave Types
+                        </option>
+
+                    </select>
 
                 </div>
 
 
-                <!-- DAYS -->
+                <!-- YEAR -->
 
-                <div class="mb-4">
+                <div>
 
                     <label
-                        for="leaveTypeDays"
+                        for="leaveBalanceYearFilter"
                         class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
 
-                        Default Days
-                        <span class="text-red-500">*</span>
+                        Year
 
                     </label>
 
-                    <input
-                        type="number"
-                        id="leaveTypeDays"
-                        min="0"
-                        step="0.5"
-                        placeholder="e.g. 12"
-                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                    <select
+                        id="leaveBalanceYearFilter"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
-                    <p
-                        id="leaveTypeDaysError"
-                        class="hidden text-xs text-red-500 mt-1">
-                    </p>
+                        <option value="">
+                            All Years
+                        </option>
+
+                    </select>
 
                 </div>
 
 
-                <!-- DESCRIPTION -->
+                <!-- RESET -->
 
-                <div class="mb-4">
-
-                    <label
-                        for="leaveTypeDescription"
-                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-
-                        Description
-
-                    </label>
-
-                    <textarea
-                        id="leaveTypeDescription"
-                        rows="3"
-                        maxlength="500"
-                        placeholder="Enter leave type description..."
-                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"></textarea>
-
-                </div>
-
-
-                <!-- ACTIVE -->
-
-                <div class="mb-5">
-
-                    <label class="flex items-center gap-3 cursor-pointer">
-
-                        <input
-                            type="checkbox"
-                            id="leaveTypeIsActive"
-                            class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-
-                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Active
-                        </span>
-
-                    </label>
-
-                </div>
-
-
-                <!-- BUTTONS -->
-
-                <div class="flex items-center justify-end gap-3">
+                <div class="flex items-end">
 
                     <button
                         type="button"
-                        id="cancelLeaveTypeBtn"
+                        id="resetLeaveBalanceFilters"
+                        class="w-full md:w-auto px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium transition">
+
+                        Reset Filters
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-sm text-left">
+
+                <thead class="bg-gray-50 dark:bg-gray-700/50">
+
+                    <tr>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            #
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Employee
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Leave Type
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Year
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Allocated
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Used
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Remaining
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300 text-right">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="leaveBalancesTableBody">
+
+                    <tr id="leaveBalanceLoadingRow">
+
+                        <td colspan="8" class="px-5 py-10 text-center">
+
+                            <div class="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
+
+                                <div class="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+
+                                <span>
+                                    Loading leave balances...
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- EMPTY STATE -->
+
+        <div
+            id="leaveBalanceEmptyState"
+            class="hidden px-5 py-12 text-center">
+
+            <div class="text-gray-400 text-4xl mb-3">
+                📊
+            </div>
+
+            <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">
+                No Leave Balances Found
+            </h3>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                No leave balances match your current filters.
+            </p>
+
+        </div>
+
+
+        <!-- PAGINATION -->
+
+        <div
+            id="leaveBalancePaginationWrapper"
+            class="hidden px-5 py-4 border-t border-gray-200 dark:border-gray-700">
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+                <div
+                    id="leaveBalancePaginationInfo"
+                    class="text-sm text-gray-500 dark:text-gray-400">
+                </div>
+
+                <div
+                    id="leaveBalancePagination"
+                    class="flex items-center gap-1">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         LEAVE TYPE ADD / EDIT MODAL
+    ======================================================= -->
+
+    <div
+        id="leaveTypeModal"
+        class="hidden fixed inset-0 z-50 overflow-y-auto"
+        aria-hidden="true">
+
+        <div
+            id="leaveTypeModalBackdrop"
+            class="fixed inset-0 bg-black/50">
+        </div>
+
+
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+
+            <div class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+
+                <!-- HEADER -->
+
+                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                    <div>
+
+                        <h2
+                            id="leaveTypeModalTitle"
+                            class="text-lg font-semibold text-gray-900 dark:text-white">
+
+                            Add Leave Type
+
+                        </h2>
+
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            Enter leave type information
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="closeLeaveTypeModal"
+                        aria-label="Close modal"
+                        class="w-9 h-9 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 text-xl">
+
+                        ×
+
+                    </button>
+
+                </div>
+
+
+                <!-- FORM -->
+
+                <form id="leaveTypeForm" class="p-5">
+
+                    <input
+                        type="hidden"
+                        id="leaveTypeId">
+
+
+                    <!-- NAME -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveTypeName"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Leave Type Name
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="leaveTypeName"
+                            maxlength="100"
+                            autocomplete="off"
+                            placeholder="e.g. Casual Leave"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                        <p id="leaveTypeNameError" class="hidden text-xs text-red-500 mt-1"></p>
+
+                    </div>
+
+
+                    <!-- CODE -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveTypeCode"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Leave Code
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="leaveTypeCode"
+                            maxlength="30"
+                            autocomplete="off"
+                            placeholder="e.g. CL"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none uppercase">
+
+                        <p id="leaveTypeCodeError" class="hidden text-xs text-red-500 mt-1"></p>
+
+                    </div>
+
+
+                    <!-- DAYS -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveTypeDays"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Default Days
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <input
+                            type="number"
+                            id="leaveTypeDays"
+                            min="0"
+                            step="0.5"
+                            inputmode="decimal"
+                            placeholder="e.g. 12"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                        <p id="leaveTypeDaysError" class="hidden text-xs text-red-500 mt-1"></p>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveTypeDescription"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Description
+
+                        </label>
+
+                        <textarea
+                            id="leaveTypeDescription"
+                            rows="3"
+                            maxlength="500"
+                            placeholder="Enter leave type description..."
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"></textarea>
+
+                    </div>
+
+
+                    <!-- ACTIVE -->
+
+                    <div class="mb-5">
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input
+                                type="checkbox"
+                                id="leaveTypeIsActive"
+                                class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                Active
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="flex items-center justify-end gap-3">
+
+                        <button
+                            type="button"
+                            id="cancelLeaveTypeBtn"
+                            class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium">
+
+                            Cancel
+
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="saveLeaveTypeBtn"
+                            class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">
+
+                            Save Leave Type
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LEAVE TYPE DELETE MODAL
+    ======================================================= -->
+
+    <div
+        id="deleteLeaveTypeModal"
+        class="hidden fixed inset-0 z-[60] overflow-y-auto"
+        aria-hidden="true">
+
+        <div class="fixed inset-0 bg-black/50"></div>
+
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+
+            <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
+
+                    <span class="text-red-600 dark:text-red-400 text-xl">
+                        !
+                    </span>
+
+                </div>
+
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    Delete Leave Type?
+                </h2>
+
+
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+
+                    Are you sure you want to delete
+
+                    <span
+                        id="deleteLeaveTypeName"
+                        class="font-semibold text-gray-700 dark:text-gray-200">
+                    </span>?
+
+                    This action cannot be undone.
+
+                </p>
+
+
+                <div class="flex justify-end gap-3 mt-6">
+
+                    <button
+                        type="button"
+                        id="cancelDeleteLeaveType"
                         class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium">
 
                         Cancel
 
                     </button>
 
-                    <button
-                        type="submit"
-                        id="saveLeaveTypeBtn"
-                        class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">
 
-                        Save Leave Type
+                    <button
+                        type="button"
+                        id="confirmDeleteLeaveType"
+                        class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium">
+
+                        Delete
 
                     </button>
 
                 </div>
 
-            </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LEAVE BALANCE ADD / EDIT MODAL
+    ======================================================= -->
+
+    <div
+        id="leaveBalanceModal"
+        class="hidden fixed inset-0 z-50 overflow-y-auto"
+        aria-hidden="true">
+
+        <div
+            id="leaveBalanceModalBackdrop"
+            class="fixed inset-0 bg-black/50">
+        </div>
+
+
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+
+            <div class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+
+                <!-- HEADER -->
+
+                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                    <div>
+
+                        <h2
+                            id="leaveBalanceModalTitle"
+                            class="text-lg font-semibold text-gray-900 dark:text-white">
+
+                            Add Leave Balance
+
+                        </h2>
+
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            Assign leave balance to an employee
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="closeLeaveBalanceModal"
+                        aria-label="Close modal"
+                        class="w-9 h-9 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 text-xl">
+
+                        ×
+
+                    </button>
+
+                </div>
+
+
+                <!-- FORM -->
+
+                <form id="leaveBalanceForm" class="p-5">
+
+                    <input
+                        type="hidden"
+                        id="leaveBalanceId">
+
+
+                    <!-- EMPLOYEE -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveBalanceEmployee"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Employee
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <select
+                            id="leaveBalanceEmployee"
+                            name="user"
+                            required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                            <option value="">
+                                Select Employee
+                            </option>
+
+                        </select>
+
+                        <p
+                            id="leaveBalanceEmployeeError"
+                            class="hidden text-xs text-red-500 mt-1">
+                        </p>
+
+                    </div>
+
+
+                    <!-- LEAVE TYPE -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveBalanceType"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Leave Type
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <select
+                            id="leaveBalanceType"
+                            name="leave_type"
+                            required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                            <option value="">
+                                Select Leave Type
+                            </option>
+
+                        </select>
+
+                        <p
+                            id="leaveBalanceTypeError"
+                            class="hidden text-xs text-red-500 mt-1">
+                        </p>
+
+                    </div>
+
+
+                    <!-- YEAR -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveBalanceYear"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Leave Year
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <input
+                            type="number"
+                            id="leaveBalanceYear"
+                            name="year"
+                            required
+                            min="2000"
+                            max="2100"
+                            step="1"
+                            inputmode="numeric"
+                            placeholder="e.g. 2026"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                        <p
+                            id="leaveBalanceYearError"
+                            class="hidden text-xs text-red-500 mt-1">
+                        </p>
+
+                    </div>
+
+
+                    <!-- ALLOCATED -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveBalanceAllocated"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Allocated Days
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <input
+                            type="number"
+                            id="leaveBalanceAllocated"
+                            name="allocated_days"
+                            required
+                            min="0"
+                            step="0.5"
+                            inputmode="decimal"
+                            placeholder="e.g. 12"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                        <p
+                            id="leaveBalanceAllocatedError"
+                            class="hidden text-xs text-red-500 mt-1">
+                        </p>
+
+                    </div>
+
+
+                    <!-- USED -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leaveBalanceUsed"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Used Days
+
+                        </label>
+
+                        <input
+                            type="number"
+                            id="leaveBalanceUsed"
+                            name="used_days"
+                            min="0"
+                            step="0.5"
+                            inputmode="decimal"
+                            value="0"
+                            placeholder="e.g. 2"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                        <p
+                            id="leaveBalanceUsedError"
+                            class="hidden text-xs text-red-500 mt-1">
+                        </p>
+
+                    </div>
+
+
+                    <!-- REMAINING PREVIEW -->
+
+                    <div class="mb-5">
+
+                        <div class="rounded-lg bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 p-4">
+
+                            <div class="flex items-center justify-between">
+
+                                <span class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                                    Remaining Days
+                                </span>
+
+                                <span
+                                    id="leaveBalanceRemainingPreview"
+                                    class="text-lg font-semibold text-green-600 dark:text-green-400">
+
+                                    0
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="flex items-center justify-end gap-3">
+
+                        <button
+                            type="button"
+                            id="cancelLeaveBalanceBtn"
+                            class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium">
+
+                            Cancel
+
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            id="saveLeaveBalanceBtn"
+                            class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">
+
+                            Save Leave Balance
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LEAVE BALANCE DELETE MODAL
+    ======================================================= -->
+
+    <div
+        id="deleteLeaveBalanceModal"
+        class="hidden fixed inset-0 z-[60] overflow-y-auto"
+        aria-hidden="true">
+
+        <div class="fixed inset-0 bg-black/50"></div>
+
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+
+            <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
+
+                    <span class="text-red-600 dark:text-red-400 text-xl">
+                        !
+                    </span>
+
+                </div>
+
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    Delete Leave Balance?
+                </h2>
+
+
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+
+                    Are you sure you want to delete the leave balance for
+
+                    <span
+                        id="deleteLeaveBalanceName"
+                        class="font-semibold text-gray-700 dark:text-gray-200">
+                    </span>?
+
+                    This action cannot be undone.
+
+                </p>
+
+
+                <div class="flex justify-end gap-3 mt-6">
+
+                    <button
+                        type="button"
+                        id="cancelDeleteLeaveBalance"
+                        class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="confirmDeleteLeaveBalance"
+                        class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -492,71 +1176,12 @@
 </div>
 
 
-<!-- ==========================================================
-     DELETE CONFIRMATION MODAL
-=========================================================== -->
+<!-- ======================================================
+     JAVASCRIPT
+======================================================= -->
 
-<div
-    id="deleteLeaveTypeModal"
-    class="hidden fixed inset-0 z-[60] overflow-y-auto">
-
-    <div class="fixed inset-0 bg-black/50"></div>
-
-    <div class="relative min-h-screen flex items-center justify-center p-4">
-
-        <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
-
-            <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
-
-                <span class="text-red-600 dark:text-red-400 text-xl">
-                    !
-                </span>
-
-            </div>
-
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                Delete Leave Type?
-            </h2>
-
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
-                Are you sure you want to delete
-                <span
-                    id="deleteLeaveTypeName"
-                    class="font-semibold text-gray-700 dark:text-gray-200">
-                </span>?
-                This action cannot be undone.
-            </p>
-
-            <div class="flex justify-end gap-3 mt-6">
-
-                <button
-                    type="button"
-                    id="cancelDeleteLeaveType"
-                    class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium">
-
-                    Cancel
-
-                </button>
-
-                <button
-                    type="button"
-                    id="confirmDeleteLeaveType"
-                    class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium">
-
-                    Delete
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<script src="/static/js/services/leave.service.js"></script>
-<script src="/static/js/admin_dashboard/leave_management.js"></script>
+<script src="{% static 'js/services/leave.service.js' %}"></script>
+<script src="{% static 'js/admin_dashboard/leave_management.js' %}"></script>
+<script src="{% static 'js/admin_dashboard/leave_balance.js' %}"></script>
 
 {% endblock %}

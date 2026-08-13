@@ -65,6 +65,7 @@ class LeaveBalanceViewSet(viewsets.ModelViewSet):
         )
 
         validated_data = serializer.validated_data
+        print(f'validated_data',validated_data)
 
         balance = LeaveBalanceService.create_balance(
             user=validated_data["user"],

@@ -39,6 +39,10 @@ const APP_CONFIG = Object.freeze({
 
         ATTENDANCE: "/attendance/",
 
+        // ==========================
+        // LEAVE MANAGEMENT
+        // ==========================
+
         LEAVE_TYPES: "/leave/types/",
         LEAVE_BALANCES: "/leave/balances/",
         LEAVE_REQUESTS: "/leave/requests/",
@@ -67,13 +71,16 @@ const APP_CONFIG = Object.freeze({
         MANAGER: "/dashboard/manager/",
         EMPLOYEE: "/dashboard/employee/",
 
-        EMPLOYEE_MONTHLY_ATTENDANCE:"/attendance/employee-monthly-attendance/",
-        ATTENDANCE_MONTHLY_REPORT: "/attendance/reports/monthly/",
+        EMPLOYEE_MONTHLY_ATTENDANCE:
+            "/attendance/employee-monthly-attendance/",
 
-        ADMIN_ATTENDANCE:"/attendance/admin-view/",
+        ATTENDANCE_MONTHLY_REPORT:
+            "/attendance/reports/monthly/",
+
+        ADMIN_ATTENDANCE:
+            "/attendance/admin-view/",
 
         FORBIDDEN: "/403/",
-
     }),
 
     REQUEST_TIMEOUT_MS: 15000,

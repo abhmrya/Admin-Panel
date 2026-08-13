@@ -22,8 +22,8 @@ class AuditService:
     @staticmethod
     def serialize_instance(instance):
 
-        fields = AUDIT_FIELDS.get(
-            instance.__class__,
+        fields = AUDIT_FIELDS.get( 
+            instance.__class__,   # ye table ke sare fields nikal ke de raha 
             []
         )
 
