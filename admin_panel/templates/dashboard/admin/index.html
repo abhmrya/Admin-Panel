@@ -5,259 +5,602 @@
 
 {% block content %}
 
-<div class="mx-auto max-w-7xl space-y-8 pb-12">
+<div class="min-h-screen bg-slate-50">
 
-    <!-- ================= Header ================= -->
-    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-            <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">Admin Dashboard</h1>
-            <p class="mt-1 text-sm text-slate-500">Organization overview, analytics and recent activity tracking.</p>
-        </div>
-        <div class="flex items-center gap-3">
-            <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3.5 py-1.5 text-xs font-semibold text-emerald-600 border border-emerald-200 shadow-xs">
-                <span class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                System Live
-            </span>
-        </div>
-    </div>
+    <div class="mx-auto max-w-7xl space-y-8 px-4 py-6 pb-12 sm:px-6 lg:px-8">
 
-    <!-- ================= Statistics Cards ================= -->
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-5">
+        <!-- ======================================================
+             PAGE HEADER
+        ======================================================= -->
 
-        <!-- Total Users -->
-        <a href="{% url 'users:list' %}" class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-indigo-200">
-            <div class="flex items-start justify-between">
-                <div>
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Total Users</p>
-                    <h2 id="statUsersCount" class="mt-2 text-3xl font-extrabold text-slate-900">--</h2>
-                </div>
-                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 transition-transform duration-300 group-hover:scale-110">
-                    👥
-                </div>
-            </div>
-        </a>
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-        <!-- Admins -->
-        <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-red-200">
-            <div class="flex items-start justify-between">
-                <div>
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Admins</p>
-                    <h2 id="statAdminsCount" class="mt-2 text-3xl font-extrabold text-slate-900">--</h2>
-                </div>
-                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 transition-transform duration-300 group-hover:scale-110">
-                    🛡️
-                </div>
-            </div>
-        </div>
-
-        <!-- HR -->
-        <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-sky-200">
-            <div class="flex items-start justify-between">
-                <div>
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">HR Team</p>
-                    <h2 id="statHrCount" class="mt-2 text-3xl font-extrabold text-slate-900">--</h2>
-                </div>
-                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-transform duration-300 group-hover:scale-110">
-                    🗂️
-                </div>
-            </div>
-        </div>
-
-        <!-- Managers -->
-        <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-amber-200">
-            <div class="flex items-start justify-between">
-                <div>
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Managers</p>
-                    <h2 id="statManagersCount" class="mt-2 text-3xl font-extrabold text-slate-900">--</h2>
-                </div>
-                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 transition-transform duration-300 group-hover:scale-110">
-                    📋
-                </div>
-            </div>
-        </div>
-
-        <!-- Employees -->
-        <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:border-emerald-200">
-            <div class="flex items-start justify-between">
-                <div>
-                    <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Employees</p>
-                    <h2 id="statEmployeesCount" class="mt-2 text-3xl font-extrabold text-slate-900">--</h2>
-                </div>
-                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 transition-transform duration-300 group-hover:scale-110">
-                    👨‍💼
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= Quick Actions ================= -->
-    <div class="space-y-3">
-        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">Quick Actions</h2>
-        
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-
-            <!-- My Profile -->
-            <a href="{% url 'profile:index' %}" class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-sm">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
-                    👤
-                </span>
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors truncate">My Profile</span>
-            </a>
-
-            <!-- Add User -->
-            <a href="{% url 'users:AddUsersAdmin' %}" class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-sm">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
-                    ➕
-                </span>
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors truncate">Add User</span>
-            </a>
-
-            <!-- Attendance (Newly Added) -->
-            <a href="{% url 'attendance:admin-attendance-page' %}" class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-sm">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
-                    🕒
-                </span>
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors truncate">Attendance</span>
-            </a>
-
-            <!-- Roles -->
-            <a href="#" class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-sm">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
-                    🔐
-                </span>
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors truncate">Manage Roles</span>
-            </a>
-
-            <!-- Departments -->
-            <a href="{% url 'department:add_department' %}" class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-sm">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
-                    🏢
-                </span>
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors truncate">Departments</span>
-            </a>
-
-            <!-- Leave Management -->
-            <a href="{% url 'leave:leave-management' %}" class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-sm">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
-                    🏖️
-                </span>
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors truncate">
-                    Leave Management
-                </span>
-            </a>
-
-            <!-- Leave Approval -->
-            <a href="{% url 'leave:admin-leave-approval' %}"
-            class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-sm">
-
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-emerald-50">
-                    🏟️
-                </span>
-
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-emerald-600 transition-colors truncate">
-                    Leave Approval
-                </span>
-
-            </a>
-
-            <!-- AI Assistant -->
-            <a href="{% url 'chatbot:index' %}" class="group col-span-2 sm:col-span-1 flex items-center gap-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-700 px-4 py-3 text-white shadow-md shadow-indigo-600/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-base backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
-                    🤖
-                </span>
-                <span class="text-xs font-bold tracking-wide truncate">AI Assistant</span>
-            </a>
-
-        </div>
-    </div>
-
-    <!-- ================= Recent Audit Activity ================= -->
-    <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        
-        <div class="flex flex-col gap-4 border-b border-slate-100 bg-slate-50/50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h2 class="text-base font-bold text-slate-900">Recent Audit Activity</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Latest system actions performed across the platform.</p>
+                <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                    Admin Dashboard
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    Organization overview, analytics and recent activity tracking.
+                </p>
             </div>
-            
-            <!-- Rows per page selector -->
-            <div class="flex items-center gap-2">
-                <label for="rowsPerPage" class="text-xs font-semibold text-slate-500">Show rows:</label>
-                <select id="rowsPerPage" class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs text-slate-700 shadow-xs outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
-                    <option value="5" selected>5</option>
-                    <option value="10">10</option>
-                </select>
+
+            <div class="flex items-center gap-3">
+
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-semibold text-emerald-600 shadow-sm">
+
+                    <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
+
+                    System Live
+
+                </span>
+
             </div>
+
         </div>
 
-        <!-- Table -->
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-left text-sm">
-                <thead class="border-b border-slate-100 bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                    <tr>
-                        <th class="px-6 py-4">User</th>
-                        <th class="px-6 py-4">Action</th>
-                        <th class="px-6 py-4">Resource</th>
-                        <th class="px-6 py-4">IP Address</th>
-                        <th class="px-6 py-4">Time</th>
-                        <th class="px-6 py-4 text-center">Details</th>
-                    </tr>
-                </thead>
-                <tbody id="recentActivityTable" class="divide-y divide-slate-100 bg-white">
-                    <!-- Dynamic Rows Here -->
-                </tbody>
-            </table>
+
+        <!-- ======================================================
+             STATISTICS CARDS
+        ======================================================= -->
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-5">
+
+
+            <!-- Total Users -->
+
+            <a href="{% url 'users:list' %}"
+               class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md">
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Total Users
+                        </p>
+
+                        <h2 id="statUsersCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 transition-transform duration-300 group-hover:scale-110">
+                        👥
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- Admins -->
+
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-md">
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Admins
+                        </p>
+
+                        <h2 id="statAdminsCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 transition-transform duration-300 group-hover:scale-110">
+                        🛡️
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- HR -->
+
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            HR Team
+                        </p>
+
+                        <h2 id="statHrCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-transform duration-300 group-hover:scale-110">
+                        🗂️
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Managers -->
+
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-200 hover:shadow-md">
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Managers
+                        </p>
+
+                        <h2 id="statManagersCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 transition-transform duration-300 group-hover:scale-110">
+                        📋
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Employees -->
+
+            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md">
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Employees
+                        </p>
+
+                        <h2 id="statEmployeesCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 transition-transform duration-300 group-hover:scale-110">
+                        👨‍💼
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <!-- Pagination Footer -->
-        <div class="flex flex-col items-center justify-between gap-4 border-t border-slate-100 bg-slate-50/50 px-6 py-4 sm:flex-row">
-            <span id="paginationInfo" class="text-xs font-medium text-slate-500">Showing 0 to 0 of 0 entries</span>
-            <div class="flex items-center gap-2">
-                <button id="prevPageBtn" class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-xs transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">Previous</button>
-                <span id="pageNumberDisplay" class="text-xs font-semibold text-slate-700 px-2">Page 1 of 1</span>
-                <button id="nextPageBtn" class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-xs transition hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed">Next</button>
+
+        <!-- ======================================================
+             QUICK ACTIONS
+        ======================================================= -->
+
+        <div class="space-y-3">
+
+            <div class="flex items-center justify-between">
+
+                <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Quick Actions
+                </h2>
+
             </div>
+
+
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+
+
+                <!-- My Profile -->
+
+                <a href="{% url 'profile:index' %}"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                        👤
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                        My Profile
+                    </span>
+
+                </a>
+
+
+                <!-- Add User -->
+
+                <a href="{% url 'users:AddUsersAdmin' %}"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                        ➕
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                        Add User
+                    </span>
+
+                </a>
+
+
+                <!-- Attendance -->
+
+                <a href="{% url 'attendance:admin-attendance-page' %}"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                        🕒
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                        Attendance
+                    </span>
+
+                </a>
+
+
+                <!-- Manage Roles -->
+
+                <a href="#"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                        🔐
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                        Manage Roles
+                    </span>
+
+                </a>
+
+
+                <!-- Departments -->
+
+                <a href="{% url 'department:add_department' %}"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                        🏢
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                        Departments
+                    </span>
+
+                </a>
+
+
+                <!-- Leave Management -->
+
+                <a href="{% url 'leave:leave-management' %}"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                        🏖️
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                        Leave Management
+                    </span>
+
+                </a>
+
+
+                <!-- Leave Approval -->
+
+                <a href="{% url 'leave:admin-leave-approval' %}"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-50">
+                        🏟️
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-emerald-600">
+                        Leave Approval
+                    </span>
+
+                </a>
+
+
+                <!-- Leave Dashboard -->
+
+                <a href="{% url 'leave:admin-leave-dashboard' %}"
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-50">
+                        🌉
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-emerald-600">
+                        Leave Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- AI Assistant -->
+
+                <a href="{% url 'chatbot:index' %}"
+                   class="group col-span-2 flex min-w-0 items-center gap-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-700 px-4 py-3 text-white shadow-md shadow-indigo-600/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg sm:col-span-1">
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-base backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                        🤖
+                    </span>
+
+                    <span class="truncate text-xs font-bold tracking-wide">
+                        AI Assistant
+                    </span>
+
+                </a>
+
+            </div>
+
         </div>
-    </section>
+
+
+        <!-- ======================================================
+             RECENT AUDIT ACTIVITY
+        ======================================================= -->
+
+        <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+
+            <!-- Section Header -->
+
+            <div class="flex flex-col gap-4 border-b border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+
+                    <h2 class="text-base font-bold text-slate-900">
+                        Recent Audit Activity
+                    </h2>
+
+                    <p class="mt-0.5 text-xs text-slate-500">
+                        Latest system actions performed across the platform.
+                    </p>
+
+                </div>
+
+
+                <!-- Rows Per Page -->
+
+                <div class="flex items-center gap-2">
+
+                    <label for="rowsPerPage"
+                           class="text-xs font-semibold text-slate-500">
+                        Show rows:
+                    </label>
+
+                    <select id="rowsPerPage"
+                            class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+
+                        <option value="5" selected>
+                            5
+                        </option>
+
+                        <option value="10">
+                            10
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Table -->
+
+            <div class="overflow-x-auto">
+
+                <table class="min-w-full text-left text-sm">
+
+                    <thead class="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+
+                        <tr>
+
+                            <th class="px-6 py-4">
+                                User
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Action
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Resource
+                            </th>
+
+                            <th class="px-6 py-4">
+                                IP Address
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Time
+                            </th>
+
+                            <th class="px-6 py-4 text-center">
+                                Details
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="recentActivityTable"
+                           class="divide-y divide-slate-100 bg-white">
+
+                        <!-- Dynamic Rows Here -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Pagination Footer -->
+
+            <div class="flex flex-col items-center justify-between gap-4 border-t border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row">
+
+                <span id="paginationInfo"
+                      class="text-xs font-medium text-slate-500">
+                    Showing 0 to 0 of 0 entries
+                </span>
+
+
+                <div class="flex items-center gap-2">
+
+                    <button id="prevPageBtn"
+                            class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40">
+                        Previous
+                    </button>
+
+
+                    <span id="pageNumberDisplay"
+                          class="px-2 text-xs font-semibold text-slate-700">
+                        Page 1 of 1
+                    </span>
+
+
+                    <button id="nextPageBtn"
+                            class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40">
+                        Next
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
 
 </div>
 
-<!-- ================= Audit Details Modal ================= -->
-<div id="auditModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div id="auditOverlay" class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
-    <div class="relative flex w-full max-w-4xl flex-col max-h-[90vh] overflow-hidden rounded-3xl bg-white shadow-2xl">
-        
-        <!-- Header -->
-        <div class="flex items-center justify-between border-b border-slate-100 px-6 py-5 bg-slate-50/50">
+
+<!-- ==========================================================
+     AUDIT DETAILS MODAL
+=========================================================== -->
+
+<div id="auditModal"
+     class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+
+
+    <!-- Overlay -->
+
+    <div id="auditOverlay"
+         class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity">
+    </div>
+
+
+    <!-- Modal -->
+
+    <div class="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+
+
+        <!-- Modal Header -->
+
+        <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-6 py-5">
+
             <div>
-                <h2 class="text-lg font-bold text-slate-900">Audit Details</h2>
-                <p class="text-xs text-slate-500 mt-0.5">Comparison of old and new property values</p>
+
+                <h2 class="text-lg font-bold text-slate-900">
+                    Audit Details
+                </h2>
+
+                <p class="mt-0.5 text-xs text-slate-500">
+                    Comparison of old and new property values
+                </p>
+
             </div>
-            <button id="closeAuditBtn" class="flex h-9 w-9 items-center justify-center rounded-xl text-slate-400 transition-colors hover:bg-slate-100 hover:text-red-500 text-xl font-bold">&times;</button>
+
+
+            <button id="closeAuditBtn"
+                    class="flex h-9 w-9 items-center justify-center rounded-xl text-xl font-bold text-slate-400 transition-colors hover:bg-slate-200 hover:text-red-500">
+                &times;
+            </button>
+
         </div>
 
-        <!-- Body: Table view for changes -->
-        <div class="p-6 overflow-y-auto flex-1">
-            <table class="min-w-full divide-y divide-slate-100 border border-slate-100 rounded-2xl overflow-hidden">
-                <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-                    <tr>
-                        <th class="px-5 py-3.5 text-left">Field / Property</th>
-                        <th class="px-5 py-3.5 text-left text-red-500">Old Value</th>
-                        <th class="px-5 py-3.5 text-left text-emerald-600">New Value</th>
-                    </tr>
-                </thead>
-                <tbody id="auditTableBody" class="divide-y divide-slate-100 bg-white text-sm">
-                    <!-- Dynamically filled via JS -->
-                </tbody>
-            </table>
+
+        <!-- Modal Body -->
+
+        <div class="flex-1 overflow-y-auto p-6">
+
+            <div class="overflow-hidden rounded-2xl border border-slate-200">
+
+                <table class="min-w-full divide-y divide-slate-100">
+
+                    <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+
+                        <tr>
+
+                            <th class="px-5 py-3.5 text-left">
+                                Field / Property
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left text-red-500">
+                                Old Value
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left text-emerald-600">
+                                New Value
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="auditTableBody"
+                           class="divide-y divide-slate-100 bg-white text-sm">
+
+                        <!-- Dynamically filled via JS -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
+
     </div>
+
 </div>
 
 {% endblock %}
 
+
+<!-- ==========================================================
+     JAVASCRIPT
+=========================================================== -->
+
 {% block extra_js %}
+
 {{ block.super }}
+
 <script src="{% static 'js/services/audit.service.js' %}"></script>
 <script src="{% static 'js/dashboard/admin.js' %}"></script>
+
 {% endblock %}

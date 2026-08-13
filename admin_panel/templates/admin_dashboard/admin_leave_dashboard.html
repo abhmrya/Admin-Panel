@@ -1,0 +1,333 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}Leave Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="mx-auto max-w-7xl space-y-8 pb-12">
+
+    <!-- ================= Header ================= -->
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                Leave Dashboard
+            </h1>
+            <p class="mt-1 text-sm text-slate-500">
+                Organization leave overview, balances and request statistics.
+            </p>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <span
+                id="leaveDashboardYear"
+                class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+                Year --
+            </span>
+
+            <a
+                href="{% url 'leave:admin-leave-approval' %}"
+                class="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700">
+                Review Requests
+            </a>
+        </div>
+    </div>
+
+
+    <!-- ================= Request Statistics ================= -->
+    <section>
+        <div class="mb-3">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Leave Requests
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+
+            <!-- Pending -->
+            <div class="rounded-2xl border border-amber-200 bg-white p-6 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Pending
+                        </p>
+
+                        <h2
+                            id="leavePendingCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-xl">
+                        ⏳
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Approved -->
+            <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Approved
+                        </p>
+
+                        <h2
+                            id="leaveApprovedCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-xl">
+                        ✅
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Rejected -->
+            <div class="rounded-2xl border border-red-200 bg-white p-6 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Rejected
+                        </p>
+
+                        <h2
+                            id="leaveRejectedCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-xl">
+                        ❌
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Cancelled -->
+            <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Cancelled
+                        </p>
+
+                        <h2
+                            id="leaveCancelledCount"
+                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            --
+                        </h2>
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-xl">
+                        🚫
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= Balance Summary ================= -->
+    <section>
+        <div class="mb-3">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Organization Leave Balance
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+
+            <!-- Allocated -->
+            <div class="rounded-2xl border border-indigo-200 bg-white p-6 shadow-sm">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Total Allocated
+                </p>
+
+                <h2
+                    id="totalAllocatedDays"
+                    class="mt-2 text-3xl font-extrabold text-slate-900">
+                    --
+                </h2>
+
+                <p class="mt-1 text-xs text-slate-500">
+                    Total leave days allocated
+                </p>
+            </div>
+
+
+            <!-- Used -->
+            <div class="rounded-2xl border border-blue-200 bg-white p-6 shadow-sm">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Total Used
+                </p>
+
+                <h2
+                    id="totalUsedDays"
+                    class="mt-2 text-3xl font-extrabold text-slate-900">
+                    --
+                </h2>
+
+                <p class="mt-1 text-xs text-slate-500">
+                    Approved and consumed
+                </p>
+            </div>
+
+
+            <!-- Pending -->
+            <div class="rounded-2xl border border-amber-200 bg-white p-6 shadow-sm">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Total Pending
+                </p>
+
+                <h2
+                    id="totalPendingDays"
+                    class="mt-2 text-3xl font-extrabold text-slate-900">
+                    --
+                </h2>
+
+                <p class="mt-1 text-xs text-slate-500">
+                    Days waiting for approval
+                </p>
+            </div>
+
+
+            <!-- Remaining -->
+            <div class="rounded-2xl border border-emerald-200 bg-white p-6 shadow-sm">
+                <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    Total Remaining
+                </p>
+
+                <h2
+                    id="totalRemainingDays"
+                    class="mt-2 text-3xl font-extrabold text-slate-900">
+                    --
+                </h2>
+
+                <p class="mt-1 text-xs text-slate-500">
+                    Available leave days
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ================= Leave Type Statistics ================= -->
+    <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+        <div class="flex flex-col gap-2 border-b border-slate-100 bg-slate-50/50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                <h2 class="text-base font-bold text-slate-900">
+                    Leave Type Statistics
+                </h2>
+
+                <p class="mt-0.5 text-xs text-slate-500">
+                    Leave request distribution by leave type.
+                </p>
+            </div>
+        </div>
+
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-left text-sm">
+
+                <thead class="border-b border-slate-100 bg-slate-50/80 text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                    <tr>
+                        <th class="px-6 py-4">Leave Type</th>
+                        <th class="px-6 py-4">Code</th>
+                        <th class="px-6 py-4">Requests</th>
+                        <th class="px-6 py-4">Total Days</th>
+                    </tr>
+                </thead>
+
+                <tbody
+                    id="leaveTypeStatisticsTable"
+                    class="divide-y divide-slate-100 bg-white">
+                </tbody>
+
+            </table>
+        </div>
+
+    </section>
+
+
+    <!-- ================= Quick Actions ================= -->
+    <section>
+
+        <div class="mb-3">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Quick Actions
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+            <a
+                href="{% url 'leave:admin-leave-approval' %}"
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md">
+
+                <div class="flex items-center gap-4">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-xl">
+                        📋
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 group-hover:text-indigo-600">
+                            Leave Approval
+                        </h3>
+
+                        <p class="mt-1 text-xs text-slate-500">
+                            Review employee requests
+                        </p>
+                    </div>
+                </div>
+
+            </a>
+
+
+            <a
+                href="{% url 'leave:leave-management' %}"
+                class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md">
+
+                <div class="flex items-center gap-4">
+                    <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-xl">
+                        ⚙️
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-800 group-hover:text-indigo-600">
+                            Leave Management
+                        </h3>
+
+                        <p class="mt-1 text-xs text-slate-500">
+                            Manage leave configuration
+                        </p>
+                    </div>
+                </div>
+
+            </a>
+
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+{{ block.super }}
+
+<script src="{% static 'js/services/leave.service.js' %}"></script>
+<script src="{% static 'js/admin_dashboard/admin_leave_dashboard.js' %}"></script>
+
+{% endblock %}

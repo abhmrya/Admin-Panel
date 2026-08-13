@@ -14,8 +14,12 @@ from ..permissions import (
 from ..serializers import LeaveRequestSerializer
 from ..services import LeaveService
 
+from audit.constants import AuditAction
+from audit.mixins import AuditMixin
 
-class LeaveRequestViewSet(viewsets.ModelViewSet):
+
+
+class LeaveRequestViewSet(AuditMixin,viewsets.ModelViewSet):
     serializer_class = LeaveRequestSerializer
 
     filter_backends = [
@@ -29,11 +33,11 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
         "end_date",
     ]
 
+    audit_action_create = AuditAction.LEAVE_CREATED
+
+
     def get_permissions(self):
-        if self.action in [
-            "approve",
-            "reject",
-        ]:
+        if self.action in ["approve","reject",]:
             return [
                 IsAuthenticated(),
                 CanApproveLeave(),
@@ -93,6 +97,14 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
             end_date=validated_data["end_date"],
             day_type=validated_data["day_type"],
             reason=validated_data["reason"],
+        )
+
+        self.audit_action(
+            action=AuditAction.LEAVE_CREATED,
+            instance=leave_request,
+            new_data=AuditService.serialize_instance(
+                leave_request
+            ),
         )
 
         response_serializer = self.get_serializer(

@@ -9,3 +9,6 @@ class LeaveApplyView(TemplateView):
 
 class AdminLeaveApprovalPageView(TemplateView):
     template_name = "admin_dashboard/admin_leave_approval.html"
+
+class LeaveDashboardView(TemplateView):
+    template_name = "admin_dashboard/admin_leave_dashboard.html"

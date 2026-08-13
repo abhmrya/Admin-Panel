@@ -49,3 +49,8 @@ class AuditAction(models.TextChoices):
     DEPARTMENT_UPDATED = ("DEPARTMENT_UPDATED", "Department Updated",)
 
     DEPARTMENT_DELETED = ("DEPARTMENT_DELETED", "Department Deleted",)
+
+    LEAVE_CREATED = "LEAVE_CREATED", "Leave Created"
+    LEAVE_APPROVED = "LEAVE_APPROVED", "Leave Approved"
+    LEAVE_REJECTED = "LEAVE_REJECTED", "Leave Rejected"
+    LEAVE_CANCELLED = "LEAVE_CANCELLED", "Leave Cancelled"
