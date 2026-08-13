@@ -1,0 +1,537 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}My Leave Management{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-6">
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                My Leave Management
+            </h1>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Manage your leave balance and leave requests.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="applyLeaveBtn"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
+
+            <span>+</span>
+            Apply Leave
+
+        </button>
+
+    </div>
+
+
+    <!-- ======================================================
+         ALERT
+    ======================================================= -->
+
+    <div
+        id="employeeLeaveAlert"
+        class="hidden mb-6">
+
+        <div
+            id="employeeLeaveAlertInner"
+            class="px-4 py-3 rounded-lg text-sm font-medium">
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LEAVE BALANCE
+    ======================================================= -->
+
+    <div class="mb-8">
+
+        <div class="flex items-center justify-between mb-4">
+
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    My Leave Balance
+                </h2>
+
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Your available leave for each leave type.
+                </p>
+            </div>
+
+            <select
+                id="employeeLeaveBalanceYear"
+                class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white">
+
+                <option value="">All Years</option>
+
+            </select>
+
+        </div>
+
+
+        <div
+            id="employeeLeaveBalanceLoading"
+            class="hidden text-center py-10 text-gray-500 dark:text-gray-400">
+
+            Loading leave balance...
+
+        </div>
+
+
+        <div
+            id="employeeLeaveBalanceContainer"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        </div>
+
+
+        <div
+            id="employeeLeaveBalanceEmpty"
+            class="hidden bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-10 text-center">
+
+            <div class="text-gray-400 text-4xl mb-3">
+                📋
+            </div>
+
+            <p class="font-medium text-gray-700 dark:text-gray-300">
+                No leave balance found.
+            </p>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Contact HR if your leave balance has not been configured.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LEAVE REQUESTS
+    ======================================================= -->
+
+    <div>
+
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    My Leave Requests
+                </h2>
+
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Track your submitted leave requests.
+                </p>
+            </div>
+
+
+            <div class="flex flex-col sm:flex-row gap-2">
+
+                <input
+                    type="text"
+                    id="employeeLeaveSearch"
+                    placeholder="Search leave..."
+                    class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+
+
+                <select
+                    id="employeeLeaveStatusFilter"
+                    class="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white">
+
+                    <option value="">All Status</option>
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="CANCELLED">Cancelled</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+
+            <div class="overflow-x-auto">
+
+                <table class="w-full text-sm">
+
+                    <thead class="bg-gray-50 dark:bg-gray-700/50">
+
+                        <tr>
+
+                            <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                                Leave Type
+                            </th>
+
+                            <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                                Dates
+                            </th>
+
+                            <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                                Days
+                            </th>
+
+                            <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                                Day Type
+                            </th>
+
+                            <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                                Status
+                            </th>
+
+                            <th class="px-5 py-3 text-right font-semibold text-gray-600 dark:text-gray-300">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody
+                        id="employeeLeaveRequestsBody"
+                        class="divide-y divide-gray-200 dark:divide-gray-700">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- EMPTY -->
+
+            <div
+                id="employeeLeaveRequestsEmpty"
+                class="hidden py-12 text-center">
+
+                <div class="text-4xl mb-3">
+                    📭
+                </div>
+
+                <p class="font-medium text-gray-700 dark:text-gray-300">
+                    No leave requests found.
+                </p>
+
+            </div>
+
+
+            <!-- LOADING -->
+
+            <div
+                id="employeeLeaveRequestsLoading"
+                class="hidden py-12 text-center text-gray-500 dark:text-gray-400">
+
+                Loading leave requests...
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+     APPLY LEAVE MODAL
+=========================================================== -->
+
+<div
+    id="employeeLeaveModal"
+    class="hidden fixed inset-0 z-50 overflow-y-auto">
+
+    <div
+        id="employeeLeaveModalBackdrop"
+        class="fixed inset-0 bg-black/50">
+    </div>
+
+
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+
+        <div class="relative w-full max-w-xl bg-white dark:bg-gray-800 rounded-xl shadow-xl">
+
+            <!-- HEADER -->
+
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                <div>
+
+                    <h2
+                        id="employeeLeaveModalTitle"
+                        class="text-lg font-semibold text-gray-900 dark:text-white">
+
+                        Apply Leave
+
+                    </h2>
+
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Submit your leave request.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="closeEmployeeLeaveModal"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <!-- FORM -->
+
+            <form
+                id="employeeLeaveForm"
+                class="p-6 space-y-5">
+
+                <!-- LEAVE TYPE -->
+
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                        Leave Type
+                    </label>
+
+                    <select
+                        id="employeeLeaveType"
+                        required
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+
+                        <option value="">
+                            Select Leave Type
+                        </option>
+
+                    </select>
+
+                    <p
+                        id="employeeLeaveTypeError"
+                        class="hidden text-xs text-red-500 mt-1">
+                    </p>
+
+                </div>
+
+
+                <!-- DATES -->
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                    <div>
+
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            Start Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="employeeLeaveStartDate"
+                            required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+
+                        <p
+                            id="employeeLeaveStartDateError"
+                            class="hidden text-xs text-red-500 mt-1">
+                        </p>
+
+                    </div>
+
+
+                    <div>
+
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                            End Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="employeeLeaveEndDate"
+                            required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+
+                        <p
+                            id="employeeLeaveEndDateError"
+                            class="hidden text-xs text-red-500 mt-1">
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DAY TYPE -->
+
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                        Day Type
+                    </label>
+
+                    <select
+                        id="employeeLeaveDayType"
+                        required
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+
+                        <option value="FULL_DAY">
+                            Full Day
+                        </option>
+
+                        <option value="HALF_DAY">
+                            Half Day
+                        </option>
+
+                    </select>
+
+                    <p
+                        id="employeeLeaveDayTypeError"
+                        class="hidden text-xs text-red-500 mt-1">
+                    </p>
+
+                </div>
+
+
+                <!-- REASON -->
+
+                <div>
+
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+                        Reason
+                    </label>
+
+                    <textarea
+                        id="employeeLeaveReason"
+                        rows="4"
+                        placeholder="Enter reason for leave..."
+                        required
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+
+                    <p
+                        id="employeeLeaveReasonError"
+                        class="hidden text-xs text-red-500 mt-1">
+                    </p>
+
+                </div>
+
+
+                <!-- BALANCE PREVIEW -->
+
+                <div
+                    id="employeeLeaveBalancePreview"
+                    class="hidden p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800">
+
+                    <div class="text-xs text-blue-600 dark:text-blue-400">
+                        Available Balance
+                    </div>
+
+                    <div
+                        id="employeeLeaveAvailableDays"
+                        class="text-lg font-semibold text-blue-700 dark:text-blue-300">
+                        0
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="flex justify-end gap-3 pt-2">
+
+                    <button
+                        type="button"
+                        id="cancelEmployeeLeaveBtn"
+                        class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 text-sm font-medium">
+
+                        Cancel
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        id="submitEmployeeLeaveBtn"
+                        class="px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">
+
+                        Submit Leave
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+     VIEW REQUEST MODAL
+=========================================================== -->
+
+<div
+    id="employeeLeaveViewModal"
+    class="hidden fixed inset-0 z-50 overflow-y-auto">
+
+    <div
+        id="employeeLeaveViewBackdrop"
+        class="fixed inset-0 bg-black/50">
+    </div>
+
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+
+        <div class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl">
+
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    Leave Request Details
+                </h2>
+
+                <button
+                    type="button"
+                    id="closeEmployeeLeaveViewModal"
+                    class="text-gray-400 hover:text-gray-600 text-2xl">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="employeeLeaveViewContent"
+                class="p-6">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="{% static 'js/services/leave.service.js' %}"></script>
+<script src="{% static 'js/employee_dashboard/employee_leave.js' %}"></script>
+
+{% endblock %}

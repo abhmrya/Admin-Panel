@@ -34,6 +34,7 @@ class LeaveCalculationService:
         current_date = start_date
 
         while current_date <= end_date:
+
             is_weekend = current_date.weekday() >= 5
             is_holiday = current_date in holidays
 
@@ -43,9 +44,16 @@ class LeaveCalculationService:
             current_date += timedelta(days=1)
 
         if day_type == LeaveRequest.DayType.HALF_DAY:
+
+            if start_date != end_date:
+                raise ValueError(
+                    "Half day leave must be for one day."
+                )
+
             if total_days != 1:
                 raise ValueError(
-                    "Half day leave must be for one working day."
+                    "Half day leave must be on "
+                    "a working day."
                 )
 
             return 0.5

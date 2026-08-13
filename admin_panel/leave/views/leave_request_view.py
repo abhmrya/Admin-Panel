@@ -86,25 +86,13 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
 
         validated_data = serializer.validated_data
 
-        leave_request = (
-            LeaveService.create_leave_request(
-                user=request.user,
-                leave_type=validated_data[
-                    "leave_type"
-                ],
-                start_date=validated_data[
-                    "start_date"
-                ],
-                end_date=validated_data[
-                    "end_date"
-                ],
-                day_type=validated_data[
-                    "day_type"
-                ],
-                reason=validated_data[
-                    "reason"
-                ],
-            )
+        leave_request = LeaveService.create_leave_request(
+            user=request.user,
+            leave_type=validated_data["leave_type"],
+            start_date=validated_data["start_date"],
+            end_date=validated_data["end_date"],
+            day_type=validated_data["day_type"],
+            reason=validated_data["reason"],
         )
 
         response_serializer = self.get_serializer(
@@ -132,12 +120,10 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
             "",
         )
 
-        leave_request = (
-            LeaveService.approve_leave_request(
-                leave_request=leave_request,
-                reviewer=request.user,
-                comment=comment,
-            )
+        leave_request = LeaveService.approve_leave_request(
+            leave_request=leave_request,
+            reviewer=request.user,
+            comment=comment,
         )
 
         serializer = self.get_serializer(
@@ -165,12 +151,10 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
             "",
         )
 
-        leave_request = (
-            LeaveService.reject_leave_request(
-                leave_request=leave_request,
-                reviewer=request.user,
-                rejection_reason=rejection_reason,
-            )
+        leave_request = LeaveService.reject_leave_request(
+            leave_request=leave_request,
+            reviewer=request.user,
+            rejection_reason=rejection_reason,
         )
 
         serializer = self.get_serializer(
@@ -193,11 +177,9 @@ class LeaveRequestViewSet(viewsets.ModelViewSet):
     ):
         leave_request = self.get_object()
 
-        leave_request = (
-            LeaveService.cancel_leave_request(
-                leave_request=leave_request,
-                user=request.user,
-            )
+        leave_request = LeaveService.cancel_leave_request(
+            leave_request=leave_request,
+            user=request.user,
         )
 
         serializer = self.get_serializer(

@@ -8,383 +8,327 @@
 
 const LeaveService = {
 
-    /**
-     * ==========================================================
-     * DASHBOARD
-     * ==========================================================
-     */
+    /* ==========================================================
+       DASHBOARD
+    ========================================================== */
 
     getDashboard() {
-
         return Api.get(
             APP_CONFIG.ENDPOINTS.LEAVE_DASHBOARD
         );
-
     },
 
 
-    /**
-     * ==========================================================
-     * LEAVE TYPES
-     * ==========================================================
-     */
+    /* ==========================================================
+       LEAVE TYPES
+    ========================================================== */
 
     getLeaveTypes(params = "") {
-
-        const path =
-            APP_CONFIG.ENDPOINTS.LEAVE_TYPES +
-            params;
-
-        return Api.get(path);
-
+        return Api.get(
+            APP_CONFIG.ENDPOINTS.LEAVE_TYPES + params
+        );
     },
-
 
     getLeaveType(id) {
-
         return Api.get(
             `${APP_CONFIG.ENDPOINTS.LEAVE_TYPES}${id}/`
         );
-
     },
 
-
-    createLeaveType(body) {
-
+    createLeaveType(data) {
         return Api.post(
             APP_CONFIG.ENDPOINTS.LEAVE_TYPES,
-            body
+            data
         );
-
     },
 
-
-    updateLeaveType(id, body) {
-
+    updateLeaveType(id, data) {
         return Api.put(
             `${APP_CONFIG.ENDPOINTS.LEAVE_TYPES}${id}/`,
-            body
+            data
         );
-
     },
 
-
-    partialUpdateLeaveType(id, body) {
-
+    partialUpdateLeaveType(id, data) {
         return Api.patch(
             `${APP_CONFIG.ENDPOINTS.LEAVE_TYPES}${id}/`,
-            body
+            data
         );
-
     },
 
-
     deleteLeaveType(id) {
-
         return Api.delete(
             `${APP_CONFIG.ENDPOINTS.LEAVE_TYPES}${id}/`
         );
-
     },
 
 
-    /**
-     * ==========================================================
-     * LEAVE BALANCES
-     * ==========================================================
-     */
+    /* ==========================================================
+       LEAVE BALANCES
+    ========================================================== */
 
     getLeaveBalances(params = "") {
-
-        const path =
-            APP_CONFIG.ENDPOINTS.LEAVE_BALANCES +
-            params;
-
-        return Api.get(path);
-
+        return Api.get(
+            APP_CONFIG.ENDPOINTS.LEAVE_BALANCES + params
+        );
     },
-
 
     getLeaveBalance(id) {
-
         return Api.get(
             `${APP_CONFIG.ENDPOINTS.LEAVE_BALANCES}${id}/`
         );
-
     },
 
-
-    createLeaveBalance(body) {
-
+    createLeaveBalance(data) {
         return Api.post(
             APP_CONFIG.ENDPOINTS.LEAVE_BALANCES,
-            body
+            data
         );
-
     },
 
-
-    updateLeaveBalance(id, body) {
-
+    updateLeaveBalance(id, data) {
         return Api.put(
             `${APP_CONFIG.ENDPOINTS.LEAVE_BALANCES}${id}/`,
-            body
+            data
         );
-
     },
 
-
-    partialUpdateLeaveBalance(id, body) {
-
+    partialUpdateLeaveBalance(id, data) {
         return Api.patch(
             `${APP_CONFIG.ENDPOINTS.LEAVE_BALANCES}${id}/`,
-            body
+            data
         );
-
     },
 
-
     deleteLeaveBalance(id) {
-
         return Api.delete(
             `${APP_CONFIG.ENDPOINTS.LEAVE_BALANCES}${id}/`
         );
-
     },
 
 
-    /**
-     * ==========================================================
-     * LEAVE REQUESTS
-     * ==========================================================
-     */
+    /* ==========================================================
+       LEAVE REQUESTS
+    ========================================================== */
 
     getLeaveRequests(params = "") {
-
-        const path =
-            APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS +
-            params;
-
-        return Api.get(path);
-
+        return Api.get(
+            APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS + params
+        );
     },
 
-
     getLeaveRequest(id) {
-
         return Api.get(
             `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}${id}/`
         );
-
     },
 
-
-    createLeaveRequest(body) {
-
+    createLeaveRequest(data) {
         return Api.post(
             APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS,
-            body
+            data
         );
-
     },
 
-
-    updateLeaveRequest(id, body) {
-
+    updateLeaveRequest(id, data) {
         return Api.put(
             `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}${id}/`,
-            body
+            data
         );
-
     },
 
-
-    partialUpdateLeaveRequest(id, body) {
-
+    partialUpdateLeaveRequest(id, data) {
         return Api.patch(
             `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}${id}/`,
-            body
+            data
         );
-
     },
 
-
     deleteLeaveRequest(id) {
-
         return Api.delete(
             `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}${id}/`
         );
-
     },
 
 
-    /**
-     * ==========================================================
-     * LEAVE REQUEST ACTIONS
-     * ==========================================================
-     */
+    /* ==========================================================
+       LEAVE REQUEST ACTIONS
+    ========================================================== */
 
-    approveLeave(id, body = {}) {
-
+    approveLeave(id, data = {}) {
         return Api.post(
             `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}${id}/approve/`,
-            body
+            data
         );
-
     },
 
-
-    rejectLeave(id, body = {}) {
-
+    rejectLeave(id, data = {}) {
         return Api.post(
             `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}${id}/reject/`,
-            body
+            data
         );
-
     },
 
-
     cancelLeave(id) {
-
         return Api.post(
             `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}${id}/cancel/`
         );
-
     },
 
-
-    /**
-     * ==========================================================
-     * LEAVE POLICIES
-     * ==========================================================
+    /*
+     * Alias used by employee leave module.
+     * Keeps the service backward compatible.
      */
-
-    getPolicies(params = "") {
-
-        const path =
-            APP_CONFIG.ENDPOINTS.LEAVE_POLICIES +
-            params;
-
-        return Api.get(path);
-
+    cancelLeaveRequest(id) {
+        return this.cancelLeave(id);
     },
 
 
-    getPolicy(id) {
+    /* ==========================================================
+       LEAVE POLICIES
+    ========================================================== */
 
+    getLeavePolicies(params = "") {
+        return Api.get(
+            APP_CONFIG.ENDPOINTS.LEAVE_POLICIES + params
+        );
+    },
+
+    getLeavePolicy(id) {
         return Api.get(
             `${APP_CONFIG.ENDPOINTS.LEAVE_POLICIES}${id}/`
         );
-
     },
 
-
-    createPolicy(body) {
-
+    createLeavePolicy(data) {
         return Api.post(
             APP_CONFIG.ENDPOINTS.LEAVE_POLICIES,
-            body
+            data
         );
-
     },
 
-
-    updatePolicy(id, body) {
-
+    updateLeavePolicy(id, data) {
         return Api.put(
             `${APP_CONFIG.ENDPOINTS.LEAVE_POLICIES}${id}/`,
-            body
+            data
         );
-
     },
 
-
-    partialUpdatePolicy(id, body) {
-
+    partialUpdateLeavePolicy(id, data) {
         return Api.patch(
             `${APP_CONFIG.ENDPOINTS.LEAVE_POLICIES}${id}/`,
-            body
+            data
         );
-
     },
 
-
-    deletePolicy(id) {
-
+    deleteLeavePolicy(id) {
         return Api.delete(
             `${APP_CONFIG.ENDPOINTS.LEAVE_POLICIES}${id}/`
         );
-
     },
 
 
-    /**
-     * ==========================================================
-     * LEAVE APPROVALS
-     * ==========================================================
-     */
+    /* ==========================================================
+       LEAVE APPROVALS
+    ========================================================== */
 
-    getApprovals(params = "") {
-
-        const path =
-            APP_CONFIG.ENDPOINTS.LEAVE_APPROVALS +
-            params;
-
-        return Api.get(path);
-
+    getLeaveApprovals(params = "") {
+        return Api.get(
+            APP_CONFIG.ENDPOINTS.LEAVE_APPROVALS + params
+        );
     },
 
-
-    getApproval(id) {
-
+    getLeaveApproval(id) {
         return Api.get(
             `${APP_CONFIG.ENDPOINTS.LEAVE_APPROVALS}${id}/`
         );
-
     },
 
-
-    createApproval(body) {
-
+    createLeaveApproval(data) {
         return Api.post(
             APP_CONFIG.ENDPOINTS.LEAVE_APPROVALS,
-            body
+            data
         );
-
     },
 
-
-    updateApproval(id, body) {
-
+    updateLeaveApproval(id, data) {
         return Api.put(
             `${APP_CONFIG.ENDPOINTS.LEAVE_APPROVALS}${id}/`,
-            body
+            data
         );
-
     },
 
-
-    partialUpdateApproval(id, body) {
-
+    partialUpdateLeaveApproval(id, data) {
         return Api.patch(
             `${APP_CONFIG.ENDPOINTS.LEAVE_APPROVALS}${id}/`,
-            body
+            data
         );
-
     },
 
-
-    deleteApproval(id) {
-
+    deleteLeaveApproval(id) {
         return Api.delete(
             `${APP_CONFIG.ENDPOINTS.LEAVE_APPROVALS}${id}/`
         );
+    },
 
+
+    /* ==========================================================
+       BACKWARD COMPATIBILITY
+    ========================================================== */
+
+    getPolicies(params = "") {
+        return this.getLeavePolicies(params);
+    },
+
+    getPolicy(id) {
+        return this.getLeavePolicy(id);
+    },
+
+    createPolicy(data) {
+        return this.createLeavePolicy(data);
+    },
+
+    updatePolicy(id, data) {
+        return this.updateLeavePolicy(id, data);
+    },
+
+    partialUpdatePolicy(id, data) {
+        return this.partialUpdateLeavePolicy(id, data);
+    },
+
+    deletePolicy(id) {
+        return this.deleteLeavePolicy(id);
+    },
+
+    getApprovals(params = "") {
+        return this.getLeaveApprovals(params);
+    },
+
+    getApproval(id) {
+        return this.getLeaveApproval(id);
+    },
+
+    createApproval(data) {
+        return this.createLeaveApproval(data);
+    },
+
+    updateApproval(id, data) {
+        return this.updateLeaveApproval(id, data);
+    },
+
+    partialUpdateApproval(id, data) {
+        return this.partialUpdateLeaveApproval(id, data);
+    },
+
+    deleteApproval(id) {
+        return this.deleteLeaveApproval(id);
     }
 
 };
 
 
-window.LeaveService = Object.freeze(
-    LeaveService
-);
+/* ==========================================================
+   GLOBAL SERVICE
+========================================================== */
+
+window.LeaveService = Object.freeze(LeaveService);

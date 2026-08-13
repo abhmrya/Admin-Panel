@@ -19,7 +19,7 @@
             </h1>
 
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                Manage leave types, balances and leave requests
+                Manage leave types, policies, balances and allocations
             </p>
         </div>
 
@@ -30,7 +30,7 @@
          GLOBAL ALERT
     ======================================================= -->
 
-    <div id="alertBox" class="hidden mb-5" role="alert">
+    <div id="alertBox" class="hidden mb-5" role="alert" aria-live="polite">
         <div id="alertInner" class="px-4 py-3 rounded-lg text-sm font-medium"></div>
     </div>
 
@@ -39,7 +39,8 @@
          LEAVE TYPES
     ======================================================= -->
 
-    <section class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+    <section
+        class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
 
         <!-- HEADER -->
 
@@ -60,7 +61,7 @@
                 <button
                     type="button"
                     id="addLeaveTypeBtn"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 text-white text-sm font-medium transition">
 
                     <span class="text-lg leading-none">+</span>
                     Add Leave Type
@@ -116,17 +117,9 @@
                         id="leaveTypeStatus"
                         class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
-                        <option value="">
-                            All Status
-                        </option>
-
-                        <option value="active">
-                            Active
-                        </option>
-
-                        <option value="inactive">
-                            Inactive
-                        </option>
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
 
                     </select>
 
@@ -194,7 +187,6 @@
                     </tr>
 
                 </thead>
-
 
                 <tbody id="leaveTypesTableBody">
 
@@ -270,10 +262,251 @@
 
 
     <!-- ======================================================
+         LEAVE POLICIES
+    ======================================================= -->
+
+    <section
+        class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+
+        <!-- HEADER -->
+
+        <div class="p-5 border-b border-gray-200 dark:border-gray-700">
+
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+
+                <div>
+
+                    <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Leave Policies
+                    </h2>
+
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        Configure rules and restrictions for each leave type
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="addLeavePolicyBtn"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 text-white text-sm font-medium transition">
+
+                    <span class="text-lg leading-none">+</span>
+                    Add Leave Policy
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTERS -->
+
+        <div class="p-5 border-b border-gray-200 dark:border-gray-700">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+                <!-- SEARCH -->
+
+                <div>
+
+                    <label
+                        for="leavePolicySearch"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                        Search
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="leavePolicySearch"
+                        autocomplete="off"
+                        placeholder="Search leave type..."
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div>
+
+                    <label
+                        for="leavePolicyStatus"
+                        class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                        Status
+
+                    </label>
+
+                    <select
+                        id="leavePolicyStatus"
+                        class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- RESET -->
+
+                <div class="flex items-end">
+
+                    <button
+                        type="button"
+                        id="resetLeavePolicyFilters"
+                        class="w-full md:w-auto px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium transition">
+
+                        Reset Filters
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-sm text-left">
+
+                <thead class="bg-gray-50 dark:bg-gray-700/50">
+
+                    <tr>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            #
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Leave Type
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Notice
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Max Days
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Half Day
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Backdated
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Reason
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Approval
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300">
+                            Status
+                        </th>
+
+                        <th class="px-5 py-4 font-semibold text-gray-600 dark:text-gray-300 text-right">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="leavePoliciesTableBody">
+
+                    <tr id="leavePolicyLoadingRow">
+
+                        <td colspan="10" class="px-5 py-10 text-center">
+
+                            <div class="flex items-center justify-center gap-3 text-gray-500 dark:text-gray-400">
+
+                                <div class="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+
+                                <span>
+                                    Loading leave policies...
+                                </span>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- EMPTY STATE -->
+
+        <div
+            id="leavePolicyEmptyState"
+            class="hidden px-5 py-12 text-center">
+
+            <div class="text-gray-400 text-4xl mb-3">
+                ⚙️
+            </div>
+
+            <h3 class="text-base font-semibold text-gray-700 dark:text-gray-300">
+                No Leave Policies Found
+            </h3>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                No leave policies match your current filters.
+            </p>
+
+        </div>
+
+
+        <!-- PAGINATION -->
+
+        <div
+            id="leavePolicyPaginationWrapper"
+            class="hidden px-5 py-4 border-t border-gray-200 dark:border-gray-700">
+
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+                <div
+                    id="leavePolicyPaginationInfo"
+                    class="text-sm text-gray-500 dark:text-gray-400">
+                </div>
+
+                <div
+                    id="leavePolicyPagination"
+                    class="flex items-center gap-1">
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
          LEAVE BALANCES
     ======================================================= -->
 
-    <section class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+    <section
+        class="mt-6 bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
 
         <!-- HEADER -->
 
@@ -293,11 +526,10 @@
 
                 </div>
 
-
                 <button
                     type="button"
                     id="addLeaveBalanceBtn"
-                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 text-white text-sm font-medium transition">
 
                     <span class="text-lg leading-none">+</span>
                     Add Leave Balance
@@ -453,7 +685,6 @@
 
                 </thead>
 
-
                 <tbody id="leaveBalancesTableBody">
 
                     <tr id="leaveBalanceLoadingRow">
@@ -534,17 +765,20 @@
     <div
         id="leaveTypeModal"
         class="hidden fixed inset-0 z-50 overflow-y-auto"
-        aria-hidden="true">
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="leaveTypeModalTitle">
 
         <div
             id="leaveTypeModalBackdrop"
             class="fixed inset-0 bg-black/50">
         </div>
 
-
         <div class="relative min-h-screen flex items-center justify-center p-4">
 
-            <div class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+            <div
+                class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
 
                 <!-- HEADER -->
 
@@ -566,7 +800,6 @@
 
                     </div>
 
-
                     <button
                         type="button"
                         id="closeLeaveTypeModal"
@@ -584,9 +817,7 @@
 
                 <form id="leaveTypeForm" class="p-5">
 
-                    <input
-                        type="hidden"
-                        id="leaveTypeId">
+                    <input type="hidden" id="leaveTypeId">
 
 
                     <!-- NAME -->
@@ -607,6 +838,7 @@
                             id="leaveTypeName"
                             maxlength="100"
                             autocomplete="off"
+                            required
                             placeholder="e.g. Casual Leave"
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
@@ -633,6 +865,7 @@
                             id="leaveTypeCode"
                             maxlength="30"
                             autocomplete="off"
+                            required
                             placeholder="e.g. CL"
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none uppercase">
 
@@ -660,6 +893,7 @@
                             min="0"
                             step="0.5"
                             inputmode="decimal"
+                            required
                             placeholder="e.g. 12"
                             class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
 
@@ -699,6 +933,7 @@
                             <input
                                 type="checkbox"
                                 id="leaveTypeIsActive"
+                                checked
                                 class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
 
                             <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -750,13 +985,16 @@
     <div
         id="deleteLeaveTypeModal"
         class="hidden fixed inset-0 z-[60] overflow-y-auto"
-        aria-hidden="true">
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true">
 
         <div class="fixed inset-0 bg-black/50"></div>
 
         <div class="relative min-h-screen flex items-center justify-center p-4">
 
-            <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+            <div
+                class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
 
                 <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
 
@@ -766,11 +1004,9 @@
 
                 </div>
 
-
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
                     Delete Leave Type?
                 </h2>
-
 
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
 
@@ -785,7 +1021,6 @@
 
                 </p>
 
-
                 <div class="flex justify-end gap-3 mt-6">
 
                     <button
@@ -797,10 +1032,383 @@
 
                     </button>
 
-
                     <button
                         type="button"
                         id="confirmDeleteLeaveType"
+                        class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LEAVE POLICY ADD / EDIT MODAL
+    ======================================================= -->
+
+    <div
+        id="leavePolicyModal"
+        class="hidden fixed inset-0 z-50 overflow-y-auto"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="leavePolicyModalTitle">
+
+        <div
+            id="leavePolicyModalBackdrop"
+            class="fixed inset-0 bg-black/50">
+        </div>
+
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+
+            <div
+                class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+
+                <!-- HEADER -->
+
+                <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                    <div>
+
+                        <h2
+                            id="leavePolicyModalTitle"
+                            class="text-lg font-semibold text-gray-900 dark:text-white">
+
+                            Add Leave Policy
+
+                        </h2>
+
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+
+                            Configure leave policy rules
+
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="closeLeavePolicyModal"
+                        aria-label="Close modal"
+                        class="w-9 h-9 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-gray-400 text-xl">
+
+                        ×
+
+                    </button>
+
+                </div>
+
+
+                <!-- FORM -->
+
+                <form id="leavePolicyForm" class="p-5">
+
+                    <input
+                        type="hidden"
+                        id="leavePolicyId">
+
+
+                    <!-- LEAVE TYPE -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leavePolicyLeaveType"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Leave Type
+                            <span class="text-red-500">*</span>
+
+                        </label>
+
+                        <select
+                            id="leavePolicyLeaveType"
+                            name="leave_type"
+                            required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                            <option value="">
+                                Select Leave Type
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- MIN NOTICE -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leavePolicyMinNotice"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Minimum Notice
+                            <span class="text-gray-400 font-normal">
+                                (Days)
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="number"
+                            id="leavePolicyMinNotice"
+                            name="min_days_notice"
+                            min="0"
+                            step="1"
+                            inputmode="numeric"
+                            value="0"
+                            placeholder="e.g. 2"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                    </div>
+
+
+                    <!-- MAX DAYS -->
+
+                    <div class="mb-4">
+
+                        <label
+                            for="leavePolicyMaxDays"
+                            class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
+
+                            Maximum Consecutive Days
+
+                        </label>
+
+                        <input
+                            type="number"
+                            id="leavePolicyMaxDays"
+                            name="max_consecutive_days"
+                            min="0"
+                            step="1"
+                            inputmode="numeric"
+                            value="0"
+                            placeholder="e.g. 10"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+
+                    </div>
+
+
+                    <!-- HALF DAY -->
+
+                    <div class="mb-4">
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input
+                                type="checkbox"
+                                id="leavePolicyHalfDay"
+                                name="allow_half_day"
+                                class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+
+                                Allow Half Day
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- BACKDATED -->
+
+                    <div class="mb-4">
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input
+                                type="checkbox"
+                                id="leavePolicyBackdated"
+                                name="allow_backdated"
+                                class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+
+                                Allow Backdated Leave
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- REASON -->
+
+                    <div class="mb-4">
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input
+                                type="checkbox"
+                                id="leavePolicyReason"
+                                name="requires_reason"
+                                checked
+                                class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+
+                                Require Reason
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- APPROVAL -->
+
+                    <div class="mb-4">
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input
+                                type="checkbox"
+                                id="leavePolicyApproval"
+                                name="requires_approval"
+                                checked
+                                class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+
+                                Require Approval
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- ACTIVE -->
+
+                    <div class="mb-5">
+
+                        <label class="flex items-center gap-3 cursor-pointer">
+
+                            <input
+                                type="checkbox"
+                                id="leavePolicyActive"
+                                name="is_active"
+                                checked
+                                class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+
+                                Active
+
+                            </span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- BUTTONS -->
+
+                    <div class="flex items-center justify-end gap-3">
+
+                        <button
+                            type="button"
+                            id="cancelLeavePolicyBtn"
+                            class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium">
+
+                            Cancel
+
+                        </button>
+
+                        <button
+                            type="submit"
+                            id="saveLeavePolicyBtn"
+                            class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium">
+
+                            Save Leave Policy
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         LEAVE POLICY DELETE MODAL
+    ======================================================= -->
+
+    <div
+        id="deleteLeavePolicyModal"
+        class="hidden fixed inset-0 z-[60] overflow-y-auto"
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true">
+
+        <div class="fixed inset-0 bg-black/50"></div>
+
+        <div class="relative min-h-screen flex items-center justify-center p-4">
+
+            <div
+                class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+
+                <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
+
+                    <span class="text-red-600 dark:text-red-400 text-xl">
+                        !
+                    </span>
+
+                </div>
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+
+                    Delete Leave Policy?
+
+                </h2>
+
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
+
+                    Are you sure you want to delete the policy for
+
+                    <span
+                        id="deleteLeavePolicyName"
+                        class="font-semibold text-gray-700 dark:text-gray-200">
+                    </span>?
+
+                    This action cannot be undone.
+
+                </p>
+
+                <div class="flex justify-end gap-3 mt-6">
+
+                    <button
+                        type="button"
+                        id="cancelDeleteLeavePolicy"
+                        class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 text-sm font-medium">
+
+                        Cancel
+
+                    </button>
+
+                    <button
+                        type="button"
+                        id="confirmDeleteLeavePolicy"
                         class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium">
 
                         Delete
@@ -823,17 +1431,20 @@
     <div
         id="leaveBalanceModal"
         class="hidden fixed inset-0 z-50 overflow-y-auto"
-        aria-hidden="true">
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="leaveBalanceModalTitle">
 
         <div
             id="leaveBalanceModalBackdrop"
             class="fixed inset-0 bg-black/50">
         </div>
 
-
         <div class="relative min-h-screen flex items-center justify-center p-4">
 
-            <div class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
+            <div
+                class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700">
 
                 <!-- HEADER -->
 
@@ -850,11 +1461,12 @@
                         </h2>
 
                         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+
                             Assign leave balance to an employee
+
                         </p>
 
                     </div>
-
 
                     <button
                         type="button"
@@ -1049,7 +1661,9 @@
                             <div class="flex items-center justify-between">
 
                                 <span class="text-sm font-medium text-gray-600 dark:text-gray-300">
+
                                     Remaining Days
+
                                 </span>
 
                                 <span
@@ -1080,7 +1694,6 @@
 
                         </button>
 
-
                         <button
                             type="submit"
                             id="saveLeaveBalanceBtn"
@@ -1108,13 +1721,16 @@
     <div
         id="deleteLeaveBalanceModal"
         class="hidden fixed inset-0 z-[60] overflow-y-auto"
-        aria-hidden="true">
+        aria-hidden="true"
+        role="dialog"
+        aria-modal="true">
 
         <div class="fixed inset-0 bg-black/50"></div>
 
         <div class="relative min-h-screen flex items-center justify-center p-4">
 
-            <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
+            <div
+                class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-6">
 
                 <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
 
@@ -1124,11 +1740,11 @@
 
                 </div>
 
-
                 <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-                    Delete Leave Balance?
-                </h2>
 
+                    Delete Leave Balance?
+
+                </h2>
 
                 <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">
 
@@ -1143,7 +1759,6 @@
 
                 </p>
 
-
                 <div class="flex justify-end gap-3 mt-6">
 
                     <button
@@ -1154,7 +1769,6 @@
                         Cancel
 
                     </button>
-
 
                     <button
                         type="button"
@@ -1182,6 +1796,7 @@
 
 <script src="{% static 'js/services/leave.service.js' %}"></script>
 <script src="{% static 'js/admin_dashboard/leave_management.js' %}"></script>
+<script src="{% static 'js/admin_dashboard/leave_policy.js' %}"></script>
 <script src="{% static 'js/admin_dashboard/leave_balance.js' %}"></script>
 
 {% endblock %}

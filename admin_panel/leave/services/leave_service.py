@@ -7,6 +7,7 @@ from ..models import (
     LeaveBalance,
     LeaveRequest,
 )
+from .leave_balance_service import LeaveBalanceService
 from .leave_calculation_service import LeaveCalculationService
 from .leave_policy_service import LeavePolicyService
 
@@ -47,13 +48,18 @@ class LeaveService:
             reason=reason,
         )
 
-        total_days = (
-            LeaveCalculationService.calculate_working_days(
-                start_date=start_date,
-                end_date=end_date,
-                day_type=day_type,
+        try:
+            total_days = (
+                LeaveCalculationService.calculate_working_days(
+                    start_date=start_date,
+                    end_date=end_date,
+                    day_type=day_type,
+                )
             )
-        )
+        except ValueError as exc:
+            raise ValidationError({
+                "date": str(exc)
+            })
 
         if total_days <= 0:
             raise ValidationError({
@@ -81,24 +87,11 @@ class LeaveService:
                 )
             })
 
-        balance = (
-            LeaveBalance.objects
-            .select_for_update()
-            .filter(
-                user=user,
-                leave_type=leave_type,
-                year=start_date.year,
-            )
-            .first()
+        balance = LeaveBalanceService.get_or_create_balance(
+            user=user,
+            leave_type=leave_type,
+            year=start_date.year,
         )
-
-        if not balance:
-            raise ValidationError({
-                "balance": (
-                    "Leave balance is not configured "
-                    "for this year."
-                )
-            })
 
         available_days = (
             balance.remaining_days
@@ -175,10 +168,7 @@ class LeaveService:
                 )
             })
 
-        if (
-            leave_request.total_days
-            > balance.remaining_days
-        ):
+        if leave_request.total_days > balance.remaining_days:
             raise ValidationError({
                 "balance": (
                     "Insufficient remaining leave balance."
@@ -356,19 +346,14 @@ class LeaveService:
 
         if leave_request.status == LeaveRequest.Status.PENDING:
 
-            if (
-                leave_request.total_days
-                > balance.pending_days
-            ):
+            if leave_request.total_days > balance.pending_days:
                 raise ValidationError({
                     "balance": (
                         "Invalid pending leave balance."
                     )
                 })
 
-            balance.pending_days -= (
-                leave_request.total_days
-            )
+            balance.pending_days -= leave_request.total_days
 
             balance.save(
                 update_fields=[
@@ -377,28 +362,17 @@ class LeaveService:
                 ]
             )
 
-        elif (
-            leave_request.status
-            == LeaveRequest.Status.APPROVED
-        ):
+        elif leave_request.status == LeaveRequest.Status.APPROVED:
 
-            if (
-                leave_request.total_days
-                > balance.used_days
-            ):
+            if leave_request.total_days > balance.used_days:
                 raise ValidationError({
                     "balance": (
                         "Invalid used leave balance."
                     )
                 })
 
-            balance.used_days -= (
-                leave_request.total_days
-            )
-
-            balance.remaining_days += (
-                leave_request.total_days
-            )
+            balance.used_days -= leave_request.total_days
+            balance.remaining_days += leave_request.total_days
 
             balance.save(
                 update_fields=[

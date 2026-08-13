@@ -5,14 +5,17 @@ from ..models import LeaveBalance
 
 class LeaveBalanceSerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField()
+
     user_email = serializers.EmailField(
         source="user.email",
         read_only=True,
     )
+
     leave_type_name = serializers.CharField(
         source="leave_type.name",
         read_only=True,
     )
+
     leave_type_code = serializers.CharField(
         source="leave_type.code",
         read_only=True,
@@ -20,6 +23,7 @@ class LeaveBalanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LeaveBalance
+
         fields = [
             "id",
             "user",
@@ -51,7 +55,10 @@ class LeaveBalanceSerializer(serializers.ModelSerializer):
         ]
 
     def get_user_name(self, obj):
-        return f"{obj.user.first_name} {obj.user.last_name}".strip()
+        return (
+            f"{obj.user.first_name} "
+            f"{obj.user.last_name}"
+        ).strip()
 
     def validate_allocated_days(self, value):
         if value < 0:

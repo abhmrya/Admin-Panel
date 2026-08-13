@@ -56,8 +56,8 @@ class LeavePolicyService:
             and start_date >= today
         ):
             minimum_date = (
-                today
-                + timedelta(
+                today +
+                timedelta(
                     days=policy.min_days_notice
                 )
             )
@@ -81,7 +81,8 @@ class LeavePolicyService:
         ):
             raise ValidationError({
                 "end_date": (
-                    f"Maximum {policy.max_consecutive_days} "
+                    f"Maximum "
+                    f"{policy.max_consecutive_days} "
                     "consecutive leave days are allowed."
                 )
             })

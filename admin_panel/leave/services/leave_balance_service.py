@@ -34,7 +34,7 @@ class LeaveBalanceService:
             user=user,
             leave_type=leave_type,
             year=year,
-        ).exists()
+        ).first()
 
         if existing_balance:
             raise ValidationError({
@@ -43,6 +43,54 @@ class LeaveBalanceService:
                     "for this employee and year."
                 )
             })
+
+        return LeaveBalance.objects.create(
+            user=user,
+            leave_type=leave_type,
+            year=year,
+            allocated_days=allocated_days,
+            used_days=0,
+            pending_days=0,
+            remaining_days=allocated_days,
+        )
+
+    @staticmethod
+    @transaction.atomic
+    def get_or_create_balance(
+        *,
+        user,
+        leave_type,
+        year,
+    ):
+        """
+        Get employee leave balance for the requested year.
+
+        If balance does not exist, create it automatically
+        using LeaveType.days_per_year as the default allocation.
+        """
+
+        if not leave_type.is_active:
+            raise ValidationError({
+                "leave_type": (
+                    "This leave type is inactive."
+                )
+            })
+
+        balance = (
+            LeaveBalance.objects
+            .select_for_update()
+            .filter(
+                user=user,
+                leave_type=leave_type,
+                year=year,
+            )
+            .first()
+        )
+
+        if balance:
+            return balance
+
+        allocated_days = leave_type.days_per_year
 
         return LeaveBalance.objects.create(
             user=user,
@@ -88,9 +136,10 @@ class LeaveBalanceService:
             })
 
         balance.allocated_days = allocated_days
+
         balance.remaining_days = (
-            allocated_days -
-            balance.used_days
+            allocated_days
+            - balance.used_days
         )
 
         balance.save(

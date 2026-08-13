@@ -69,19 +69,19 @@
 
         
 
-            <a href="#" class="sidebar-link">
+            {% comment %} <a href="#" class="sidebar-link">
                 🔐
                 Roles
-            </a>
+            </a> {% endcomment %}
 
 
-            <a href="#" class="sidebar-link">
+            {% comment %} <a href="#" class="sidebar-link">
                 🛡
                 Permissions
-            </a>
+            </a> {% endcomment %}
 
 
-            <a href="#" class="sidebar-link">
+            <a href="{% url 'department:add_department' %}" class="sidebar-link">
                 🏢
                 Departments
             </a>
@@ -103,7 +103,7 @@
             </a>
 
 
-            <a href="#" class="sidebar-link">
+            <a href="{% url 'department:add_department' %}" class="sidebar-link">
                 🏢
                 Departments
             </a>

@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
-from ..models import LeaveType
+from ..models import LeaveType, LeavePolicy
 
 
 class LeaveTypeSerializer(serializers.ModelSerializer):
+    has_active_policy = serializers.SerializerMethodField()
+
     class Meta:
         model = LeaveType
         fields = [
@@ -14,14 +16,22 @@ class LeaveTypeSerializer(serializers.ModelSerializer):
             "days_per_year",
             "is_paid",
             "is_active",
+            "has_active_policy",
             "created_at",
             "updated_at",
         ]
         read_only_fields = [
             "id",
+            "has_active_policy",
             "created_at",
             "updated_at",
         ]
+
+    def get_has_active_policy(self, obj):
+        return LeavePolicy.objects.filter(
+            leave_type=obj,
+            is_active=True,
+        ).exists()
 
     def validate_name(self, value):
         value = value.strip()

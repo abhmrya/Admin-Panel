@@ -11,10 +11,14 @@ from ..permissions import IsAdminOrHR
 from ..serializers import LeaveBalanceSerializer
 from ..services import LeaveBalanceService
 
+
 class LeaveBalanceViewSet(viewsets.ModelViewSet):
     serializer_class = LeaveBalanceSerializer
 
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+
     filterset_fields = [
         "user",
         "leave_type",
@@ -55,7 +59,12 @@ class LeaveBalanceViewSet(viewsets.ModelViewSet):
             IsAuthenticated(),
         ]
 
-    def create(self, request, *args, **kwargs):
+    def create(
+        self,
+        request,
+        *args,
+        **kwargs,
+    ):
         serializer = self.get_serializer(
             data=request.data
         )
@@ -65,15 +74,12 @@ class LeaveBalanceViewSet(viewsets.ModelViewSet):
         )
 
         validated_data = serializer.validated_data
-        print(f'validated_data',validated_data)
 
         balance = LeaveBalanceService.create_balance(
             user=validated_data["user"],
             leave_type=validated_data["leave_type"],
             year=validated_data["year"],
-            allocated_days=validated_data[
-                "allocated_days"
-            ],
+            allocated_days=validated_data["allocated_days"],
         )
 
         response_serializer = self.get_serializer(
@@ -82,10 +88,15 @@ class LeaveBalanceViewSet(viewsets.ModelViewSet):
 
         return Response(
             response_serializer.data,
-            status=201,
+            status=status.HTTP_201_CREATED,
         )
 
-    def update(self, request, *args, **kwargs):
+    def update(
+        self,
+        request,
+        *args,
+        **kwargs,
+    ):
         partial = kwargs.pop(
             "partial",
             False,
@@ -124,5 +135,6 @@ class LeaveBalanceViewSet(viewsets.ModelViewSet):
         )
 
         return Response(
-            response_serializer.data
+            response_serializer.data,
+            status=status.HTTP_200_OK,
         )

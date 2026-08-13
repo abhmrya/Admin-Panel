@@ -5,14 +5,17 @@ from ..models import LeaveRequest
 
 class LeaveRequestSerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField()
+
     user_email = serializers.EmailField(
         source="user.email",
         read_only=True,
     )
+
     leave_type_name = serializers.CharField(
         source="leave_type.name",
         read_only=True,
     )
+
     approval_history = serializers.SerializerMethodField()
 
     class Meta:

@@ -1,0 +1,466 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block title %}Leave Approval{% endblock %}
+
+{% block content %}
+
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 p-4 md:p-6">
+
+    <!-- ======================================================
+         HEADER
+    ======================================================= -->
+
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+                Leave Approval
+            </h1>
+
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Review and manage employee leave requests.
+            </p>
+        </div>
+
+        <button
+            type="button"
+            id="refreshLeaveApprovalBtn"
+            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
+
+            <span>↻</span>
+            Refresh
+
+        </button>
+
+    </div>
+
+
+    <!-- ======================================================
+         ALERT
+    ======================================================= -->
+
+    <div
+        id="adminLeaveAlert"
+        class="hidden mb-6">
+
+        <div
+            id="adminLeaveAlertInner"
+            class="px-4 py-3 rounded-lg text-sm font-medium">
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         SUMMARY CARDS
+    ======================================================= -->
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
+
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Total Requests
+            </p>
+
+            <p
+                id="totalLeaveRequests"
+                class="text-2xl font-bold text-gray-900 dark:text-white mt-1">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-yellow-200 dark:border-yellow-800 p-5">
+
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Pending
+            </p>
+
+            <p
+                id="pendingLeaveRequests"
+                class="text-2xl font-bold text-yellow-600 mt-1">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-green-200 dark:border-green-800 p-5">
+
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Approved
+            </p>
+
+            <p
+                id="approvedLeaveRequests"
+                class="text-2xl font-bold text-green-600 mt-1">
+                0
+            </p>
+
+        </div>
+
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl border border-red-200 dark:border-red-800 p-5">
+
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+                Rejected
+            </p>
+
+            <p
+                id="rejectedLeaveRequests"
+                class="text-2xl font-bold text-red-600 mt-1">
+                0
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         FILTERS
+    ======================================================= -->
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4 mb-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+
+            <input
+                type="text"
+                id="adminLeaveSearch"
+                placeholder="Search employee, email or leave type..."
+                class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-blue-500">
+
+
+            <select
+                id="adminLeaveStatusFilter"
+                class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+
+                <option value="">All Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="APPROVED">Approved</option>
+                <option value="REJECTED">Rejected</option>
+                <option value="CANCELLED">Cancelled</option>
+
+            </select>
+
+
+            <input
+                type="date"
+                id="adminLeaveDateFilter"
+                class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+
+        </div>
+
+    </div>
+
+
+    <!-- ======================================================
+         TABLE
+    ======================================================= -->
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full text-sm">
+
+                <thead class="bg-gray-50 dark:bg-gray-700/50">
+
+                    <tr>
+
+                        <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                            Employee
+                        </th>
+
+                        <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                            Leave Type
+                        </th>
+
+                        <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                            Dates
+                        </th>
+
+                        <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                            Days
+                        </th>
+
+                        <th class="px-5 py-3 text-left font-semibold text-gray-600 dark:text-gray-300">
+                            Status
+                        </th>
+
+                        <th class="px-5 py-3 text-right font-semibold text-gray-600 dark:text-gray-300">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="adminLeaveRequestsBody"
+                    class="divide-y divide-gray-200 dark:divide-gray-700">
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- LOADING -->
+
+        <div
+            id="adminLeaveLoading"
+            class="hidden py-12 text-center text-gray-500 dark:text-gray-400">
+
+            Loading leave requests...
+
+        </div>
+
+
+        <!-- EMPTY -->
+
+        <div
+            id="adminLeaveEmpty"
+            class="hidden py-12 text-center">
+
+            <div class="text-4xl mb-3">
+                📭
+            </div>
+
+            <p class="font-medium text-gray-700 dark:text-gray-300">
+                No leave requests found.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+     VIEW REQUEST MODAL
+=========================================================== -->
+
+<div
+    id="adminLeaveViewModal"
+    class="hidden fixed inset-0 z-50 overflow-y-auto">
+
+    <div
+        id="adminLeaveViewBackdrop"
+        class="fixed inset-0 bg-black/50">
+    </div>
+
+
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+
+        <div class="relative w-full max-w-lg bg-white dark:bg-gray-800 rounded-xl shadow-xl">
+
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    Leave Request Details
+                </h2>
+
+                <button
+                    type="button"
+                    id="closeAdminLeaveViewModal"
+                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-2xl">
+
+                    ×
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="adminLeaveViewContent"
+                class="p-6">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+     APPROVE MODAL
+=========================================================== -->
+
+<div
+    id="approveLeaveModal"
+    class="hidden fixed inset-0 z-50">
+
+    <div
+        id="approveLeaveBackdrop"
+        class="fixed inset-0 bg-black/50">
+    </div>
+
+
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+
+        <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl">
+
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    Approve Leave
+                </h2>
+
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Are you sure you want to approve this leave request?
+                </p>
+
+            </div>
+
+
+            <div class="p-6">
+
+                <div
+                    id="approveLeaveInfo"
+                    class="mb-5 p-4 rounded-lg bg-gray-50 dark:bg-gray-700 text-sm">
+                </div>
+
+
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Comment
+                </label>
+
+                <textarea
+                    id="approveLeaveComment"
+                    rows="3"
+                    placeholder="Optional comment..."
+                    class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500 resize-none"></textarea>
+
+            </div>
+
+
+            <div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+
+                <button
+                    type="button"
+                    id="cancelApproveLeaveBtn"
+                    class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="confirmApproveLeaveBtn"
+                    class="px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-medium">
+
+                    Approve
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+     REJECT MODAL
+=========================================================== -->
+
+<div
+    id="rejectLeaveModal"
+    class="hidden fixed inset-0 z-50">
+
+    <div
+        id="rejectLeaveBackdrop"
+        class="fixed inset-0 bg-black/50">
+    </div>
+
+
+    <div class="relative min-h-screen flex items-center justify-center p-4">
+
+        <div class="relative w-full max-w-md bg-white dark:bg-gray-800 rounded-xl shadow-xl">
+
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    Reject Leave
+                </h2>
+
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Please provide a reason for rejection.
+                </p>
+
+            </div>
+
+
+            <div class="p-6">
+
+                <div
+                    id="rejectLeaveInfo"
+                    class="mb-5 p-4 rounded-lg bg-gray-50 dark:bg-gray-700 text-sm">
+                </div>
+
+
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Rejection Reason
+                </label>
+
+                <textarea
+                    id="rejectLeaveReason"
+                    rows="4"
+                    placeholder="Enter rejection reason..."
+                    class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-red-500 resize-none"></textarea>
+
+                <p
+                    id="rejectLeaveReasonError"
+                    class="hidden text-xs text-red-500 mt-1">
+                </p>
+
+            </div>
+
+
+            <div class="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
+
+                <button
+                    type="button"
+                    id="cancelRejectLeaveBtn"
+                    class="px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm font-medium">
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="confirmRejectLeaveBtn"
+                    class="px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-sm font-medium">
+
+                    Reject
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="{% static 'js/services/leave.service.js' %}"></script>
+<script src="{% static 'js/admin_dashboard/admin_leave_approval.js' %}"></script>
+
+{% endblock %}
