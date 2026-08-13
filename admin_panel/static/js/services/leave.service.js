@@ -322,7 +322,13 @@ const LeaveService = {
 
     deleteApproval(id) {
         return this.deleteLeaveApproval(id);
-    }
+    },
+
+    getHistory(params = "") {
+        return Api.get(
+            `${APP_CONFIG.ENDPOINTS.LEAVE_REQUESTS}history/${params}`
+        );
+    },
 
 };
 

@@ -1,0 +1,277 @@
+{% extends "base/dashboard_base.html" %}
+{% load static %}
+
+{% block page_title %}Leave History{% endblock %}
+
+{% block content %}
+
+<div class="space-y-5">
+
+    <!-- Header -->
+    <div>
+        <h1 class="text-xl font-bold text-gray-900 sm:text-2xl">
+            Leave History
+        </h1>
+        <p class="mt-1 text-sm text-gray-500">
+            View your previous leave requests and approval details.
+        </p>
+    </div>
+
+
+    <!-- Filters -->
+    <div class="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
+            <!-- Status -->
+            <div>
+                <label
+                    for="history-status"
+                    class="mb-1 block text-xs font-medium text-gray-600"
+                >
+                    Status
+                </label>
+
+                <select
+                    id="history-status"
+                    class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                >
+                    <option value="">All Status</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="REJECTED">Rejected</option>
+                    <option value="CANCELLED">Cancelled</option>
+                </select>
+            </div>
+
+
+            <!-- Start Date -->
+            <div>
+                <label
+                    for="history-start-date"
+                    class="mb-1 block text-xs font-medium text-gray-600"
+                >
+                    Start Date
+                </label>
+
+                <input
+                    type="date"
+                    id="history-start-date"
+                    class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                >
+            </div>
+
+
+            <!-- End Date -->
+            <div>
+                <label
+                    for="history-end-date"
+                    class="mb-1 block text-xs font-medium text-gray-600"
+                >
+                    End Date
+                </label>
+
+                <input
+                    type="date"
+                    id="history-end-date"
+                    class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+                >
+            </div>
+
+
+            <!-- Buttons -->
+            <div class="flex items-end gap-2">
+
+                <button
+                    id="history-filter-btn"
+                    type="button"
+                    class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700"
+                >
+                    Filter
+                </button>
+
+                <button
+                    id="history-reset-btn"
+                    type="button"
+                    class="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                >
+                    Reset
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Loading -->
+    <div
+        id="history-loading"
+        class="hidden rounded-xl border border-gray-200 bg-white p-6 text-center shadow-sm"
+    >
+        <p class="text-sm text-gray-500">
+            Loading leave history...
+        </p>
+    </div>
+
+
+    <!-- Error -->
+    <div
+        id="history-error"
+        class="hidden rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-600"
+    ></div>
+
+
+    <!-- Table Card -->
+    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+
+        <!-- Horizontal Slider -->
+        <div class="overflow-x-auto">
+
+            <table class="min-w-[850px] w-full divide-y divide-gray-200">
+
+                <!-- Header -->
+                <thead class="bg-gray-50">
+
+                    <tr>
+
+                        <th class="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                            Leave Type
+                        </th>
+
+                        <th class="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                            Date
+                        </th>
+
+                        <th class="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                            Days
+                        </th>
+
+                        <th class="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                            Reason
+                        </th>
+
+                        <th class="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                            Status
+                        </th>
+
+                        <th class="px-4 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                            Reviewed At
+                        </th>
+
+                        <th class="px-4 py-2.5 text-right text-[11px] font-semibold uppercase tracking-wide text-gray-500">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <!-- Body -->
+                <tbody
+                    id="history-table-body"
+                    class="divide-y divide-gray-100 bg-white"
+                >
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- Empty State -->
+        <div
+            id="history-empty"
+            class="hidden p-8 text-center"
+        >
+            <div class="text-3xl">📋</div>
+
+            <p class="mt-2 text-sm font-medium text-gray-700">
+                No leave history found.
+            </p>
+
+            <p class="mt-1 text-xs text-gray-500">
+                Your completed leave requests will appear here.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================================
+     Detail Modal
+========================================================== -->
+
+<div
+    id="history-modal"
+    class="fixed inset-0 z-50 hidden"
+>
+
+    <!-- Overlay -->
+    <div
+        id="history-modal-overlay"
+        class="absolute inset-0 bg-black/50"
+    ></div>
+
+
+    <!-- Modal Wrapper -->
+    <div class="relative flex min-h-full items-center justify-center p-3 sm:p-4">
+
+        <!-- Modal -->
+        <div class="w-full max-w-xl overflow-hidden rounded-xl bg-white shadow-xl">
+
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between border-b px-4 py-3 sm:px-5">
+
+                <div>
+                    <h2 class="text-base font-semibold text-gray-900 sm:text-lg">
+                        Leave Details
+                    </h2>
+
+                    <p class="text-xs text-gray-500">
+                        Leave request information
+                    </p>
+                </div>
+
+
+                <button
+                    id="history-modal-close"
+                    type="button"
+                    class="flex h-8 w-8 items-center justify-center rounded-lg text-xl text-gray-400 transition hover:bg-gray-100 hover:text-gray-600"
+                >
+                    &times;
+                </button>
+
+            </div>
+
+
+            <!-- Modal Content -->
+            <div
+                id="history-modal-content"
+                class="max-h-[75vh] overflow-y-auto p-4 sm:p-5"
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+{% endblock %}
+
+
+<!-- ==========================================================
+     JavaScript
+========================================================== -->
+
+{% block extra_js %}
+{{ block.super }}
+
+<script src="{% static 'js/services/leave.service.js' %}"></script>
+<script src="{% static 'js/employee_dashboard/employee_leave_history.js' %}"></script>
+
+{% endblock %}
