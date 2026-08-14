@@ -1,120 +1,814 @@
 {% extends "base/dashboard_base.html" %}
 {% load static %}
 
-{% block page_title %}My Dashboard{% endblock %}
+{% block page_title %}Employee Dashboard{% endblock %}
 
 {% block content %}
 
-<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
-    <div>
-        <h1 id="welcomeMessage" class="text-2xl sm:text-3xl font-bold text-gray-800">Welcome back</h1>
-        <p class="text-sm text-gray-500 mt-1">Here's your overview</p>
-    </div>
-</div>
+<div class="space-y-6">
 
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Attendance (This Month)</p>
-            <h2 id="statAttendance" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+    <div
+        class="relative overflow-hidden rounded-2xl bg-gradient-to-r
+               from-indigo-600 via-violet-600 to-purple-600 p-6 sm:p-8
+               shadow-lg"
+    >
+
+        <!-- decorative blobs -->
+        <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10"></div>
+        <div class="pointer-events-none absolute -bottom-16 right-24 h-32 w-32 rounded-full bg-white/10"></div>
+        <div class="pointer-events-none absolute left-1/3 -top-20 h-24 w-24 rounded-full bg-white/5"></div>
+
+        <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+            <div>
+                <p class="text-sm font-semibold uppercase tracking-wide text-indigo-100">
+                    Employee Portal
+                </p>
+
+                <h1
+                    id="welcomeMessage"
+                    class="mt-1 text-2xl sm:text-3xl font-bold tracking-tight text-white"
+                >
+                    Welcome back
+                </h1>
+
+                <p class="mt-1 text-sm text-indigo-100">
+                    Here's your attendance, leave and work overview.
+                </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+
+                <a
+                    href="{% url 'attendance:index' %}"
+                    class="inline-flex items-center gap-2 rounded-lg bg-white
+                           px-4 py-2.5 text-sm font-semibold text-indigo-700
+                           shadow-sm transition hover:bg-indigo-50"
+                >
+                    <span>⏱️</span>
+                    Mark Attendance
+                </a>
+
+            </div>
+
         </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-xl">📅</span>
+
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Leave Balance</p>
-            <h2 id="statLeaveBalance" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+
+    <!-- =========================================================
+         STAT CARDS
+    ========================================================== -->
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+        <!-- Attendance -->
+
+        <div
+            class="group relative overflow-hidden rounded-xl border border-emerald-100
+                   bg-gradient-to-br from-emerald-100 via-emerald-50 to-white p-5
+                   shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-500"></div>
+
+            <div class="flex items-start justify-between">
+
+                <div>
+
+                    <p class="text-sm font-medium text-gray-500">
+                        Attendance
+                    </p>
+
+                    <h2
+                        id="statAttendance"
+                        class="mt-2 text-3xl font-bold text-emerald-700"
+                    >
+                        --
+                    </h2>
+
+                    <p class="mt-1 text-xs text-gray-400">
+                        This month
+                    </p>
+
+                </div>
+
+                <div
+                    class="flex h-11 w-11 items-center justify-center
+                           rounded-lg bg-emerald-100 text-xl text-emerald-600
+                           shadow-sm transition group-hover:scale-110"
+                >
+                    📅
+                </div>
+
+            </div>
+
         </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">🌴</span>
-    </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Pending Requests</p>
-            <h2 id="statPendingRequests" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+
+        <!-- Leave Balance -->
+
+        <div
+            class="group relative overflow-hidden rounded-xl border border-indigo-100
+                   bg-gradient-to-br from-indigo-100 via-indigo-50 to-white p-5
+                   shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-indigo-500"></div>
+
+            <div class="flex items-start justify-between">
+
+                <div>
+
+                    <p class="text-sm font-medium text-gray-500">
+                        Leave Balance
+                    </p>
+
+                    <h2
+                        id="statLeaveBalance"
+                        class="mt-2 text-3xl font-bold text-indigo-700"
+                    >
+                        --
+                    </h2>
+
+                    <p class="mt-1 text-xs text-gray-400">
+                        Remaining days
+                    </p>
+
+                </div>
+
+                <div
+                    class="flex h-11 w-11 items-center justify-center
+                           rounded-lg bg-indigo-100 text-xl text-indigo-600
+                           shadow-sm transition group-hover:scale-110"
+                >
+                    🌴
+                </div>
+
+            </div>
+
         </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-xl">⏳</span>
-    </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Documents</p>
-            <h2 id="statDocuments" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+
+        <!-- Pending Requests -->
+
+        <div
+            class="group relative overflow-hidden rounded-xl border border-amber-100
+                   bg-gradient-to-br from-amber-100 via-amber-50 to-white p-5
+                   shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-amber-500"></div>
+
+            <div class="flex items-start justify-between">
+
+                <div>
+
+                    <p class="text-sm font-medium text-gray-500">
+                        Pending Requests
+                    </p>
+
+                    <h2
+                        id="statPendingRequests"
+                        class="mt-2 text-3xl font-bold text-amber-700"
+                    >
+                        --
+                    </h2>
+
+                    <p class="mt-1 text-xs text-gray-400">
+                        Awaiting approval
+                    </p>
+
+                </div>
+
+                <div
+                    class="flex h-11 w-11 items-center justify-center
+                           rounded-lg bg-amber-100 text-xl text-amber-600
+                           shadow-sm transition group-hover:scale-110"
+                >
+                    ⏳
+                </div>
+
+            </div>
+
         </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-xl">📄</span>
+
+
+        <!-- Documents -->
+
+        <div
+            class="group relative overflow-hidden rounded-xl border border-rose-100
+                   bg-gradient-to-br from-rose-100 via-rose-50 to-white p-5
+                   shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+            <div class="absolute left-0 top-0 h-full w-1.5 bg-rose-500"></div>
+
+            <div class="flex items-start justify-between">
+
+                <div>
+
+                    <p class="text-sm font-medium text-gray-500">
+                        Documents
+                    </p>
+
+                    <h2
+                        id="statDocuments"
+                        class="mt-2 text-3xl font-bold text-rose-700"
+                    >
+                        --
+                    </h2>
+
+                    <p class="mt-1 text-xs text-gray-400">
+                        Available documents
+                    </p>
+
+                </div>
+
+                <div
+                    class="flex h-11 w-11 items-center justify-center
+                           rounded-lg bg-rose-100 text-xl text-rose-600
+                           shadow-sm transition group-hover:scale-110"
+                >
+                    📄
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-</div>
 
-<div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- =========================================================
+         PROFILE + TODAY'S ATTENDANCE (PARALLEL)
+    ========================================================== -->
 
-    <div class="lg:col-span-1 bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col items-center text-center">
-        <div id="profileAvatar" class="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white flex items-center justify-center text-xl font-semibold shadow-sm"></div>
+    <div
+        class="rounded-xl border border-gray-100 bg-white
+               p-6 shadow-sm"
+    >
 
-        <h3 id="profileName" class="mt-4 font-semibold text-gray-800"></h3>
-        <p id="profileEmail" class="text-sm text-gray-500"></p>
+        <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:divide-x md:divide-gray-100">
 
-        <a href="{% url 'profile:index' %}" class="mt-4 text-sm font-medium text-indigo-600 hover:underline">
-            View Full Profile
-        </a>
+
+            <!-- =================================================
+                 PROFILE
+            ================================================== -->
+
+            <div>
+
+                <div class="flex items-center justify-between">
+
+                    <h2 class="text-base font-semibold text-gray-800">
+                        My Profile
+                    </h2>
+
+                    <a
+                        href="{% url 'profile:index' %}"
+                        class="text-sm font-medium text-indigo-600 hover:underline"
+                    >
+                        Edit
+                    </a>
+
+                </div>
+
+
+                <div class="mt-6 flex flex-col items-center text-center">
+
+                    <div
+                        id="profileAvatar"
+                        class="flex h-20 w-20 items-center justify-center
+                               rounded-full bg-gradient-to-br from-indigo-500
+                               via-violet-600 to-purple-600 text-xl font-semibold text-white
+                               shadow-md ring-4 ring-indigo-50"
+                    >
+                    </div>
+
+                    <h3
+                        id="profileName"
+                        class="mt-4 text-lg font-semibold text-gray-800"
+                    >
+                    </h3>
+
+                    <p
+                        id="profileEmail"
+                        class="mt-1 text-sm text-gray-500"
+                    >
+                    </p>
+
+
+                    <div class="mt-5 w-full border-t border-gray-100 pt-5">
+
+                        <a
+                            href="{% url 'profile:index' %}"
+                            class="inline-flex w-full items-center justify-center
+                                   rounded-lg bg-indigo-600
+                                   px-4 py-2.5 text-sm font-medium
+                                   text-white shadow-sm transition
+                                   hover:bg-indigo-700"
+                        >
+                            View Full Profile
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TODAY'S ATTENDANCE
+            ================================================== -->
+
+            <div class="md:pl-8">
+
+                <div class="flex items-center justify-between">
+
+                    <div>
+
+                        <h2 class="text-base font-semibold text-gray-800">
+                            Today's Attendance
+                        </h2>
+
+                        <p class="mt-1 text-xs text-gray-500">
+                            Your attendance status for today
+                        </p>
+
+                    </div>
+
+                    <span
+                        id="todayAttendanceStatus"
+                        class="rounded-full bg-indigo-100 px-3 py-1
+                               text-xs font-semibold text-indigo-600"
+                    >
+                        --
+                    </span>
+
+                </div>
+
+
+                <div class="mt-6 space-y-4">
+
+                    <!-- Check In -->
+
+                    <div
+                        class="flex items-center justify-between rounded-lg
+                               bg-emerald-100 p-4"
+                    >
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="flex h-10 w-10 items-center justify-center
+                                       rounded-lg bg-emerald-200 text-emerald-700 shadow-sm"
+                            >
+                                🟢
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-medium text-gray-700">
+                                    Check In
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    Start of work
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span
+                            id="todayCheckIn"
+                            class="text-sm font-semibold text-emerald-700"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+
+                    <!-- Check Out -->
+
+                    <div
+                        class="flex items-center justify-between rounded-lg
+                               bg-rose-100 p-4"
+                    >
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="flex h-10 w-10 items-center justify-center
+                                       rounded-lg bg-rose-200 text-rose-700 shadow-sm"
+                            >
+                                🔴
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-medium text-gray-700">
+                                    Check Out
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    End of work
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span
+                            id="todayCheckOut"
+                            class="text-sm font-semibold text-rose-700"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+
+                    <!-- Working Hours -->
+
+                    <div
+                        class="flex items-center justify-between rounded-lg
+                               bg-gradient-to-r from-indigo-50 to-violet-50 p-4"
+                    >
+
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="flex h-10 w-10 items-center justify-center
+                                       rounded-lg bg-indigo-200 text-indigo-700 shadow-sm"
+                            >
+                                ⏱️
+                            </div>
+
+                            <div>
+
+                                <p class="text-sm font-medium text-gray-700">
+                                    Working Hours
+                                </p>
+
+                                <p class="text-xs text-gray-400">
+                                    Today's total
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        <span
+                            id="todayWorkingHours"
+                            class="text-sm font-semibold text-indigo-700"
+                        >
+                            --
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="lg:col-span-2">
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+    <!-- =========================================================
+         QUICK ACTIONS (compact)
+    ========================================================== -->
 
-            <!-- Daily Attendance -->
-            <a href="{% url 'attendance:index' %}" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-50 text-teal-600 text-lg">⏱️</span>
-                <span class="text-sm font-medium text-gray-700 text-center">Mark Attendance</span>
+    <div class="space-y-3">
+
+        <div>
+
+            <h2 class="text-xs font-bold uppercase tracking-wider text-gray-400">
+                Quick Actions
+            </h2>
+
+        </div>
+
+
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+
+
+            <!-- Attendance -->
+
+            <a
+                href="{% url 'attendance:index' %}"
+                class="group flex min-w-0 items-center gap-3 rounded-2xl border border-teal-300
+                       bg-teal-200 px-4 py-3 shadow-sm transition-all duration-300
+                       hover:-translate-y-0.5 hover:border-teal-400 hover:bg-teal-300 hover:shadow-md"
+            >
+
+                <span
+                    class="flex h-9 w-9 shrink-0 items-center justify-center
+                           rounded-xl bg-white/70 text-base
+                           transition-all duration-300 group-hover:scale-110"
+                >
+                    ⏱️
+                </span>
+
+                <span class="truncate text-xs font-semibold text-gray-700">
+                    Attendance
+                </span>
+
             </a>
+
 
             <!-- Monthly Attendance -->
-            <a id="monthlyAttendanceLink" href={% url 'attendance:employee-monthly-attendance'%} class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-lg">📊</span>
-                <span class="text-sm font-medium text-gray-700 text-center">Monthly Attendance</span>
+
+            <a
+                id="monthlyAttendanceLink"
+                href="{% url 'attendance:employee-monthly-attendance' %}"
+                class="group flex min-w-0 items-center gap-3 rounded-2xl border border-emerald-300
+                       bg-emerald-200 px-4 py-3 shadow-sm transition-all duration-300
+                       hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-emerald-300 hover:shadow-md"
+            >
+
+                <span
+                    class="flex h-9 w-9 shrink-0 items-center justify-center
+                           rounded-xl bg-white/70 text-base
+                           transition-all duration-300 group-hover:scale-110"
+                >
+                    📊
+                </span>
+
+                <span class="truncate text-xs font-semibold text-gray-700">
+                    Monthly Report
+                </span>
+
             </a>
 
-            <!-- Leave -->
-            <a href="{% url 'leave:apply' %}" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-lg">📅</span>
-                <span class="text-sm font-medium text-gray-700 text-center">Apply for Leave</span>
+
+            <!-- Apply Leave -->
+
+            <a
+                href="{% url 'leave:apply' %}"
+                class="group flex min-w-0 items-center gap-3 rounded-2xl border border-blue-300
+                       bg-blue-200 px-4 py-3 shadow-sm transition-all duration-300
+                       hover:-translate-y-0.5 hover:border-blue-400 hover:bg-blue-300 hover:shadow-md"
+            >
+
+                <span
+                    class="flex h-9 w-9 shrink-0 items-center justify-center
+                           rounded-xl bg-white/70 text-base
+                           transition-all duration-300 group-hover:scale-110"
+                >
+                    📝
+                </span>
+
+                <span class="truncate text-xs font-semibold text-gray-700">
+                    Apply Leave
+                </span>
+
             </a>
 
-            <a href="{% url 'leave:employee-history' %}" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-lg">📅</span>
-                <span class="text-sm font-medium text-gray-700 text-center">leave history</span>
+
+            <!-- Leave History -->
+
+            <a
+                href="{% url 'leave:employee-history' %}"
+                class="group flex min-w-0 items-center gap-3 rounded-2xl border border-purple-300
+                       bg-purple-200 px-4 py-3 shadow-sm transition-all duration-300
+                       hover:-translate-y-0.5 hover:border-purple-400 hover:bg-purple-300 hover:shadow-md"
+            >
+
+                <span
+                    class="flex h-9 w-9 shrink-0 items-center justify-center
+                           rounded-xl bg-white/70 text-base
+                           transition-all duration-300 group-hover:scale-110"
+                >
+                    📋
+                </span>
+
+                <span class="truncate text-xs font-semibold text-gray-700">
+                    Leave History
+                </span>
+
             </a>
 
-            <!-- Documents -->
-            <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-lg">📄</span>
-                <span class="text-sm font-medium text-gray-700 text-center">My Documents</span>
-            </a>
 
             <!-- Profile -->
-            <a href="{% url 'profile:index' %}" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-lg">👤</span>
-                <span class="text-sm font-medium text-gray-700 text-center">Edit Profile</span>
+
+            <a
+                href="{% url 'profile:index' %}"
+                class="group flex min-w-0 items-center gap-3 rounded-2xl border border-indigo-300
+                       bg-indigo-200 px-4 py-3 shadow-sm transition-all duration-300
+                       hover:-translate-y-0.5 hover:border-indigo-400 hover:bg-indigo-300 hover:shadow-md"
+            >
+
+                <span
+                    class="flex h-9 w-9 shrink-0 items-center justify-center
+                           rounded-xl bg-white/70 text-base
+                           transition-all duration-300 group-hover:scale-110"
+                >
+                    👤
+                </span>
+
+                <span class="truncate text-xs font-semibold text-gray-700">
+                    My Profile
+                </span>
+
             </a>
 
-            <!-- Password -->
-            <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-                <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-lg">🔒</span>
-                <span class="text-sm font-medium text-gray-700 text-center">Change Password</span>
+
+            <!-- Documents -->
+
+            <a
+                href="#"
+                class="group flex min-w-0 items-center gap-3 rounded-2xl border border-rose-300
+                       bg-rose-200 px-4 py-3 shadow-sm transition-all duration-300
+                       hover:-translate-y-0.5 hover:border-rose-400 hover:bg-rose-300 hover:shadow-md"
+            >
+
+                <span
+                    class="flex h-9 w-9 shrink-0 items-center justify-center
+                           rounded-xl bg-white/70 text-base
+                           transition-all duration-300 group-hover:scale-110"
+                >
+                    📄
+                </span>
+
+                <span class="truncate text-xs font-semibold text-gray-700">
+                    Documents
+                </span>
+
             </a>
 
         </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         BOTTOM SECTION
+    ========================================================== -->
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+
+        <!-- Leave Overview -->
+
+        <div
+            class="rounded-xl border border-gray-100 bg-white
+                   p-6 shadow-sm"
+        >
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-base font-semibold text-gray-800">
+                        Leave Overview
+                    </h2>
+
+                    <p class="mt-1 text-xs text-gray-500">
+                        Your current leave status
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'leave:employee-history' %}"
+                    class="text-sm font-medium text-indigo-600 hover:underline"
+                >
+                    View History
+                </a>
+
+            </div>
+
+
+            <div class="mt-5 grid grid-cols-3 gap-3">
+
+                <div class="rounded-lg border border-emerald-200 bg-emerald-100 p-4 text-center">
+
+                    <p class="text-xs text-gray-500">
+                        Available
+                    </p>
+
+                    <p
+                        id="leaveAvailable"
+                        class="mt-2 text-xl font-bold text-emerald-600"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+
+                <div class="rounded-lg border border-indigo-200 bg-indigo-100 p-4 text-center">
+
+                    <p class="text-xs text-gray-500">
+                        Used
+                    </p>
+
+                    <p
+                        id="leaveUsed"
+                        class="mt-2 text-xl font-bold text-indigo-600"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+
+                <div class="rounded-lg border border-amber-200 bg-amber-100 p-4 text-center">
+
+                    <p class="text-xs text-gray-500">
+                        Pending
+                    </p>
+
+                    <p
+                        id="leavePending"
+                        class="mt-2 text-xl font-bold text-amber-600"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Security -->
+
+        <div
+            class="rounded-xl border border-gray-100 bg-white
+                   p-6 shadow-sm"
+        >
+
+            <div class="flex items-center gap-3">
+
+                <div
+                    class="flex h-10 w-10 items-center justify-center
+                           rounded-lg bg-amber-200 text-amber-700 shadow-sm"
+                >
+                    🔒
+                </div>
+
+                <div>
+
+                    <h2 class="text-base font-semibold text-gray-800">
+                        Account Security
+                    </h2>
+
+                    <p class="mt-1 text-xs text-gray-500">
+                        Keep your account secure
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="mt-5 flex items-center justify-between
+                        rounded-lg bg-amber-100 p-4">
+
+                <div>
+
+                    <p class="text-sm font-medium text-gray-700">
+                        Password
+                    </p>
+
+                    <p class="mt-1 text-xs text-gray-400">
+                        Update your account password
+                    </p>
+
+                </div>
+
+                <a
+                    href="{% url 'accounts:forgot-password' %}"
+                    class="rounded-lg bg-amber-500
+                           px-3 py-2 text-xs font-semibold
+                           text-black shadow-sm transition hover:bg-amber-600"
+                >
+                    Change Password
+                </a>
+
+
+            </div>
+
+        </div>
+
     </div>
 
 </div>
 
 {% endblock %}
 
+
 {% block extra_js %}
+
 {{ block.super }}
+
 <script src="{% static 'js/dashboard/employee.js' %}"></script>
+
 {% endblock %}

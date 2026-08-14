@@ -18,7 +18,6 @@ class LeaveRequestViewSet(AuditMixin, viewsets.ModelViewSet):
     serializer_class = LeaveRequestSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ["leave_type", "status", "start_date", "end_date"]
-    audit_action_create = AuditAction.LEAVE_CREATED
 
     def get_permissions(self):
         if self.action in ["approve", "reject"]:
@@ -51,11 +50,6 @@ class LeaveRequestViewSet(AuditMixin, viewsets.ModelViewSet):
             reason=data["reason"],
         )
 
-        self.audit_action(
-            action=AuditAction.LEAVE_CREATED,
-            instance=leave_request,
-            new_data=AuditService.serialize_instance(leave_request),
-        )
 
         return Response(
             self.get_serializer(leave_request).data,

@@ -13,27 +13,40 @@
              PAGE HEADER
         ======================================================= -->
 
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-6 sm:p-8 shadow-lg">
 
-            <div>
-                <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
-                    Admin Dashboard
-                </h1>
+            <!-- decorative blobs -->
+            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10"></div>
+            <div class="pointer-events-none absolute -bottom-16 right-24 h-32 w-32 rounded-full bg-white/10"></div>
+            <div class="pointer-events-none absolute left-1/3 -top-20 h-24 w-24 rounded-full bg-white/5"></div>
 
-                <p class="mt-1 text-sm text-slate-500">
-                    Organization overview, analytics and recent activity tracking.
-                </p>
-            </div>
+            <div class="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
-            <div class="flex items-center gap-3">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-wide text-indigo-100">
+                        Control Center
+                    </p>
 
-                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-semibold text-emerald-600 shadow-sm">
+                    <h1 class="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                        Admin Dashboard
+                    </h1>
 
-                    <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
+                    <p class="mt-1 text-sm text-indigo-100">
+                        Organization overview, analytics and recent activity tracking.
+                    </p>
+                </div>
 
-                    System Live
+                <div class="flex items-center gap-3">
 
-                </span>
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-md">
+
+                        <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-400"></span>
+
+                        System Live
+
+                    </span>
+
+                </div>
 
             </div>
 
@@ -50,7 +63,9 @@
             <!-- Total Users -->
 
             <a href="{% url 'users:list' %}"
-               class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md">
+               class="group relative overflow-hidden rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-indigo-500"></div>
 
                 <div class="flex items-start justify-between">
 
@@ -61,13 +76,13 @@
                         </p>
 
                         <h2 id="statUsersCount"
-                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            class="mt-2 text-3xl font-extrabold text-indigo-700">
                             --
                         </h2>
 
                     </div>
 
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 transition-transform duration-300 group-hover:scale-110">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
                         👥
                     </div>
 
@@ -78,7 +93,9 @@
 
             <!-- Admins -->
 
-            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-red-200 hover:shadow-md">
+            <div class="group relative overflow-hidden rounded-2xl border border-red-200 bg-gradient-to-br from-red-100 via-red-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-red-500"></div>
 
                 <div class="flex items-start justify-between">
 
@@ -89,13 +106,13 @@
                         </p>
 
                         <h2 id="statAdminsCount"
-                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            class="mt-2 text-3xl font-extrabold text-red-700">
                             --
                         </h2>
 
                     </div>
 
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600 transition-transform duration-300 group-hover:scale-110">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-100 text-red-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
                         🛡️
                     </div>
 
@@ -106,7 +123,9 @@
 
             <!-- HR -->
 
-            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-sky-200 hover:shadow-md">
+            <div class="group relative overflow-hidden rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-100 via-sky-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-sky-500"></div>
 
                 <div class="flex items-start justify-between">
 
@@ -117,13 +136,13 @@
                         </p>
 
                         <h2 id="statHrCount"
-                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            class="mt-2 text-3xl font-extrabold text-sky-700">
                             --
                         </h2>
 
                     </div>
 
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-transform duration-300 group-hover:scale-110">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-sky-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
                         🗂️
                     </div>
 
@@ -134,7 +153,9 @@
 
             <!-- Managers -->
 
-            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-200 hover:shadow-md">
+            <div class="group relative overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-100 via-amber-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-amber-500"></div>
 
                 <div class="flex items-start justify-between">
 
@@ -145,13 +166,13 @@
                         </p>
 
                         <h2 id="statManagersCount"
-                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            class="mt-2 text-3xl font-extrabold text-amber-700">
                             --
                         </h2>
 
                     </div>
 
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 transition-transform duration-300 group-hover:scale-110">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
                         📋
                     </div>
 
@@ -162,7 +183,9 @@
 
             <!-- Employees -->
 
-            <div class="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-emerald-200 hover:shadow-md">
+            <div class="group relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-500"></div>
 
                 <div class="flex items-start justify-between">
 
@@ -173,13 +196,13 @@
                         </p>
 
                         <h2 id="statEmployeesCount"
-                            class="mt-2 text-3xl font-extrabold text-slate-900">
+                            class="mt-2 text-3xl font-extrabold text-emerald-700">
                             --
                         </h2>
 
                     </div>
 
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 transition-transform duration-300 group-hover:scale-110">
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
                         👨‍💼
                     </div>
 
@@ -211,9 +234,9 @@
                 <!-- My Profile -->
 
                 <a href="{% url 'profile:index' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-indigo-300 bg-indigo-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400 hover:bg-indigo-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         👤
                     </span>
 
@@ -227,13 +250,13 @@
                 <!-- Add User -->
 
                 <a href="{% url 'users:AddUsersAdmin' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-violet-300 bg-violet-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:bg-violet-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         ➕
                     </span>
 
-                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-violet-600">
                         Add User
                     </span>
 
@@ -243,13 +266,13 @@
                 <!-- Attendance -->
 
                 <a href="{% url 'attendance:admin-attendance-page' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-teal-300 bg-teal-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-400 hover:bg-teal-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         🕒
                     </span>
 
-                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-teal-600">
                         Attendance
                     </span>
 
@@ -259,13 +282,13 @@
                 <!-- Manage Roles -->
 
                 <a href="#"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-rose-300 bg-rose-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-rose-400 hover:bg-rose-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         🔐
                     </span>
 
-                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-rose-600">
                         Manage Roles
                     </span>
 
@@ -275,13 +298,13 @@
                 <!-- Departments -->
 
                 <a href="{% url 'department:add_department' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-blue-300 bg-blue-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-400 hover:bg-blue-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         🏢
                     </span>
 
-                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-blue-600">
                         Departments
                     </span>
 
@@ -291,13 +314,13 @@
                 <!-- Leave Management -->
 
                 <a href="{% url 'leave:leave-management' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-purple-300 bg-purple-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-400 hover:bg-purple-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         🏖️
                     </span>
 
-                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-purple-600">
                         Leave Management
                     </span>
 
@@ -307,9 +330,9 @@
                 <!-- Leave Approval -->
 
                 <a href="{% url 'leave:admin-leave-approval' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-emerald-300 bg-emerald-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-emerald-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         🏟️
                     </span>
 
@@ -323,26 +346,26 @@
                 <!-- Leave Dashboard -->
 
                 <a href="{% url 'leave:admin-leave-dashboard' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-amber-300 bg-amber-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-amber-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         🌉
                     </span>
 
-                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-emerald-600">
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-amber-600">
                         Leave Dashboard
                     </span>
 
                 </a>
 
                 <a href="{% url 'leave:admin-leave-requests' %}"
-                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
+                   class="group flex min-w-0 items-center gap-3 rounded-2xl border border-sky-300 bg-sky-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-300 hover:shadow-md">
 
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-base transition-all duration-300 group-hover:scale-110 group-hover:bg-emerald-50">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
                         🌃
                     </span>
 
-                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-emerald-600">
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-sky-600">
                         Leave Requests
 
                     </span>
@@ -379,7 +402,7 @@
 
             <!-- Section Header -->
 
-            <div class="flex flex-col gap-4 border-b border-slate-200 bg-slate-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <div class="flex flex-col gap-4 border-b border-slate-200 bg-gradient-to-r from-indigo-50 via-violet-50 to-purple-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
 
                 <div>
 
@@ -404,7 +427,7 @@
                     </label>
 
                     <select id="rowsPerPage"
-                            class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
+                            class="rounded-xl border border-indigo-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100">
 
                         <option value="5" selected>
                             5
@@ -485,7 +508,7 @@
                 <div class="flex items-center gap-2">
 
                     <button id="prevPageBtn"
-                            class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40">
+                            class="rounded-xl border border-indigo-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40">
                         Previous
                     </button>
 
@@ -497,7 +520,7 @@
 
 
                     <button id="nextPageBtn"
-                            class="rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-sm transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40">
+                            class="rounded-xl border border-indigo-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40">
                         Next
                     </button>
 
@@ -534,15 +557,15 @@
 
         <!-- Modal Header -->
 
-        <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-6 py-5">
+        <div class="flex items-center justify-between border-b border-slate-200 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 px-6 py-5">
 
             <div>
 
-                <h2 class="text-lg font-bold text-slate-900">
+                <h2 class="text-lg font-bold text-white">
                     Audit Details
                 </h2>
 
-                <p class="mt-0.5 text-xs text-slate-500">
+                <p class="mt-0.5 text-xs text-indigo-100">
                     Comparison of old and new property values
                 </p>
 
@@ -550,7 +573,7 @@
 
 
             <button id="closeAuditBtn"
-                    class="flex h-9 w-9 items-center justify-center rounded-xl text-xl font-bold text-slate-400 transition-colors hover:bg-slate-200 hover:text-red-500">
+                    class="flex h-9 w-9 items-center justify-center rounded-xl text-xl font-bold text-white/80 transition-colors hover:bg-white/15 hover:text-white">
                 &times;
             </button>
 
