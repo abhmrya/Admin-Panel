@@ -9,3 +9,14 @@ class RegisterPageView(TemplateView):
 
 class DashboardPageView(TemplateView):
     template_name = "dashboard/index.html"
+
+from django.views.generic import TemplateView
+
+
+class ResetPasswordPageView(TemplateView):
+
+    template_name = "authentication/reset_password.html"
+
+class ForgotPasswordPageView(TemplateView):
+
+    template_name = "authentication/forgot_password.html"

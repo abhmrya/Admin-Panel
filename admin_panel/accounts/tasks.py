@@ -6,12 +6,9 @@ from accounts.services.email import EmailService
 
 logger = logging.getLogger(__name__)
 
-@shared_task(
-    name="accounts.send_registration_email",
-)
+@shared_task(name="accounts.send_registration_email",)
 def send_registration_email_task(
-    user_id,
-):
+    user_id,):
     logger.info(f"Starting email task for user={user_id} name = {(User.objects.get(id = user_id)).first_name}")
     try:
         user = User.objects.get(
@@ -25,3 +22,18 @@ def send_registration_email_task(
         user=user,
     )
     logger.info(f"Email sent successfully for user={user_id}")
+
+
+@shared_task
+def send_password_reset_email_task(
+    user_id,
+    reset_link,):
+
+    user = User.objects.get(
+        id=user_id
+    )
+
+    EmailService.send_password_reset_email(
+        user=user,
+        reset_link=reset_link,
+    )
