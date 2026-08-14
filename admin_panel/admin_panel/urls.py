@@ -20,6 +20,8 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import  ForbiddenViewPage
+
 
 urlpatterns = [
     
@@ -47,6 +49,9 @@ urlpatterns = [
     path("departmet/",include("departments.urls_web")),
     path("attendance/", include(("attendance.urls_web", "attendance"), namespace="attendance")),
     path("leave/",include(("leave.urls_web", "leave"),namespace="leave")),
+    path("common/",include("common.urls_web"),name='common'),
+
+    path("403/",ForbiddenViewPage.as_view(),name='add_department'),
 
 
 ]+ debug_toolbar_urls()
