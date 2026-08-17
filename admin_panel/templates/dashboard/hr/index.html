@@ -1,103 +1,852 @@
 {% extends "base/dashboard_base.html" %}
 {% load static %}
 
-{% block page_title %}dHR Dashboard{% endblock %}
+{% block page_title %}HR Dashboard{% endblock %}
 
 {% block content %}
 
-<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
-    <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">HR Dashboard</h1>
-        <p class="text-sm text-gray-500 mt-1">Workforce and department overview</p>
-    </div>
-</div>
+<div class="min-h-screen bg-slate-50">
 
-<!-- Stat cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+    <div class="mx-auto max-w-7xl space-y-8 px-4 py-6 pb-12 sm:px-6 lg:px-8">
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Total Employees</p>
-            <h2 id="statEmployeesCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
+        <!-- ======================================================
+             PAGE HEADER
+        ======================================================= -->
+
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-6 shadow-lg sm:p-8">
+
+            <!-- Decorative blobs -->
+            <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10"></div>
+            <div class="pointer-events-none absolute -bottom-16 right-24 h-32 w-32 rounded-full bg-white/10"></div>
+            <div class="pointer-events-none absolute left-1/3 -top-20 h-24 w-24 rounded-full bg-white/5"></div>
+
+            <div class="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+
+                    <p class="text-sm font-semibold uppercase tracking-wide text-indigo-100">
+                        Human Resources
+                    </p>
+
+                    <h1 class="mt-1 text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                        HR Dashboard
+                    </h1>
+
+                    <p class="mt-1 text-sm text-indigo-100">
+                        Workforce, attendance, leave and employee activity overview.
+                    </p>
+
+                </div>
+
+                <div class="flex items-center gap-3">
+
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/15 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm backdrop-blur-md">
+                        <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-400"></span>
+                        System Live
+                    </span>
+
+                </div>
+
+            </div>
+
         </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-xl">🧑‍💼</span>
-    </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">Departments</p>
-            <h2 id="statDepartmentsCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-sky-50 text-sky-600 text-xl">🏢</span>
-    </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">On Leave Today</p>
-            <h2 id="statOnLeaveCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-amber-600 text-xl">📅</span>
-    </div>
+        <!-- ======================================================
+             HR STATISTICS
+        ======================================================= -->
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-start justify-between hover:shadow-md transition-shadow duration-200">
-        <div>
-            <p class="text-gray-500 text-sm">New Hires (30d)</p>
-            <h2 id="statNewHiresCount" class="text-3xl font-bold mt-2 text-gray-800">--</h2>
-        </div>
-        <span class="flex h-11 w-11 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xl">✨</span>
-    </div>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-5">
 
-</div>
+            <!-- Employees -->
 
-<!-- Quick actions -->
-<div class="mt-8">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <a
+                href="{% url 'users:hrupdateemployee' %}"
+                class="group relative overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-100 via-emerald-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
 
-        <a href="{% url 'users:AddUsersHr' %}" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 text-lg">➕</span>
-            <span class="text-sm font-medium text-gray-700">Add Employee</span>
-        </a>
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-emerald-500"></div>
 
-        <a href="{% url 'department:add_department' %}" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-sky-50 text-sky-600 text-lg">🏢</span>
-            <span class="text-sm font-medium text-gray-700">Departments</span>
-        </a>
+                <div class="flex items-start justify-between">
 
-        <!-- Attendance URL Connected -->
-            <!-- Attendance (Newly Added) -->
-            <a href="{% url 'attendance:admin-attendance-page' %}" class="group flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-sm">
-                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-base transition-transform duration-300 group-hover:scale-110 group-hover:bg-indigo-50">
-                    🕒
-                </span>
-                <span class="text-xs font-semibold text-slate-700 group-hover:text-indigo-600 transition-colors truncate">Attendance</span>
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Employees
+                        </p>
+
+                        <h2
+                            id="statEmployeesCount"
+                            class="mt-2 text-3xl font-extrabold text-emerald-700"
+                        >
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                        👨‍💼
+                    </div>
+
+                </div>
+
             </a>
 
-        <a href="#" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 flex flex-col items-center gap-2 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200">
-            <span class="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-50 text-rose-600 text-lg">📄</span>
-            <span class="text-sm font-medium text-gray-700">Leave Requests</span>
-        </a>
+
+            <!-- Departments -->
+
+            <a
+                href="{% url 'department:add_department' %}"
+                class="group relative overflow-hidden rounded-2xl border border-sky-200 bg-gradient-to-br from-sky-100 via-sky-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-sky-500"></div>
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Departments
+                        </p>
+
+                        <h2
+                            id="statDepartmentsCount"
+                            class="mt-2 text-3xl font-extrabold text-sky-700"
+                        >
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-sky-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                        🏢
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <!-- On Leave -->
+
+            <div
+                class="group relative overflow-hidden rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-100 via-amber-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-amber-500"></div>
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            On Leave Today
+                        </p>
+
+                        <h2
+                            id="statOnLeaveCount"
+                            class="mt-2 text-3xl font-extrabold text-amber-700"
+                        >
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                        🏖️
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- New Hires -->
+
+            <div
+                class="group relative overflow-hidden rounded-2xl border border-indigo-200 bg-gradient-to-br from-indigo-100 via-indigo-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-indigo-500"></div>
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            New Hires (30d)
+                        </p>
+
+                        <h2
+                            id="statNewHiresCount"
+                            class="mt-2 text-3xl font-extrabold text-indigo-700"
+                        >
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                        ✨
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Pending Leave -->
+
+            <a
+                href="{% url 'leave:admin-leave-requests' %}"
+                class="group relative overflow-hidden rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-100 via-rose-50 to-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+            >
+
+                <div class="absolute left-0 top-0 h-full w-1.5 bg-rose-500"></div>
+
+                <div class="flex items-start justify-between">
+
+                    <div>
+
+                        <p class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                            Pending Leaves
+                        </p>
+
+                        <h2
+                            id="statPendingLeaveCount"
+                            class="mt-2 text-3xl font-extrabold text-rose-700"
+                        >
+                            --
+                        </h2>
+
+                    </div>
+
+                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-100 text-rose-600 shadow-sm transition-transform duration-300 group-hover:scale-110">
+                        📋
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- ======================================================
+             QUICK ACTIONS
+        ======================================================= -->
+
+        <div class="space-y-3">
+
+            <div class="flex items-center justify-between">
+
+                <div>
+
+                    <h2 class="text-xs font-bold uppercase tracking-wider text-slate-400">
+                        Quick Actions
+                    </h2>
+
+                    <p class="mt-1 text-xs text-slate-400">
+                        Frequently used HR operations.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+
+                <!-- My Profile -->
+
+                <a
+                    href="{% url 'profile:index' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-indigo-300 bg-indigo-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400 hover:bg-indigo-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        👤
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-indigo-600">
+                        My Profile
+                    </span>
+
+                </a>
+
+
+                <!-- Add Employee -->
+
+                <a
+                    href="{% url 'users:AddUsersHr' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-violet-300 bg-violet-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:bg-violet-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        ➕
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-violet-600">
+                        Add Employee
+                    </span>
+
+                </a>
+
+
+                <!-- Employees -->
+
+                <a
+                    href="{% url 'users:list' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-emerald-300 bg-emerald-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-emerald-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        👥
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-emerald-600">
+                        Employees
+                    </span>
+
+                </a>
+
+
+                <!-- Departments -->
+
+                <a
+                    href="{% url 'department:add_department' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-sky-300 bg-sky-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        🏢
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-sky-600">
+                        Departments
+                    </span>
+
+                </a>
+
+
+                <!-- Attendance -->
+
+                <a
+                    href="{% url 'attendance:admin-attendance-page' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-teal-300 bg-teal-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-teal-400 hover:bg-teal-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        🕒
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-teal-600">
+                        Attendance
+                    </span>
+
+                </a>
+
+
+                <!-- Leave Management -->
+
+                <a
+                    href="{% url 'leave:leave-management' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-purple-300 bg-purple-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-400 hover:bg-purple-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        🏖️
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-purple-600">
+                        Leave Management
+                    </span>
+
+                </a>
+
+
+                <!-- Leave Requests -->
+
+                <a
+                    href="{% url 'leave:admin-leave-requests' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-sky-300 bg-sky-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        📋
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-sky-600">
+                        Leave Requests
+                    </span>
+
+                </a>
+
+
+                <!-- Leave Approval -->
+
+                <a
+                    href="{% url 'leave:admin-leave-approval' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-emerald-300 bg-emerald-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-emerald-400 hover:bg-emerald-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        ✅
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-emerald-600">
+                        Leave Approval
+                    </span>
+
+                </a>
+
+
+                <!-- Leave Dashboard -->
+
+                <a
+                    href="{% url 'leave:admin-leave-dashboard' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-amber-300 bg-amber-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-400 hover:bg-amber-300 hover:shadow-md"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/70 text-base transition-all duration-300 group-hover:scale-110">
+                        📊
+                    </span>
+
+                    <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-amber-600">
+                        Leave Dashboard
+                    </span>
+
+                </a>
+
+
+                <!-- AI Assistant -->
+
+                <a
+                    href="{% url 'chatbot:index' %}"
+                    class="group flex min-w-0 items-center gap-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-700 px-4 py-3 text-white shadow-md shadow-indigo-600/20 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                >
+
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/15 text-base backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                        🤖
+                    </span>
+
+                    <span class="truncate text-xs font-bold tracking-wide">
+                        AI Assistant
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- ======================================================
+             RECENT EMPLOYEES
+        ======================================================= -->
+
+        <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+            <div class="flex flex-col gap-3 border-b border-slate-200 bg-gradient-to-r from-emerald-50 via-sky-50 to-indigo-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+
+                    <h2 class="text-base font-bold text-slate-900">
+                        Workforce Overview
+                    </h2>
+
+                    <p class="mt-0.5 text-xs text-slate-500">
+                        HR workforce information and current dashboard status.
+                    </p>
+
+                </div>
+
+                <span
+                    id="employeeOverviewStatus"
+                    class="inline-flex w-fit items-center rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500"
+                >
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <div class="grid grid-cols-1 gap-4 p-6 sm:grid-cols-3">
+
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Active Employees
+                    </p>
+
+                    <p
+                        id="overviewEmployees"
+                        class="mt-2 text-2xl font-bold text-slate-800"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        On Leave
+                    </p>
+
+                    <p
+                        id="overviewOnLeave"
+                        class="mt-2 text-2xl font-bold text-slate-800"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+
+                <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+
+                    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                        Pending Requests
+                    </p>
+
+                    <p
+                        id="overviewPendingLeaves"
+                        class="mt-2 text-2xl font-bold text-slate-800"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
+             RECENT AUDIT ACTIVITY
+        ======================================================= -->
+
+        <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+
+            <!-- Header -->
+
+            <div class="flex flex-col gap-4 border-b border-slate-200 bg-gradient-to-r from-indigo-50 via-violet-50 to-purple-50 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+
+                    <h2 class="text-base font-bold text-slate-900">
+                        Recent Audit Activity
+                    </h2>
+
+                    <p class="mt-0.5 text-xs text-slate-500">
+                        Latest system actions performed across the platform.
+                    </p>
+
+                </div>
+
+
+                <div class="flex items-center gap-2">
+
+                    <label
+                        for="rowsPerPage"
+                        class="text-xs font-semibold text-slate-500"
+                    >
+                        Show rows:
+                    </label>
+
+                    <select
+                        id="rowsPerPage"
+                        class="rounded-xl border border-indigo-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm outline-none transition focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                    >
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- Table -->
+
+            <div class="overflow-x-auto">
+
+                <table class="min-w-full text-left text-sm">
+
+                    <thead class="border-b border-slate-200 bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+
+                        <tr>
+
+                            <th class="px-6 py-4">
+                                User
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Action
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Resource
+                            </th>
+
+                            <th class="px-6 py-4">
+                                IP Address
+                            </th>
+
+                            <th class="px-6 py-4">
+                                Time
+                            </th>
+
+                            <th class="px-6 py-4 text-center">
+                                Details
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="recentActivityTable"
+                        class="divide-y divide-slate-100 bg-white"
+                    >
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="px-6 py-12 text-center text-sm text-slate-400"
+                            >
+                                Loading audit activity...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Pagination -->
+
+            <div class="flex flex-col items-center justify-between gap-4 border-t border-slate-200 bg-slate-50 px-6 py-4 sm:flex-row">
+
+                <span
+                    id="paginationInfo"
+                    class="text-xs font-medium text-slate-500"
+                >
+                    Showing 0 to 0 of 0 entries
+                </span>
+
+
+                <div class="flex items-center gap-2">
+
+                    <button
+                        id="prevPageBtn"
+                        type="button"
+                        class="rounded-xl border border-indigo-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        Previous
+                    </button>
+
+
+                    <span
+                        id="pageNumberDisplay"
+                        class="px-2 text-xs font-semibold text-slate-700"
+                    >
+                        Page 1 of 1
+                    </span>
+
+
+                    <button
+                        id="nextPageBtn"
+                        type="button"
+                        class="rounded-xl border border-indigo-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        Next
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </div>
+
 </div>
 
-<!-- Employees table placeholder -->
-<div class="mt-8 bg-white rounded-xl border border-gray-100 shadow-sm">
-    <div class="px-6 py-4 border-b border-gray-100">
-        <h2 class="text-lg font-semibold text-gray-800">Recently Added Employees</h2>
-    </div>
-    <div id="recentEmployeesList" class="divide-y divide-gray-100">
-        <div class="px-6 py-10 text-center text-sm text-gray-400">
-            No data yet — connect the employees API to populate this list.
+
+<!-- ==========================================================
+     AUDIT DETAILS MODAL
+=========================================================== -->
+
+<div
+    id="auditModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center p-4"
+>
+
+    <!-- Overlay -->
+
+    <div
+        id="auditOverlay"
+        class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
+    ></div>
+
+
+    <!-- Modal -->
+
+    <div class="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
+
+        <!-- Header -->
+
+        <div class="flex items-center justify-between border-b border-slate-200 bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 px-6 py-5">
+
+            <div>
+
+                <h2 class="text-lg font-bold text-white">
+                    Audit Details
+                </h2>
+
+                <p class="mt-0.5 text-xs text-indigo-100">
+                    Comparison of old and new property values
+                </p>
+
+            </div>
+
+
+            <button
+                id="closeAuditBtn"
+                type="button"
+                class="flex h-9 w-9 items-center justify-center rounded-xl text-xl font-bold text-white/80 transition-colors hover:bg-white/15 hover:text-white"
+            >
+                &times;
+            </button>
+
         </div>
+
+
+        <!-- Body -->
+
+        <div class="flex-1 overflow-y-auto p-6">
+
+            <div class="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
+
+                <div class="rounded-2xl bg-slate-50 p-4">
+
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        User
+                    </p>
+
+                    <p
+                        id="auditModalUser"
+                        class="mt-1 text-sm font-semibold text-slate-800"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+
+                <div class="rounded-2xl bg-slate-50 p-4">
+
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Action
+                    </p>
+
+                    <p
+                        id="auditModalAction"
+                        class="mt-1 text-sm font-semibold text-slate-800"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+
+                <div class="rounded-2xl bg-slate-50 p-4">
+
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Resource
+                    </p>
+
+                    <p
+                        id="auditModalResource"
+                        class="mt-1 text-sm font-semibold text-slate-800"
+                    >
+                        --
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="overflow-hidden rounded-2xl border border-slate-200">
+
+                <table class="min-w-full divide-y divide-slate-100">
+
+                    <thead class="bg-slate-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+
+                        <tr>
+
+                            <th class="px-5 py-3.5 text-left">
+                                Field / Property
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left text-red-500">
+                                Old Value
+                            </th>
+
+                            <th class="px-5 py-3.5 text-left text-emerald-600">
+                                New Value
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody
+                        id="auditTableBody"
+                        class="divide-y divide-slate-100 bg-white text-sm"
+                    >
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div
+                id="auditNoChanges"
+                class="mt-4 hidden rounded-2xl border border-slate-200 bg-slate-50 p-5 text-center text-sm text-slate-500"
+            >
+                No property changes were recorded for this activity.
+            </div>
+
+        </div>
+
     </div>
+
 </div>
 
 {% endblock %}
 
 
 {% block extra_js %}
+
 {{ block.super }}
-<script src="{% static 'js/services/dashboard.service.js' %}"></script>
+
+<script src="{% static 'js/services/audit.service.js' %}"></script>
 <script src="{% static 'js/dashboard/hr.js' %}"></script>
+
 {% endblock %}

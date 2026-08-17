@@ -14,3 +14,6 @@ class AddUsersAdminPageView(TemplateView):
 class AddUsersHrPageView(TemplateView):
 
     template_name = "hr_dashboard/hr_add_user.html"
+
+class HrUpdateEmployee(TemplateView):
+    template_name = "hr_dashboard/hr_update_employee.html"

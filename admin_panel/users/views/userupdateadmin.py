@@ -4,7 +4,7 @@ from accounts.models import User
 
 from ..serializers.userupdateadmin import UserUpdateAdminSerializer
 
-from common.permission import IsAdmin
+from common.permission import IsAdmin,IsAdminOrHR
 
 from audit.services import AuditService
 from audit.constants import AuditAction
@@ -18,7 +18,7 @@ class UserUpdateAdminViewSet(AuditMixin,viewsets.ModelViewSet):
     serializer_class = UserUpdateAdminSerializer
 
     permission_classes = [
-        IsAdmin
+        IsAdminOrHR
     ]
 
     audit_action_create = AuditAction.USER_CREATED
