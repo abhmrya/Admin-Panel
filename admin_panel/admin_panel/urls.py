@@ -38,6 +38,7 @@ urlpatterns = [
     path("api/v1/chat/",include("chatbot.urls_api")),
     path("api/v1/attendance/", include("attendance.urls_api")),
     path("api/v1/leave/", include("leave.urls_api")),
+    path("api/v1/notifications/",include("notification.urls_api"),),
 
 
     # Web Pages

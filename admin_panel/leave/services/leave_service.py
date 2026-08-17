@@ -11,8 +11,15 @@ from .leave_balance_service import LeaveBalanceService
 from .leave_calculation_service import LeaveCalculationService
 from .leave_policy_service import LeavePolicyService
 
+from notification.constants import NotificationType
+from notification.services import NotificationService
+
 
 class LeaveService:
+
+    # =========================================================
+    # CREATE LEAVE REQUEST
+    # =========================================================
 
     @staticmethod
     @transaction.atomic
@@ -35,9 +42,7 @@ class LeaveService:
 
         if not leave_type.is_active:
             raise ValidationError({
-                "leave_type": (
-                    "This leave type is inactive."
-                )
+                "leave_type": "This leave type is inactive."
             })
 
         LeavePolicyService.validate_request(
@@ -100,9 +105,7 @@ class LeaveService:
 
         if total_days > available_days:
             raise ValidationError({
-                "total_days": (
-                    "Insufficient leave balance."
-                )
+                "total_days": "Insufficient leave balance."
             })
 
         leave_request = LeaveRequest.objects.create(
@@ -125,7 +128,31 @@ class LeaveService:
             ]
         )
 
+        # -----------------------------------------------------
+        # Notification: Leave Submitted
+        # -----------------------------------------------------
+
+        NotificationService.create_notification(
+            recipient=user,
+            notification_type=NotificationType.LEAVE_SUBMITTED,
+            title="Leave Request Submitted",
+            message=(
+                f"Your {leave_type.name} leave request "
+                f"from {leave_request.start_date} "
+                f"to {leave_request.end_date} "
+                "has been submitted successfully."
+            ),
+            metadata={
+                "leave_request_id": str(leave_request.id),
+                "leave_type": leave_type.name,
+            },
+        )
+
         return leave_request
+
+    # =========================================================
+    # APPROVE LEAVE REQUEST
+    # =========================================================
 
     @staticmethod
     @transaction.atomic
@@ -208,7 +235,33 @@ class LeaveService:
             comment=comment.strip(),
         )
 
+        # -----------------------------------------------------
+        # Notification: Leave Approved
+        # -----------------------------------------------------
+
+        NotificationService.create_notification(
+            recipient=leave_request.user,
+            notification_type=NotificationType.LEAVE_APPROVED,
+            title="Leave Request Approved",
+            message=(
+                f"Your {leave_request.leave_type.name} "
+                f"leave request from "
+                f"{leave_request.start_date} "
+                f"to {leave_request.end_date} "
+                "has been approved."
+            ),
+            metadata={
+                "leave_request_id": str(leave_request.id),
+                "leave_type": leave_request.leave_type.name,
+                "reviewer_id": str(reviewer.id),
+            },
+        )
+
         return leave_request
+
+    # =========================================================
+    # REJECT LEAVE REQUEST
+    # =========================================================
 
     @staticmethod
     @transaction.atomic
@@ -284,7 +337,36 @@ class LeaveService:
             comment=rejection_reason.strip(),
         )
 
+        # -----------------------------------------------------
+        # Notification: Leave Rejected
+        # -----------------------------------------------------
+
+        NotificationService.create_notification(
+            recipient=leave_request.user,
+            notification_type=NotificationType.LEAVE_REJECTED,
+            title="Leave Request Rejected",
+            message=(
+                f"Your {leave_request.leave_type.name} "
+                f"leave request from "
+                f"{leave_request.start_date} "
+                f"to {leave_request.end_date} "
+                "has been rejected."
+            ),
+            metadata={
+                "leave_request_id": str(leave_request.id),
+                "leave_type": leave_request.leave_type.name,
+                "reviewer_id": str(reviewer.id),
+                "rejection_reason": (
+                    leave_request.rejection_reason or ""
+                ),
+            },
+        )
+
         return leave_request
+
+    # =========================================================
+    # CANCEL LEAVE REQUEST
+    # =========================================================
 
     @staticmethod
     @transaction.atomic
@@ -344,6 +426,10 @@ class LeaveService:
                 )
             })
 
+        # -----------------------------------------------------
+        # Pending Leave Cancellation
+        # -----------------------------------------------------
+
         if leave_request.status == LeaveRequest.Status.PENDING:
 
             if leave_request.total_days > balance.pending_days:
@@ -361,6 +447,10 @@ class LeaveService:
                     "updated_at",
                 ]
             )
+
+        # -----------------------------------------------------
+        # Approved Leave Cancellation
+        # -----------------------------------------------------
 
         elif leave_request.status == LeaveRequest.Status.APPROVED:
 
@@ -389,6 +479,27 @@ class LeaveService:
                 "status",
                 "updated_at",
             ]
+        )
+
+        # -----------------------------------------------------
+        # Notification: Leave Cancelled
+        # -----------------------------------------------------
+
+        NotificationService.create_notification(
+            recipient=user,
+            notification_type=NotificationType.LEAVE_CANCELLED,
+            title="Leave Request Cancelled",
+            message=(
+                f"Your {leave_request.leave_type.name} "
+                f"leave request from "
+                f"{leave_request.start_date} "
+                f"to {leave_request.end_date} "
+                "has been cancelled."
+            ),
+            metadata={
+                "leave_request_id": str(leave_request.id),
+                "leave_type": leave_request.leave_type.name,
+            },
         )
 
         return leave_request
