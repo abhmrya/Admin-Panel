@@ -70,6 +70,11 @@ AUTH_USER_MODEL = "accounts.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+
+
+    "common.timemiddleware.RequestTimeMiddleware",
+
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -246,6 +251,12 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Asia/Kolkata"
 
+CELERY_BEAT_SCHEDULE = {
+    "send-test-email-every-minute": {
+        "task": "common.tasks.send_test_email",
+        "schedule": 10.0,   # 10 secound
+    },
+}
 
 INTERNAL_IPS = ["127.0.0.1",]
 
