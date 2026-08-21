@@ -280,7 +280,13 @@ body, html { height: 100%; }
   <div class="sidebar" id="sidebar">
 
     <div class="sidebar-header">
-      <img src="{{ request.user.userprofile.profile_image.url }}" class="avatar-sm" alt="me">
+      {% if profile and profile.avatar %}
+            <img src="{{ request.user.profile.avatar.url }}" class="avatar" alt="">
+        {% else %}
+            <div class="avatar">
+                {{ send_to.first_name|first|upper }}
+            </div>
+        {% endif %}
       <div class="sidebar-header-info">
         <div class="name">{{ request.user.get_full_name|default:request.user.username }}</div>
         <div class="sub">My Account</div>

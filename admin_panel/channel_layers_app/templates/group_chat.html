@@ -411,7 +411,13 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Sego
           </div>
         {% else %}
           <div class="bubble-row recv">
-            <img src="{{ chat_msg.user.userprofile.profile_image.url }}" alt="{{ chat_msg.user.username }}">
+            {% if profile and profile.avatar %}
+            <img src="{{ request.user.profile.avatar.url }}" class="avatar" alt="">
+        {% else %}
+            <div class="avatar">
+                {{ send_to.first_name|first|upper }}
+            </div>
+        {% endif %}
             <div class="bubble recv">
               <div class="bsender">{{ chat_msg.user.get_full_name|default:chat_msg.user.username }}</div>
               {% if chat_msg.audio %}

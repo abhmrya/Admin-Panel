@@ -58,12 +58,11 @@ class OneToOneMessage(models.Model):
             f"Message: {self.message}"
         )
 
-
 class UserProfile(models.Model):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="chat_profile"
+        on_delete=models.CASCADE
+        # related_name hata diya -> ab default "userprofile" milega
     )
 
     online = models.BooleanField(default=False)
@@ -75,7 +74,4 @@ class UserProfile(models.Model):
     )
 
     def __str__(self):
-        return (
-            f"{self.user.email} - "
-            f"{'Online' if self.online else 'Offline'}"
-        )
+        return f"{self.user.email} - {'Online' if self.online else 'Offline'}"
