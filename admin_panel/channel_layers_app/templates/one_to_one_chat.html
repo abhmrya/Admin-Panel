@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'channelbase.html' %}
 {% load static %}
 {% block content %}
 
@@ -299,7 +299,9 @@ body, html { height: 100%; }
           <input type="hidden" name="user" value="{{ u.username }}">
           <button type="submit" class="contact-item {% if user_name == u.username %}active{% endif %}"
                   data-name="{{ u.get_full_name|default:u.username|lower }}">
-            <img src="{{ u.userprofile.profile_image.url }}" class="avatar" alt="{{ u.username }}">
+            <img src="{{ request.user.profile.avatar.url }}"
+     class="avatar-sm"
+     alt="me">
             <div class="contact-info">
               <div class="cname">{{ u.get_full_name|default:u.username }}</div>
               <div class="csub">
@@ -327,8 +329,14 @@ body, html { height: 100%; }
       <button class="hamburger" onclick="openSidebar()">&#9776;</button>
 
       {% if user %}
-        <img src="{{ user.profile_image.url }}" class="avatar" alt="">
-        <div class="chat-header-info">
+        {% if profile and profile.avatar %}
+            <img src="{{ request.user.profile.avatar.url }}" class="avatar" alt="">
+        {% else %}
+            <div class="avatar">
+                {{ send_to.first_name|first|upper }}
+            </div>
+        {% endif %}
+<div class="chat-header-info">
           <div class="hname">{{ user.user.get_full_name|default:user.user.username }}</div>
           <div class="hstatus {% if user.online %}online{% endif %}" id="{{ user.user.username }}_header_status">
             {% if user.online %}Online{% else %}

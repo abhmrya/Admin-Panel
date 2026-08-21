@@ -26,8 +26,8 @@ class Profile(models.Model):
 
     avatar = models.ImageField(
         upload_to="profile/",
+        default="profiles/nonprofiles.png",
         blank=True,
-        null=True
     )
 
     gender = models.CharField(

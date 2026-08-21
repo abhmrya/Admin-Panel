@@ -36,6 +36,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,7 +60,7 @@ INSTALLED_APPS = [
     "rest_framework",
 
     # third party
-    "debug_toolbar",
+    # "debug_toolbar",
 
     # websocket chatapp
     'channel_layers_app',
@@ -75,7 +76,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 
 
-    "common.timemiddleware.RequestTimeMiddleware",
+    # "common.timemiddleware.RequestTimeMiddleware",
 
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -90,7 +91,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    # "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'admin_panel.urls'
@@ -174,11 +175,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-
 STATICFILES_DIRS = [
-    BASE_DIR / "staticfiles",
+    BASE_DIR / "static",
 ]
 
+STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -278,7 +279,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get("REDIS_URL")],
+            "hosts": ["redis://127.0.0.1:6379/1"],
         },
     },
 }

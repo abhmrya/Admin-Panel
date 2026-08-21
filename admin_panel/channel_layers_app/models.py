@@ -1,14 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
-
-# Create your models here.
-
-
-# from django.contrib.auth.models import AbstractUser
-
-# class CustomUser(AbstractUser):
-#     is_online = models.BooleanField(default=False)  
-
+from django.conf import settings
 
 
 class Group_name(models.Model):
@@ -17,35 +8,74 @@ class Group_name(models.Model):
     def __str__(self):
         return str(self.groupname)
 
+
 class Chat_msg(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group_name, on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    group = models.ForeignKey(
+        Group_name,
+        on_delete=models.CASCADE
+    )
+
     message = models.CharField(max_length=1000)
+
     time = models.DateTimeField(auto_now=True)
-    audio = models.FileField(upload_to="voice_messages/", blank=True, null=True)  # ✅ for audio
-   
+
+    audio = models.FileField(
+        upload_to="voice_messages/",
+        blank=True,
+        null=True
+    )
 
     def __str__(self):
         return f"{self.user.username} in {self.group.groupname}"
-    
-from django.db import models
-from django.contrib.auth.models import User
+
 
 class OneToOneMessage(models.Model):
-    send_from = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
-    send_to = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    send_from = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="sent_messages",
+        on_delete=models.CASCADE
+    )
+
+    send_to = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="received_messages",
+        on_delete=models.CASCADE
+    )
+
     message = models.CharField(max_length=1000)
+
     time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"From: {self.send_from.username}, To: {self.send_to.username}, Message: {self.message}"
+        return (
+            f"From: {self.send_from.username}, "
+            f"To: {self.send_to.username}, "
+            f"Message: {self.message}"
+        )
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="chat_profile"
+    )
+
     online = models.BooleanField(default=False)
-    profile_image = models.ImageField(upload_to="profiles/", default="profiles/nonprofile.png")  # ✅ profile image
 
+    profile_image = models.ImageField(
+        upload_to="profiles/",
+        blank=True,
+        null=True
+    )
 
-    # def __str__(self):
-    #     return f"{self.user.username} - {'Online' if self.online else 'Offline'}"
+    def __str__(self):
+        return (
+            f"{self.user.email} - "
+            f"{'Online' if self.online else 'Offline'}"
+        )

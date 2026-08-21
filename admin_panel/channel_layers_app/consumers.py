@@ -212,7 +212,9 @@ class OnlineStatusConsumer(AsyncConsumer):
 
     @database_sync_to_async
     def change_online_status(self, username, c_type):
-        from django.contrib.auth.models import User
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+
         from .models import UserProfile
         user = User.objects.get(username=username)
         userprofile, _ = UserProfile.objects.get_or_create(user=user)
@@ -222,7 +224,8 @@ class OnlineStatusConsumer(AsyncConsumer):
     @database_sync_to_async
     def change_online_status_offline(self):
         # Mark user offline on disconnect (e.g. tab close without beforeunload)
-        from django.contrib.auth.models import User
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
         from .models import UserProfile
         try:
             user = self.scope["user"]
@@ -296,7 +299,10 @@ class OneToOneAsyncConsumer(AsyncConsumer):
         await self.send({"type": "websocket.accept"})
 
     async def websocket_receive(self, event):
-        from django.contrib.auth.models import User
+        from django.contrib.auth import get_user_model
+
+        User = get_user_model()
+        
         from .models import OneToOneMessage
 
         data = json.loads(event["text"])

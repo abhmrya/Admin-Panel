@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from debug_toolbar.toolbar import debug_toolbar_urls
+# from debug_toolbar.toolbar import debug_toolbar_urls
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -53,10 +53,13 @@ urlpatterns = [
 
     path("403/",ForbiddenViewPage.as_view(),name='add_department'),
 
+    # chatapp
+    path('', include('channel_layers_app.urls')),
 
-]+ debug_toolbar_urls()
 
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT
-)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

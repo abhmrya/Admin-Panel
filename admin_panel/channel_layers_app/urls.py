@@ -23,7 +23,7 @@ from .views import upload_audio
 urlpatterns = [
     path('base/', views.index, name="index"),
     path('index/', views.index, name="index"),
-    path('', views.register_page, name='register'),
+    # path('', views.register_page, name='register'),
     path('login/', views.login_page, name='login'),
      path("accounts/login/", views.login_page),
     path('api/register/', RegisterView.as_view(), name='apiregister'),
