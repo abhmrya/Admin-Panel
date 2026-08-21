@@ -1,77 +1,41 @@
+/**
+ * =====================================================
+ * channelbase.js
+ * =====================================================
+ *
+ * Uses Admin Panel's centralized Auth system.
+ *
+ * Required globally:
+ * - Storage
+ * - APP_CONFIG
+ * - Auth
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
-  const logoutBtn = document.getElementById("logoutBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-  // Helper to decode JWT and get payload
-  function parseJwt(token) {
-    try {
-      const base64Url = token.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split("")
-          .map(c => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join("")
-      );
-      return JSON.parse(jsonPayload);
-    } catch (e) {
-      return null;
-    }
-  }
+    /*
+     * =====================================================
+     * LOGOUT
+     * =====================================================
+     *
+     * Do NOT use:
+     *
+     * fetch("/api/logout/")
+     *
+     * because authentication/logout is handled centrally
+     * by Admin Panel's Auth service.
+     */
 
-  // Auto logout if token expired
-  function scheduleAutoLogout() {
-    const access = localStorage.getItem("access");
-    if (!access) return;
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", (event) => {
+            event.preventDefault();
 
-    const payload = parseJwt(access);
-    if (!payload || !payload.exp) return;
-
-    const expiryTime = payload.exp * 1000; // JWT exp is in seconds
-    const now = Date.now();
-    const timeout = expiryTime - now;
-
-    if (timeout <= 0) {
-      logout(); // already expired
-    } else {
-      setTimeout(() => {
-        logout();
-      }, timeout);
-    }
-  }
-
-  // Logout function
-  async function logout() {
-    const access = localStorage.getItem("access");
-    const refresh = localStorage.getItem("refresh");
-
-    try {
-      if (refresh) {
-        await fetch("/api/logout/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(access && { Authorization: `Bearer ${access}` }),
-          },
-          body: JSON.stringify({ refresh }),
+            if (window.Auth && typeof window.Auth.logout === "function") {
+                window.Auth.logout();
+            } else {
+                console.error("Auth.logout() is not available.");
+            }
         });
-      }
-    } catch (err) {
-      console.error("Logout error:", err);
-    } finally {
-      localStorage.removeItem("access");
-      localStorage.removeItem("refresh");
-      window.location.href = "/login/";
     }
-  }
-
-  // Attach logout button
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", e => {
-      e.preventDefault();
-      logout();
-    });
-  }
-
-  // Schedule auto logout
-  scheduleAutoLogout();
 });

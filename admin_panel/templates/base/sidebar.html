@@ -1,11 +1,18 @@
 {% load static %}
 
-<!-- Mobile Overlay -->
+<!-- =========================================================
+     MOBILE OVERLAY
+========================================================= -->
+
 <div
     id="sidebarOverlay"
     class="hidden fixed inset-0 bg-black/50 z-30 lg:hidden"
 ></div>
 
+
+<!-- =========================================================
+     SIDEBAR
+========================================================= -->
 
 <aside
     id="sidebar"
@@ -26,140 +33,314 @@
 >
 
 
-    <!-- Brand -->
+    <!-- =====================================================
+         BRAND
+    ====================================================== -->
+
     <div class="px-5 py-5 border-b border-slate-800">
 
         <h2 class="text-lg font-bold text-white">
             Admin Panel
         </h2>
 
-        <p 
+        <p
             id="sidebarUserRole"
-            class="text-xs text-slate-400 mt-1">
+            class="text-xs text-slate-400 mt-1"
+        >
         </p>
 
     </div>
 
 
 
-    <!-- Menu -->
+    <!-- =====================================================
+         MENU
+    ====================================================== -->
+
     <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
 
 
-        <!-- Common Dashboard -->
+        <!-- =================================================
+             COMMON DASHBOARD
+        ================================================== -->
+
         <a
             href="{% url 'dashboard:index' %}"
             class="sidebar-link"
         >
-            🏠
-            Dashboard
+            <span>🏠</span>
+            <span>Dashboard</span>
         </a>
 
 
 
+        <!-- =================================================
+             ROLE BASED MENU
+        ================================================== -->
+
         {% if request.user.role == "ADMIN" %}
 
+            <!-- Users -->
 
-            <a href="{% url 'users:list' %}" class="sidebar-link">
-                👥
-                Users
+            <a
+                href="{% url 'users:list' %}"
+                class="sidebar-link"
+            >
+                <span>👥</span>
+                <span>Users</span>
             </a>
 
 
+            <!-- Departments -->
 
-        
-
-            {% comment %} <a href="#" class="sidebar-link">
-                🔐
-                Roles
-            </a> {% endcomment %}
-
-
-            {% comment %} <a href="#" class="sidebar-link">
-                🛡
-                Permissions
-            </a> {% endcomment %}
-
-
-            <a href="{% url 'department:add_department' %}" class="sidebar-link">
-                🏢
-                Departments
+            <a
+                href="{% url 'department:add_department' %}"
+                class="sidebar-link"
+            >
+                <span>🏢</span>
+                <span>Departments</span>
             </a>
 
 
-            <a href="#" class="sidebar-link">
-                ✉
-                Email Logs
+            <!-- Email Logs -->
+
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+                <span>✉️</span>
+                <span>Email Logs</span>
             </a>
 
 
 
         {% elif request.user.role == "HR" %}
 
+            <!-- Employees -->
 
-            <a href="#" class="sidebar-link">
-                👥
-                Employees
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+                <span>👥</span>
+                <span>Employees</span>
             </a>
 
 
-            <a href="{% url 'department:add_department' %}" class="sidebar-link">
-                🏢
-                Departments
+            <!-- Departments -->
+
+            <a
+                href="{% url 'department:add_department' %}"
+                class="sidebar-link"
+            >
+                <span>🏢</span>
+                <span>Departments</span>
             </a>
 
 
-            <a href="{% url 'attendance:admin-attendance-page' %}" class="sidebar-link">
-                📅
-                Attendance
+            <!-- Attendance -->
+
+            <a
+                href="{% url 'attendance:admin-attendance-page' %}"
+                class="sidebar-link"
+            >
+                <span>📅</span>
+                <span>Attendance</span>
             </a>
 
 
 
         {% elif request.user.role == "MANAGER" %}
 
+            <!-- My Team -->
 
-            <a href="#" class="sidebar-link">
-                👥
-                My Team
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+                <span>👥</span>
+                <span>My Team</span>
             </a>
 
 
-            <a href="#" class="sidebar-link">
-                📊
-                Reports
+            <!-- Reports -->
+
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+                <span>📊</span>
+                <span>Reports</span>
             </a>
 
 
 
         {% elif request.user.role == "EMPLOYEE" %}
 
+            <!-- My Profile -->
 
-            <a href="#" class="sidebar-link">
-                👤
-                My Profile
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+                <span>👤</span>
+                <span>My Profile</span>
             </a>
 
-            <a href="{% url 'attendance:index' %}" class="flex items-center px-4 py-2.5 text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-100 transition">
-                <span class="mr-3 text-lg">📅</span>
+
+            <!-- Attendance -->
+
+            <a
+                href="{% url 'attendance:index' %}"
+                class="sidebar-link"
+            >
+                <span>📅</span>
                 <span>Attendance</span>
             </a>
 
 
-            <a href="#" class="sidebar-link">
-                📄
-                Documents
-            </a>
+            <!-- Documents -->
 
+            <a
+                href="#"
+                class="sidebar-link"
+            >
+                <span>📄</span>
+                <span>Documents</span>
+            </a>
 
         {% endif %}
 
 
 
-        <!-- Common -->
-        <a href="#" class="sidebar-link">
-            ⚙
-            Settings
+        <!-- =================================================
+             =================================================
+             WORKPLACE CHAT
+             COMMON FOR EVERY ROLE
+             =================================================
+        ================================================== -->
+
+        <div class="pt-4 pb-2">
+
+            <p class="
+                px-3
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-wider
+                text-slate-500
+            ">
+                Communication
+            </p>
+
+        </div>
+
+
+        <!-- Workplace Chat -->
+
+        <a
+            href="{% url 'channel:index' %}"
+            class="
+                group
+                flex
+                items-center
+                gap-3
+                rounded-xl
+                px-3
+                py-3
+                text-slate-300
+                font-medium
+                transition-all
+                duration-200
+                bg-gradient-to-r
+                from-indigo-600/20
+                to-violet-600/20
+                border
+                border-indigo-500/20
+                hover:border-indigo-400/40
+                hover:from-indigo-600/30
+                hover:to-violet-600/30
+                hover:text-white
+            "
+        >
+
+            <span
+                class="
+                    flex
+                    h-9
+                    w-9
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-indigo-500/20
+                    text-lg
+                    transition-transform
+                    duration-200
+                    group-hover:scale-110
+                "
+            >
+                💬
+            </span>
+
+            <span class="text-sm">
+                Workplace Chat
+            </span>
+
+        </a>
+
+
+
+        <!-- Group Chat -->
+
+        <a
+            href="{% url 'channel:group_home' %}"
+            class="sidebar-link"
+        >
+            <span>👥</span>
+            <span>Group Conversations</span>
+        </a>
+
+
+
+        <!-- One-to-One Chat -->
+
+        <a
+            href="{% url 'channel:one_chat' %}"
+            class="sidebar-link"
+        >
+            <span>💭</span>
+            <span>Direct Messages</span>
+        </a>
+
+
+
+        <!-- =================================================
+             COMMON SETTINGS
+        ================================================== -->
+
+        <div class="pt-4 pb-2">
+
+            <p class="
+                px-3
+                text-[10px]
+                font-bold
+                uppercase
+                tracking-wider
+                text-slate-500
+            ">
+                System
+            </p>
+
+        </div>
+
+
+        <a
+            href="#"
+            class="sidebar-link"
+        >
+            <span>⚙️</span>
+            <span>Settings</span>
         </a>
 
 
@@ -167,46 +348,62 @@
 
 
 
-    <!-- Footer -->
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
 
-    <div class="
-        px-5
-        py-4
-        border-t
-        border-slate-800
-        text-xs
-        text-slate-500
-    ">
+    <div
+        class="
+            px-5
+            py-4
+            border-t
+            border-slate-800
+            text-xs
+            text-slate-500
+        "
+    >
         v1.0.0
     </div>
-
 
 </aside>
 
 
+
+<!-- =========================================================
+     SIDEBAR JS
+========================================================= -->
+
 <script src="{% static 'js/dashboard/sidebar.js' %}"></script>
+
+
+
+<!-- =========================================================
+     SIDEBAR STYLE
+========================================================= -->
 
 <style>
 
-.sidebar-link{
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:10px 12px;
-    border-radius:8px;
-    color:#cbd5e1;
-    font-weight:500;
-    transition:0.2s;
+    padding: 10px 12px;
 
+    border-radius: 8px;
+
+    color: #cbd5e1;
+
+    font-weight: 500;
+
+    transition: all 0.2s ease;
 }
 
 
-.sidebar-link:hover{
-
-    background:#1e293b;
-    color:white;
-
+.sidebar-link:hover {
+    background: #1e293b;
+    color: white;
+    transform: translateX(2px);
 }
 
 </style>

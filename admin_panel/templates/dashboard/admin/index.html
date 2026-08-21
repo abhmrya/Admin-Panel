@@ -1,7 +1,9 @@
 {% extends "base/dashboard_base.html" %}
 {% load static %}
 
-{% block page_title %}Admin Dashboard{% endblock %}
+{% block page_title %}
+Admin Dashboard
+{% endblock %}
 
 {% block content %}
 
@@ -13,16 +15,20 @@
              PAGE HEADER
         ======================================================= -->
 
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-6 sm:p-8 shadow-lg">
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-violet-600 to-purple-600 p-6 shadow-lg sm:p-8">
 
-            <!-- decorative blobs -->
+            <!-- Decorative blobs -->
+
             <div class="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10"></div>
+
             <div class="pointer-events-none absolute -bottom-16 right-24 h-32 w-32 rounded-full bg-white/10"></div>
+
             <div class="pointer-events-none absolute left-1/3 -top-20 h-24 w-24 rounded-full bg-white/5"></div>
 
             <div class="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
                 <div>
+
                     <p class="text-sm font-semibold uppercase tracking-wide text-indigo-100">
                         Control Center
                     </p>
@@ -34,6 +40,7 @@
                     <p class="mt-1 text-sm text-indigo-100">
                         Organization overview, analytics and recent activity tracking.
                     </p>
+
                 </div>
 
                 <div class="flex items-center gap-3">
@@ -58,7 +65,6 @@
         ======================================================= -->
 
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-5">
-
 
             <!-- Total Users -->
 
@@ -214,6 +220,153 @@
 
 
         <!-- ======================================================
+             COMMUNICATION HUB
+        ======================================================= -->
+
+        <section class="relative overflow-hidden rounded-3xl border border-indigo-200 bg-white shadow-sm">
+
+            <!-- Background decoration -->
+
+            <div class="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-indigo-100/70"></div>
+
+            <div class="pointer-events-none absolute -bottom-20 left-1/3 h-44 w-44 rounded-full bg-violet-100/50"></div>
+
+            <div class="relative p-6 sm:p-7">
+
+                <!-- Section heading -->
+
+                <div class="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div class="flex items-start gap-4">
+
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-violet-700 text-2xl text-white shadow-lg shadow-indigo-500/20">
+                            💬
+                        </div>
+
+                        <div>
+
+                            <p class="text-[11px] font-bold uppercase tracking-wider text-indigo-500">
+                                Communication
+                            </p>
+
+                            <h2 class="mt-1 text-xl font-bold text-slate-900">
+                                Communication Hub
+                            </h2>
+
+                            <p class="mt-1 max-w-2xl text-sm text-slate-500">
+                                Connect with your team, start conversations and stay connected across the organization.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Main Chat Button -->
+
+                    <a href="{% url 'channel:index' %}"
+                       class="group inline-flex items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-700 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-indigo-500/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/30">
+
+                        <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-white/15 text-lg backdrop-blur-md transition-transform duration-300 group-hover:scale-110">
+                            💬
+                        </span>
+
+                        <span>
+                            Open Team Chat
+                        </span>
+
+                        <span class="text-lg transition-transform duration-300 group-hover:translate-x-1">
+                            →
+                        </span>
+
+                    </a>
+
+                </div>
+
+
+                <!-- Chat Features -->
+
+                <div class="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+
+                    <!-- Group Chat -->
+
+                    <a href="{% url 'channel:group_home' %}"
+                       class="group flex items-center gap-3 rounded-2xl border border-indigo-100 bg-indigo-50/70 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-indigo-100">
+
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg shadow-sm">
+                            👥
+                        </div>
+
+                        <div class="min-w-0">
+
+                            <p class="text-sm font-bold text-slate-800 group-hover:text-indigo-600">
+                                Group Conversations
+                            </p>
+
+                            <p class="mt-0.5 text-xs text-slate-500">
+                                Chat with your teams
+                            </p>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- One-to-One Chat -->
+
+                    <a href="{% url 'channel:one_chat' %}"
+                       class="group flex items-center gap-3 rounded-2xl border border-violet-100 bg-violet-50/70 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-violet-200 hover:bg-violet-100">
+
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg shadow-sm">
+                            👤
+                        </div>
+
+                        <div class="min-w-0">
+
+                            <p class="text-sm font-bold text-slate-800 group-hover:text-violet-600">
+                                Direct Messages
+                            </p>
+
+                            <p class="mt-0.5 text-xs text-slate-500">
+                                Chat privately with users
+                            </p>
+
+                        </div>
+
+                    </a>
+
+
+                    <!-- Chat Home -->
+
+                    <a href="{% url 'channel:index' %}"
+                       class="group flex items-center gap-3 rounded-2xl border border-purple-100 bg-purple-50/70 p-4 transition-all duration-300 hover:-translate-y-0.5 hover:border-purple-200 hover:bg-purple-100">
+
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-lg shadow-sm">
+                            🚀
+                        </div>
+
+                        <div class="min-w-0">
+
+                            <p class="text-sm font-bold text-slate-800 group-hover:text-purple-600">
+                                Chat Workspace
+                            </p>
+
+                            <p class="mt-0.5 text-xs text-slate-500">
+                                Open your messaging space
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ======================================================
              QUICK ACTIONS
         ======================================================= -->
 
@@ -358,6 +511,9 @@
 
                 </a>
 
+
+                <!-- Leave Requests -->
+
                 <a href="{% url 'leave:admin-leave-requests' %}"
                    class="group flex min-w-0 items-center gap-3 rounded-2xl border border-sky-300 bg-sky-200 px-4 py-3 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-300 hover:shadow-md">
 
@@ -367,7 +523,6 @@
 
                     <span class="truncate text-xs font-semibold text-slate-700 transition-colors group-hover:text-sky-600">
                         Leave Requests
-
                     </span>
 
                 </a>
@@ -398,7 +553,6 @@
         ======================================================= -->
 
         <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-
 
             <!-- Section Header -->
 
@@ -509,19 +663,25 @@
 
                     <button id="prevPageBtn"
                             class="rounded-xl border border-indigo-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40">
+
                         Previous
+
                     </button>
 
 
                     <span id="pageNumberDisplay"
                           class="px-2 text-xs font-semibold text-slate-700">
+
                         Page 1 of 1
+
                     </span>
 
 
                     <button id="nextPageBtn"
                             class="rounded-xl border border-indigo-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-indigo-600 shadow-sm transition hover:bg-indigo-50 disabled:cursor-not-allowed disabled:opacity-40">
+
                         Next
+
                     </button>
 
                 </div>
@@ -541,7 +701,6 @@
 
 <div id="auditModal"
      class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-
 
     <!-- Overlay -->
 
@@ -574,7 +733,9 @@
 
             <button id="closeAuditBtn"
                     class="flex h-9 w-9 items-center justify-center rounded-xl text-xl font-bold text-white/80 transition-colors hover:bg-white/15 hover:text-white">
+
                 &times;
+
             </button>
 
         </div>
@@ -638,6 +799,7 @@
 {{ block.super }}
 
 <script src="{% static 'js/services/audit.service.js' %}"></script>
+
 <script src="{% static 'js/dashboard/admin.js' %}"></script>
 
 {% endblock %}

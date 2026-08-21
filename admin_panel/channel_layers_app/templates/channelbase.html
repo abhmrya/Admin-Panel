@@ -1,104 +1,105 @@
-{% comment %} {% load static %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/dist/toastify.min.css" rel="stylesheet">
+
+    <title>Chat App</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Toastify -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/dist/toastify.min.css"
+        rel="stylesheet"
+    >
+
     <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/dist/toastify.min.js"></script>
 
+    <style>
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
-<style>
-    .chat-box {
-      height: 400px;
-      overflow-y: scroll;
-    }
-  </style>
-<body>
-  <nav class="navbar navbar-expand-lg navbar-danger bg-light">
-    <a class="navbar-brand" href="/index">Chat App</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            {% if request.user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="/index">Home</a>
-            </li>
-            {% endif %}
 
-            {% if not request.user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="/">Register</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/login">Login</a>
-            </li>
-            {% endif %}
-            {% if request.user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="/logout">Logout</a>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
-</nav>
-{% block content %} {% endblock content %}
-</body>
- <script src="{% static 'js/base.js' %}"></script>
-</html> {% endcomment %}
-
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat App</title>
-
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Toastify -->
-  <link href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/dist/toastify.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/dist/toastify.min.js"></script>
-
-  <style>
-    .chat-box {
-      height: 400px;
-      overflow-y: auto;
-    }
-  </style>
-</head>
 <body class="bg-gray-100">
 
-  <!-- Slim Navbar -->
-  <header class="flex items-center justify-between bg-blue-900 text-white px-8 py-2 shadow">
-    
-    <div class="text-lg font-bold">Chat App
-      <a href="/index" class=" ml-5 bg-gradient-to-r from-red-500 to-pink-400 text-sm px-3 py-1 rounded hover:bg-red-600">Home</a></div>
+    <!-- =====================================================
+         NAVBAR
+    ====================================================== -->
 
-    <div class="flex items-center gap-4">
-      <input type="text" placeholder="Search..." class="px-2 py-1 text-sm rounded text-black focus:outline-none">
-      
-      <!-- User Info -->
-      <span id="userInfo" class="text-sm italic"></span>
+    <header class="flex items-center justify-between bg-blue-900 text-white px-8 py-2 shadow">
 
-      <button id="logoutBtn" class="bg-red-500 text-sm px-3 py-1 rounded hover:bg-red-600">Logout</button>
-    </div>
-  </header>
+        <div class="text-lg font-bold">
 
-  <!-- Main Content -->
-    {% block content %}{% endblock content %}
-  <!-- Base.js (your logic) -->
-  <script src="{% static 'js/channelbase.js' %}"></script>
-  {% comment %} <script>
-  setTimeout(() => {
-    window.location.reload();
-  }, 5000); // reloads page after 5 seconds
-</script> {% endcomment %}
+            Chat App
+
+            <a
+                href="{% url 'channel:index' %}"
+                class="ml-5 bg-gradient-to-r from-red-500 to-pink-400 text-sm px-3 py-1 rounded hover:bg-red-600"
+            >
+                Home
+            </a>
+
+        </div>
+
+        <div class="flex items-center gap-4">
+
+            <input
+                type="text"
+                placeholder="Search..."
+                class="px-2 py-1 text-sm rounded text-black focus:outline-none"
+            >
+
+            <!-- User Info -->
+            <span
+                id="userInfo"
+                class="text-sm italic"
+            ></span>
+
+            <!-- Logout -->
+            <button
+                id="logoutBtn"
+                type="button"
+                class="bg-red-500 text-sm px-3 py-1 rounded hover:bg-red-600"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    {% block content %}
+    {% endblock content %}
+
+
+    <!-- =====================================================
+         ADMIN PANEL AUTH SYSTEM
+    ====================================================== -->
+
+    <script src="{% static 'js/core/config.js' %}"></script>
+    <script src="{% static 'js/core/storage.js' %}"></script>
+    <script src="{% static 'js/core/auth.js' %}"></script>
+
+
+    <!-- =====================================================
+         CHANNEL JS
+    ====================================================== -->
+
+    <script src="{% static 'js/channelbase.js' %}"></script>
 
 </body>
+
 </html>
