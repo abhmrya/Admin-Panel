@@ -60,6 +60,9 @@ INSTALLED_APPS = [
 
     # third party
     "debug_toolbar",
+
+    # websocket chatapp
+    'channel_layers_app',
 ]
 
 LOGIN_URL = "/login/"
@@ -109,7 +112,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'admin_panel.wsgi.application'
+# WSGI_APPLICATION = 'admin_panel.wsgi.application'
+ASGI_APPLICATION = 'admin_panel.asgi.application'
+
 
 
 # Database
@@ -171,7 +176,7 @@ STATIC_URL = "/static/"
 
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "staticfiles",
 ]
 
 MEDIA_URL = "/media/"
@@ -267,3 +272,13 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.5")
 
 GEMINI_API_KEY = config("GEMINI_API_KEY")
 GEMINI_MODEL = config("GEMINI_MODEL", default="gemini-2.5-flash")
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get("REDIS_URL")],
+        },
+    },
+}

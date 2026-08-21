@@ -1,0 +1,1374 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Group Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+.root {
+  display: flex;
+  height: 100vh;
+  background: #0a1628;
+  overflow: hidden;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: #111b2e;
+  border-right: 1px solid #1e2d45;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #1a2740;
+  border-bottom: 1px solid #1e2d45;
+  flex-shrink: 0;
+}
+.sidebar-header img {
+  width: 42px; height: 42px;
+  border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  border: 2px solid #2a4a6a;
+}
+.sidebar-header .uname  { font-size: 14px; font-weight: 600; color: #e9edef; }
+.sidebar-header .uroom  { font-size: 12px; color: #8696a0; }
+.sidebar-header .uroom span { color: #53d8b8; }
+
+/* create group form */
+.create-form {
+  padding: 12px;
+  border-bottom: 1px solid #1e2d45;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.create-form input {
+  width: 100%;
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid #2a3a52;
+  background: #1a2740;
+  color: #e9edef;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.create-form input:focus { border-color: #53d8b8; }
+.create-form input::placeholder { color: #8696a0; }
+.create-form button {
+  padding: 9px;
+  border-radius: 10px;
+  border: none;
+  background: #005c4b;
+  color: #e9edef;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.create-form button:hover { background: #00705a; }
+
+/* group list */
+.group-list-label {
+  padding: 10px 16px 6px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8696a0;
+  font-weight: 600;
+}
+.group-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 8px 8px;
+}
+.group-list::-webkit-scrollbar { width: 3px; }
+.group-list::-webkit-scrollbar-thumb { background: #2a3a50; border-radius: 99px; }
+
+.group-item {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 3px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #b0bec5;
+  transition: background 0.15s, color 0.15s;
+}
+.group-item:hover  { background: #1a2740; color: #e9edef; }
+.group-item.active { background: #1a3a5c; color: #53d8b8; font-weight: 600; }
+
+.sidebar-footer {
+  padding: 10px 12px;
+  border-top: 1px solid #1e2d45;
+}
+.sidebar-footer a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 13px;
+  color: #8696a0;
+  transition: background 0.15s, color 0.15s;
+}
+.sidebar-footer a:hover { background: #1a2740; color: #e9edef; }
+
+/* ── MAIN CHAT ── */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #0d1b2a;
+  position: relative;
+}
+
+.chat-bg {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: radial-gradient(circle, #fff 1px, transparent 1px);
+  background-size: 22px 22px;
+  z-index: 0;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 18px;
+  background: #1a2740;
+  border-bottom: 1px solid #1e2d45;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.chat-header .group-icon {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: #1e3a5c;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.chat-header .hname   { font-size: 15px; font-weight: 600; color: #e9edef; }
+.chat-header .hmeta   { font-size: 12px; color: #8696a0; }
+
+.rec-badge {
+  margin-left: auto;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  background: #c0392b;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.rec-badge.show { display: flex; }
+.rec-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #fff;
+  animation: pulse 1s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* messages */
+.msg-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 1;
+  position: relative;
+}
+.msg-area::-webkit-scrollbar { width: 4px; }
+.msg-area::-webkit-scrollbar-thumb { background: #2a3a50; border-radius: 99px; }
+
+.bubble-row { display: flex; align-items: flex-end; gap: 8px; }
+.bubble-row.sent  { justify-content: flex-end; }
+.bubble-row.recv  { justify-content: flex-start; }
+
+.bubble-row img {
+  width: 28px; height: 28px;
+  border-radius: 50%; object-fit: cover; flex-shrink: 0;
+  border: 1px solid #2a3a52;
+}
+.avatar-initial {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #1e3a5c;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #64b5f6; font-weight: 600; flex-shrink: 0;
+}
+
+.bubble {
+  max-width: 62%;
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+.bubble.sent {
+  background: #005c4b;
+  color: #e9edef;
+  border-bottom-right-radius: 3px;
+}
+.bubble.recv {
+  background: #1e2d3d;
+  color: #e9edef;
+  border-bottom-left-radius: 3px;
+}
+.bubble .bsender { font-size: 11px; color: #53d8b8; font-weight: 600; margin-bottom: 3px; }
+.bubble .btime   { font-size: 11px; color: rgba(255,255,255,0.38); text-align: right; margin-top: 3px; }
+
+/* voice message */
+.voice-msg {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px; padding: 6px 10px;
+  min-width: 140px;
+}
+.play-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; flex-shrink: 0;
+  transition: transform 0.1s;
+}
+.play-btn:active { transform: scale(0.9); }
+.play-btn.sent-play { background: rgba(255,255,255,0.8); color: #005c4b; }
+.play-btn.recv-play { background: #00a884; color: #fff; }
+.voice-label { font-size: 13px; color: rgba(255,255,255,0.7); }
+
+/* empty state */
+.empty-state {
+  align-self: center;
+  color: #8696a0;
+  font-size: 14px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+/* ── INPUT BAR ── */
+.input-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #1a2740;
+  border-top: 1px solid #1e2d45;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.input-bar input {
+  flex: 1; min-width: 0;
+  padding: 10px 16px;
+  border-radius: 24px;
+  border: none;
+  background: #2a3a52;
+  color: #e9edef;
+  font-size: 14px;
+  outline: none;
+}
+.input-bar input::placeholder { color: #8696a0; }
+
+.ibtn {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 16px;
+  transition: background 0.2s, transform 0.1s;
+}
+.ibtn:active { transform: scale(0.93); }
+.ibtn.send   { background: #00a884; color: #fff; }
+.ibtn.send:hover  { background: #00c49a; }
+.ibtn.send:disabled { background: #2a3a52; cursor: not-allowed; }
+.ibtn.mic    { background: #1e3a5c; color: #64b5f6; }
+.ibtn.mic:hover   { background: #253d60; }
+.ibtn.mic.recording { background: #c0392b; color: #fff; }
+
+/* hamburger */
+.hamburger {
+  display: none;
+  background: none; border: none;
+  color: #e9edef; font-size: 20px; cursor: pointer; padding: 4px;
+  flex-shrink: 0;
+}
+
+.sb-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6); z-index: 30;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed; inset-y: 0; left: 0; z-index: 40;
+    transform: translateX(-100%);
+    width: 85vw; max-width: 300px;
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sb-overlay.open { display: block; }
+  .hamburger { display: block; }
+  .msg-area { padding: 12px 14px; }
+}
+</style>
+
+<div class="root">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+      <img src="{{ request.user.userprofile.profile_image.url }}" alt="me">
+      <div>
+        <div class="uname">{{ request.user.get_full_name|default:request.user.username }}</div>
+        <div class="uroom">Room: <span>{{ group_name|default:"—" }}</span></div>
+      </div>
+    </div>
+
+    <form method="POST" class="create-form">
+      {% csrf_token %}
+      <input type="text" name="group-name" placeholder="+ New group name…" required>
+      <button type="submit">Create Group</button>
+    </form>
+
+    <div class="group-list-label">Groups</div>
+    <div class="group-list">
+      {% for g in groupname %}
+        <a href="/group/{{ g.groupname }}"
+           class="group-item {% if g.groupname == group_name %}active{% endif %}">
+          💬 {{ g.groupname }}
+        </a>
+      {% endfor %}
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="/index">← Back to Home</a>
+    </div>
+  </div>
+
+  <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+  <!-- CHAT MAIN -->
+  <div class="chat-main">
+    <div class="chat-bg"></div>
+
+    <!-- Header -->
+    <div class="chat-header">
+      <button class="hamburger" onclick="openSidebar()">&#9776;</button>
+      <div class="group-icon">💬</div>
+      <div>
+        <div class="hname">{{ group_name|default:"Select a group" }}</div>
+        <div class="hmeta">Group chat</div>
+      </div>
+      <div class="rec-badge" id="rec-badge">
+        <span class="rec-dot"></span> Recording…
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="msg-area" id="msg-box">
+
+      {% for chat_msg in chat_msgs %}
+        {% if chat_msg.user.username == request.user.username %}
+          <div class="bubble-row sent">
+            <div class="bubble sent">
+              {% if chat_msg.audio %}
+                <div class="voice-msg">
+                  <button class="play-btn sent-play" onclick="toggleAudio(this)">▶</button>
+                  <audio class="hidden-audio"><source src="{{ chat_msg.audio.url }}" type="audio/webm"></audio>
+                  <span class="voice-label">🎤 Voice</span>
+                </div>
+              {% else %}
+                {{ chat_msg.message }}
+              {% endif %}
+              <div class="btime">You · {{ chat_msg.time|date:"H:i" }}</div>
+            </div>
+            <img src="{{ request.user.userprofile.profile_image.url }}" alt="you">
+          </div>
+        {% else %}
+          <div class="bubble-row recv">
+            <img src="{{ chat_msg.user.userprofile.profile_image.url }}" alt="{{ chat_msg.user.username }}">
+            <div class="bubble recv">
+              <div class="bsender">{{ chat_msg.user.get_full_name|default:chat_msg.user.username }}</div>
+              {% if chat_msg.audio %}
+                <div class="voice-msg">
+                  <button class="play-btn recv-play" onclick="toggleAudio(this)">▶</button>
+                  <audio class="hidden-audio"><source src="{{ chat_msg.audio.url }}" type="audio/webm"></audio>
+                  <span class="voice-label">🎤 Voice</span>
+                </div>
+              {% else %}
+                {{ chat_msg.message }}
+              {% endif %}
+              <div class="btime">{{ chat_msg.time|date:"H:i" }}</div>
+            </div>
+          </div>
+        {% endif %}
+      {% empty %}
+        <div class="empty-state">👋 No messages yet — say hello!</div>
+      {% endfor %}
+
+    </div>
+
+    <!-- Input bar -->
+    <div class="input-bar">
+      <input id="input-box" type="text" autocomplete="off" placeholder="Type a message…">
+      <button class="ibtn send" id="send-btn" disabled>&#10148;</button>
+      <button class="ibtn mic" id="record-btn" title="Hold to record">🎤</button>
+    </div>
+  </div>
+
+</div>
+
+<audio class="hidden-audio" style="display:none"></audio>
+
+{{ group_name|json_script:"group-name" }}
+{{ request.user.username|json_script:"cuser-name" }}
+
+<script>
+function openSidebar()  {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sb-overlay').classList.add('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sb-overlay').classList.remove('open');
+}
+
+window.toggleAudio = function(btn) {
+  const audio = btn.nextElementSibling;
+  if (audio.paused) { audio.play(); btn.textContent = '⏸'; }
+  else              { audio.pause(); btn.textContent = '▶'; }
+  audio.onended = () => btn.textContent = '▶';
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  const currentUser = JSON.parse(document.getElementById('cuser-name').textContent);
+  const groupName   = JSON.parse(document.getElementById('group-name').textContent);
+
+  const WS   = location.protocol === 'https:' ? 'wss' : 'ws';
+  const HOST = window.location.host;
+
+  const msgBox   = document.getElementById('msg-box');
+  const inputBox = document.getElementById('input-box');
+  const sendBtn  = document.getElementById('send-btn');
+  const recBtn   = document.getElementById('record-btn');
+  const recBadge = document.getElementById('rec-badge');
+
+  msgBox.scrollTop = msgBox.scrollHeight;
+
+  function esc(t) { const d = document.createElement('div'); d.innerText = t; return d.innerHTML; }
+  function nowTime() {
+    const d = new Date();
+    return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+  }
+
+  /* ── WebSocket ── */
+  let ws, isUnloading = false;
+
+  window.addEventListener('beforeunload', () => { isUnloading = true; });
+
+  function connectChat() {
+    if (!groupName) return;
+    ws = new WebSocket(`${WS}://${HOST}/ws/ac/${groupName}/`);
+
+    ws.onopen = () => { sendBtn.disabled = false; };
+
+    ws.onmessage = ({ data }) => {
+      const d = JSON.parse(data);
+      const isMe = d.user === currentUser;
+      const row  = document.createElement('div');
+      row.className = 'bubble-row ' + (isMe ? 'sent' : 'recv');
+
+      const avatarHTML = isMe
+        ? `<img src="{{ request.user.userprofile.profile_image.url }}" alt="you">`
+        : `<div class="avatar-initial">${esc(d.user.charAt(0).toUpperCase())}</div>`;
+
+      let content = '';
+      if (d.msg) {
+        content = esc(d.msg);
+      } else if (d.audio) {
+        const btnClass = isMe ? 'sent-play' : 'recv-play';
+        content = `<div class="voice-msg">
+          <button class="play-btn ${btnClass}" onclick="toggleAudio(this)">▶</button>
+          <audio class="hidden-audio"><source src="${esc(d.audio)}" type="audio/webm"></audio>
+          <span class="voice-label">🎤 Voice</span>
+        </div>`;
+      }
+
+      const senderLine = isMe ? '' : `<div class="bsender">${esc(d.user)}</div>`;
+      const bubble = `<div class="bubble ${isMe ? 'sent' : 'recv'}">${senderLine}${content}<div class="btime">${isMe ? 'You' : esc(d.user)} · ${nowTime()}</div></div>`;
+
+      row.innerHTML = isMe
+        ? bubble + avatarHTML
+        : avatarHTML + bubble;
+
+      msgBox.appendChild(row);
+      msgBox.scrollTop = msgBox.scrollHeight;
+    };
+
+    ws.onclose = () => {
+      sendBtn.disabled = true;
+      if (!isUnloading) setTimeout(connectChat, 3000);
+    };
+  }
+
+  connectChat();
+
+  /* send message */
+  function sendMessage() {
+    const msg = inputBox.value.trim();
+    if (!msg || !ws || ws.readyState !== WebSocket.OPEN) return;
+    ws.send(JSON.stringify({ msg }));
+    inputBox.value = '';
+    inputBox.focus();
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  inputBox.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  });
+
+  /* ── Audio recording ── */
+  let mediaRecorder, audioChunks = [], autoStopTimer;
+
+  recBtn.addEventListener('click', async () => {
+    if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        mediaRecorder.start();
+
+        recBtn.classList.add('recording');
+        recBtn.textContent = '⏹';
+        recBadge.classList.add('show');
+
+        mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+
+        mediaRecorder.onstop = async () => {
+          recBtn.classList.remove('recording');
+          recBtn.textContent = '🎤';
+          recBadge.classList.remove('show');
+
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          const fd   = new FormData();
+          fd.append('audio', blob, 'voice.webm');
+          fd.append('group', groupName);
+
+          try {
+            const res  = await fetch('/upload-audio/', {
+              method: 'POST',
+              headers: { 'X-CSRFToken': getCookie('csrftoken') },
+              body: fd
+            });
+            const json = await res.json();
+            if (ws?.readyState === WebSocket.OPEN)
+              ws.send(JSON.stringify({ audio: json.url }));
+          } catch(err) { console.error('Audio upload error:', err); }
+
+          stream.getTracks().forEach(t => t.stop());
+        };
+
+        autoStopTimer = setTimeout(() => {
+          if (mediaRecorder?.state === 'recording') mediaRecorder.stop();
+        }, 20000);
+
+      } catch(err) {
+        alert('Microphone access denied.');
+      }
+    } else if (mediaRecorder.state === 'recording') {
+      clearTimeout(autoStopTimer);
+      mediaRecorder.stop();
+    }
+  });
+
+  function getCookie(name) {
+    const val = `; ${document.cookie}`;
+    const parts = val.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Room</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex h-screen font-sans overflow-hidden relative">
+
+  <!-- ── Animated Background ── -->
+  <div class="absolute inset-0 -z-10 bg-gradient-to-br from-blue-900 via-indigo-800 to-cyan-700 animate-gradient-x"></div>
+  <div class="absolute inset-0 -z-10 opacity-10"
+       style="background-image:radial-gradient(circle,#fff 1px,transparent 1px);background-size:24px 24px"></div>
+
+  <!-- ════════════════════════════════════════
+       SIDEBAR
+  ════════════════════════════════════════ -->
+  <div id="sidebar"
+       class="fixed md:relative inset-y-0 left-0 z-40
+              w-72 md:w-64 lg:w-72
+              flex flex-col
+              bg-white/10 backdrop-blur-2xl
+              border-r border-white/20 shadow-2xl
+              p-4 md:p-5
+              -translate-x-full md:translate-x-0
+              transition-transform duration-300 ease-in-out">
+
+    <!-- Current User -->
+    <div class="flex items-center gap-3 mb-5 p-3 rounded-xl bg-white/15 border border-white/20">
+      <img src="{{ request.user.userprofile.profile_image.url }}"
+           alt="me" class="w-11 h-11 rounded-full object-cover border-2 border-white/70 shadow flex-shrink-0">
+      <div class="min-w-0">
+        <p class="text-[10px] uppercase tracking-widest text-white/50 font-semibold">You</p>
+        <p class="text-sm font-bold text-white truncate">{{ request.user.get_full_name|default:request.user.username }}</p>
+        <p class="text-xs text-white/50 truncate">Room: <span class="text-cyan-300 font-semibold">{{ group_name }}</span></p>
+      </div>
+    </div>
+
+    <div class="h-px bg-white/20 mb-4"></div>
+
+    <!-- Create Group -->
+    <form method="POST" class="mb-4 space-y-2">
+      {% csrf_token %}
+      <input type="text" name="group-name" placeholder="➕ New group name..." required
+             class="w-full px-3 py-2 text-sm rounded-xl bg-white/15 border border-white/25
+                    text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-cyan-400 transition">
+      <button type="submit"
+              class="w-full text-sm font-semibold text-white py-2 rounded-xl
+                     bg-gradient-to-r from-indigo-500 to-purple-600
+                     hover:from-indigo-400 hover:to-purple-500 transition-all hover:scale-105">
+        Create Group
+      </button>
+    </form>
+
+    <!-- Group List -->
+    <p class="text-[10px] uppercase tracking-widest text-white/40 font-bold mb-2">Your Groups</p>
+    <ul class="flex-1 overflow-y-auto space-y-1.5 pr-1 custom-scroll">
+      {% for groupnm in groupname %}
+      <li>
+        <a href="/group/{{ groupnm.groupname }}"
+           class="block text-sm font-semibold text-center px-3 py-2 rounded-xl
+                  {% if groupnm.groupname == group_name %}
+                    bg-cyan-400/40 text-white border border-cyan-300/50
+                  {% else %}
+                    bg-white/10 text-white/80 hover:bg-white/20 border border-white/10
+                  {% endif %}
+                  transition-all">
+          {{ groupnm.groupname }}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <!-- Back -->
+    <a href="/index"
+       class="mt-4 block text-center text-sm font-semibold text-white
+              bg-white/15 hover:bg-white/25 border border-white/25
+              py-2 rounded-xl transition-all hover:scale-105">
+      ← Back to Home
+    </a>
+  </div>
+
+  <!-- Sidebar overlay (mobile) -->
+  <div id="sb-overlay" class="fixed inset-0 z-30 bg-black/50 hidden md:hidden"
+       onclick="closeSidebar()"></div>
+
+  <!-- ════════════════════════════════════════
+       CHAT AREA
+  ════════════════════════════════════════ -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- Header -->
+    <div class="flex items-center gap-3 px-4 py-3
+                bg-white/10 backdrop-blur-lg border-b border-white/20 shadow-sm flex-shrink-0">
+
+      <!-- Hamburger (mobile) -->
+      <button onclick="openSidebar()"
+              class="md:hidden p-2 rounded-lg bg-white/15 hover:bg-white/25 text-white transition flex-shrink-0">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+
+      <div class="flex items-center gap-2 min-w-0">
+        <span class="text-2xl">💬</span>
+        <div class="min-w-0">
+          <p class="text-xs text-white/50 uppercase tracking-widest font-semibold">Group Room</p>
+          <h2 class="text-base font-bold text-white truncate">{{ group_name }}</h2>
+        </div>
+      </div>
+
+      <!-- Recording indicator -->
+      <div id="rec-indicator"
+           class="ml-auto flex items-center gap-2 px-3 py-1 rounded-full
+                  bg-red-500/80 text-white text-xs font-bold hidden flex-shrink-0">
+        <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+        Recording…
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="msg-box"
+         class="flex-1 overflow-y-auto p-4 space-y-3 custom-scroll relative"
+         style="background-image:url('{% static 'images/wall.jpg' %}');background-size:cover;background-position:center">
+      <!-- Blur overlay -->
+      <div class="absolute inset-0 bg-black/30 pointer-events-none"></div>
+
+      <!-- Messages -->
+      <div id="msg-inner" class="relative z-10 space-y-3">
+        {% for chat_msg in chat_msgs %}
+          {% if chat_msg.user.username == request.user.username %}
+            <!-- Sent -->
+            <div class="flex justify-end items-end gap-2">
+              <div class="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-sm
+                          bg-gradient-to-r from-emerald-400 to-green-500 text-white shadow-lg">
+                <p class="text-[10px] font-semibold text-white/70 mb-1">
+                  You · {{ chat_msg.time|date:"H:i" }}
+                </p>
+                {% if chat_msg.audio %}
+                  <div class="flex items-center gap-2 bg-white/20 rounded-xl px-2 py-1">
+                    <button onclick="this.nextElementSibling.paused?this.nextElementSibling.play():this.nextElementSibling.pause()"
+                            class="w-7 h-7 flex items-center justify-center bg-white/80 text-green-700 rounded-full text-xs flex-shrink-0">▶</button>
+                    <audio class="hidden"><source src="{{ chat_msg.audio.url }}" type="audio/webm"></audio>
+                    <span class="text-xs">🎤 Voice</span>
+                  </div>
+                {% else %}
+                  <p class="text-sm break-words">{{ chat_msg.message }}</p>
+                {% endif %}
+              </div>
+              <img src="{{ request.user.userprofile.profile_image.url }}"
+                   class="w-7 h-7 rounded-full object-cover border border-white/50 flex-shrink-0" alt="you">
+            </div>
+          {% else %}
+            <!-- Received -->
+            <div class="flex justify-start items-end gap-2">
+              <img src="{{ chat_msg.user.userprofile.profile_image.url }}"
+                   class="w-7 h-7 rounded-full object-cover border border-white/50 flex-shrink-0"
+                   alt="{{ chat_msg.user.username }}">
+              <div class="max-w-[75%] px-4 py-2 rounded-2xl rounded-bl-sm
+                          bg-white/25 backdrop-blur-sm border border-white/20 text-white shadow-md">
+                <p class="text-[10px] font-semibold text-white/60 mb-1">
+                  {{ chat_msg.user.get_full_name|default:chat_msg.user.username }} · {{ chat_msg.time|date:"H:i" }}
+                </p>
+                {% if chat_msg.audio %}
+                  <div class="flex items-center gap-2 bg-white/20 rounded-xl px-2 py-1">
+                    <button onclick="this.nextElementSibling.paused?this.nextElementSibling.play():this.nextElementSibling.pause()"
+                            class="w-7 h-7 flex items-center justify-center bg-purple-600 text-white rounded-full text-xs flex-shrink-0">▶</button>
+                    <audio class="hidden"><source src="{{ chat_msg.audio.url }}" type="audio/webm"></audio>
+                    <span class="text-xs">🎤 Voice</span>
+                  </div>
+                {% else %}
+                  <p class="text-sm break-words">{{ chat_msg.message }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endif %}
+        {% empty %}
+          <div class="flex flex-col items-center justify-center py-24 select-none">
+            <span class="text-5xl mb-3">👋</span>
+            <p class="text-white/50 text-sm">No messages yet — say hello!</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="flex items-center gap-2 px-3 py-3
+                bg-white/10 backdrop-blur-md border-t border-white/20 flex-shrink-0">
+      <input id="input-box" type="text" autocomplete="off"
+             placeholder="Type a message…"
+             class="flex-1 px-4 py-2.5 rounded-2xl text-sm min-w-0
+                    bg-white/20 border border-white/30 text-white placeholder-white/40
+                    focus:outline-none focus:ring-2 focus:ring-cyan-400 transition">
+      <button id="submit-btn"
+              class="flex-shrink-0 px-4 py-2.5 rounded-2xl text-sm font-semibold text-white shadow
+                     bg-gradient-to-r from-indigo-500 to-purple-600
+                     hover:from-indigo-400 hover:to-purple-500
+                     transition-all hover:scale-105 active:scale-95">
+        Send
+      </button>
+      <button id="record-btn"
+              class="flex-shrink-0 px-4 py-2.5 rounded-2xl text-sm font-semibold text-white shadow
+                     bg-gradient-to-r from-red-500 to-pink-500
+                     hover:from-red-400 hover:to-pink-400
+                     transition-all hover:scale-105 active:scale-95">
+        🎤
+      </button>
+    </div>
+  </div><!-- /chat area -->
+
+  <!-- Data for JS -->
+  {{ group_name|json_script:"group-name" }}
+  {{ request.user.username|json_script:"cuser-name" }}
+
+  <!-- ════════════════ STYLES ════════════════ -->
+  <style>
+  @keyframes gradient-x {
+    0%,100% { background-position:0% 50% }
+    50%      { background-position:100% 50% }
+  }
+  .animate-gradient-x { background-size:300% 300%; animation:gradient-x 15s ease infinite }
+  .custom-scroll::-webkit-scrollbar        { width:4px }
+  .custom-scroll::-webkit-scrollbar-track  { background:transparent }
+  .custom-scroll::-webkit-scrollbar-thumb  { background:rgba(255,255,255,.25); border-radius:99px }
+  </style>
+
+  <!-- ════════════════ JAVASCRIPT ════════════════ -->
+  <script>
+  /* ── Sidebar ── */
+  function openSidebar()  {
+    document.getElementById('sidebar').classList.remove('-translate-x-full');
+    document.getElementById('sb-overlay').classList.remove('hidden');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.add('-translate-x-full');
+    document.getElementById('sb-overlay').classList.add('hidden');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    /* ── Read Django data ── */
+    const currentUser = JSON.parse(document.getElementById('cuser-name').textContent);
+    const groupName   = JSON.parse(document.getElementById('group-name').textContent);
+
+    /* ── DOM refs ── */
+    const msgBox    = document.getElementById('msg-box');
+    const msgInner  = document.getElementById('msg-inner');
+    const inputBox  = document.getElementById('input-box');
+    const sendBtn   = document.getElementById('submit-btn');
+    const recordBtn = document.getElementById('record-btn');
+    const recInd    = document.getElementById('rec-indicator');
+
+    /* ── KEY FIX: wss on HTTPS, ws on HTTP ── */
+    const WS   = location.protocol === 'https:' ? 'wss' : 'ws';
+    const HOST = window.location.host;
+
+    /* ── Helpers ── */
+    function scrollBottom() { msgBox.scrollTop = msgBox.scrollHeight; }
+    scrollBottom();
+
+    function esc(txt) {
+      const d = document.createElement('div');
+      d.innerText = txt;
+      return d.innerHTML;
+    }
+    function nowTime() {
+      const d = new Date();
+      return String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+    }
+
+    /* ════════════════════════════════════════
+       CHAT WebSocket  — with auto-reconnect
+    ════════════════════════════════════════ */
+    let ws;
+
+    function connectChat() {
+      if (!groupName) { console.warn('No group name — socket skipped'); return; }
+
+      /* ✅ FIXED URL — uses wss:// on HTTPS */
+      ws = new WebSocket(`${WS}://${HOST}/ws/ac/${groupName}/`);
+
+      ws.onopen = () => {
+        console.log('✅ Group chat connected');
+        sendBtn.disabled = false;
+      };
+
+      ws.onmessage = ({ data }) => {
+        const d = JSON.parse(data);
+        const isMe = d.user === currentUser;
+        const wrap = document.createElement('div');
+
+        if (isMe) {
+          wrap.className = 'flex justify-end items-end gap-2';
+          if (d.msg) {
+            wrap.innerHTML = `
+              <div class="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-sm
+                          bg-gradient-to-r from-emerald-400 to-green-500 text-white shadow-lg">
+                <p class="text-[10px] font-semibold text-white/70 mb-1">You · ${nowTime()}</p>
+                <p class="text-sm break-words">${esc(d.msg)}</p>
+              </div>
+              <img src="{{ request.user.userprofile.profile_image.url }}"
+                   class="w-7 h-7 rounded-full object-cover border border-white/50 flex-shrink-0" alt="you">`;
+          } else if (d.audio) {
+            wrap.innerHTML = `
+              <div class="max-w-[75%] px-4 py-2 rounded-2xl rounded-br-sm
+                          bg-gradient-to-r from-emerald-400 to-green-500 text-white shadow-lg">
+                <p class="text-[10px] font-semibold text-white/70 mb-1">You · ${nowTime()}</p>
+                <div class="flex items-center gap-2 bg-white/20 rounded-xl px-2 py-1">
+                  <button onclick="toggleAudio(this)" class="w-7 h-7 flex items-center justify-center bg-white/80 text-green-700 rounded-full text-xs flex-shrink-0">▶</button>
+                  <audio class="hidden"><source src="${esc(d.audio)}" type="audio/webm"></audio>
+                  <span class="text-xs">🎤 Voice</span>
+                </div>
+              </div>
+              <img src="{{ request.user.userprofile.profile_image.url }}"
+                   class="w-7 h-7 rounded-full object-cover border border-white/50 flex-shrink-0" alt="you">`;
+          }
+        } else {
+          wrap.className = 'flex justify-start items-end gap-2';
+          const avatarPlaceholder = `<div class="w-7 h-7 rounded-full bg-white/30 flex items-center justify-center text-xs text-white flex-shrink-0">${esc(d.user.charAt(0).toUpperCase())}</div>`;
+          if (d.msg) {
+            wrap.innerHTML = `
+              ${avatarPlaceholder}
+              <div class="max-w-[75%] px-4 py-2 rounded-2xl rounded-bl-sm
+                          bg-white/25 backdrop-blur-sm border border-white/20 text-white shadow-md">
+                <p class="text-[10px] font-semibold text-white/60 mb-1">${esc(d.user)} · ${nowTime()}</p>
+                <p class="text-sm break-words">${esc(d.msg)}</p>
+              </div>`;
+          } else if (d.audio) {
+            wrap.innerHTML = `
+              ${avatarPlaceholder}
+              <div class="max-w-[75%] px-4 py-2 rounded-2xl rounded-bl-sm
+                          bg-white/25 backdrop-blur-sm border border-white/20 text-white shadow-md">
+                <p class="text-[10px] font-semibold text-white/60 mb-1">${esc(d.user)} · ${nowTime()}</p>
+                <div class="flex items-center gap-2 bg-white/20 rounded-xl px-2 py-1">
+                  <button onclick="toggleAudio(this)" class="w-7 h-7 flex items-center justify-center bg-purple-600 text-white rounded-full text-xs flex-shrink-0">▶</button>
+                  <audio class="hidden"><source src="${esc(d.audio)}" type="audio/webm"></audio>
+                  <span class="text-xs">🎤 Voice</span>
+                </div>
+              </div>`;
+          }
+        }
+
+        msgInner.appendChild(wrap);
+        scrollBottom();
+      };
+
+      ws.onclose = () => {
+        console.log('🔄 Group chat disconnected — retry in 3s');
+        sendBtn.disabled = true;
+        setTimeout(connectChat, 3000);
+      };
+
+      ws.onerror = e => console.error('Group WS error:', e);
+    }
+
+    connectChat();
+
+    /* ── Audio play/pause toggle ── */
+    window.toggleAudio = function(btn) {
+      const audio = btn.nextElementSibling;
+      if (audio.paused) { audio.play(); btn.textContent = '⏸'; }
+      else              { audio.pause(); btn.textContent = '▶'; }
+      audio.onended = () => { btn.textContent = '▶'; };
+    };
+
+    /* ── Send text message ── */
+    function sendMessage() {
+      const msg = inputBox.value.trim();
+      if (!msg) return;
+      if (!ws || ws.readyState !== WebSocket.OPEN) {
+        alert('Connecting… please wait a moment.'); return;
+      }
+      ws.send(JSON.stringify({ msg }));
+      inputBox.value = '';
+      inputBox.focus();
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    inputBox.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
+
+    /* ── Audio recording ── */
+    let mediaRecorder;
+    let audioChunks = [];
+    let autoStopTimer;
+
+    recordBtn.addEventListener('click', async () => {
+      if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+          mediaRecorder.start();
+
+          recordBtn.textContent = '⏹ Stop';
+          recordBtn.classList.replace('from-red-500','from-orange-500');
+          recInd.classList.remove('hidden');
+
+          mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+
+          mediaRecorder.onstop = async () => {
+            recInd.classList.add('hidden');
+            recordBtn.textContent = '🎤';
+            recordBtn.classList.replace('from-orange-500','from-red-500');
+
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const formData  = new FormData();
+            formData.append('audio', audioBlob, 'voice.webm');
+            formData.append('group', groupName);
+
+            try {
+              const res  = await fetch('/upload-audio/', {
+                method: 'POST',
+                headers: { 'X-CSRFToken': getCookie('csrftoken') },
+                body: formData
+              });
+              const data = await res.json();
+              if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ audio: data.url }));
+              }
+            } catch (err) { console.error('Audio upload error:', err); }
+
+            // Stop mic
+            stream.getTracks().forEach(t => t.stop());
+          };
+
+          autoStopTimer = setTimeout(() => {
+            if (mediaRecorder.state === 'recording') mediaRecorder.stop();
+          }, 20000);
+
+        } catch (err) {
+          alert('Microphone access denied. Please allow microphone permission.');
+          console.error(err);
+        }
+
+      } else if (mediaRecorder.state === 'recording') {
+        clearTimeout(autoStopTimer);
+        mediaRecorder.stop();
+      }
+    });
+
+    /* ── CSRF helper ── */
+    function getCookie(name) {
+      const val = `; ${document.cookie}`;
+      const parts = val.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return null;
+    }
+
+  });
+  </script>
+
+</body>
+</html> {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Room</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex h-screen font-sans">
+
+    <!-- Sidebar -->
+    <div class="w-1/4 bg-gradient-to-r from-blue-900/40 to-cyan-700/40 backdrop-blur-xl shadow-xl p-6 flex flex-col border-r border-white/20">
+
+
+                <!-- User Info -->
+        <div class="mb-6 p-4 rounded-xl bg-gradient-to-r from-green-300 to-teal-400 shadow-md border border-white/30 flex items-center gap-3">
+            <img src="{{ request.user.userprofile.profile_image.url }}" alt="Profile" class="w-12 h-12 rounded-full object-cover border-2 border-white">
+            <div>
+                <h5 class="text-gray-900 font-semibold"> {{ request.user.get_full_name }}</h5>
+                <p class="text-sm text-gray-900">Group: <span class="font-medium text-indigo-800">{{ group_name }}</span></p>
+            </div>
+        </div>
+
+        <hr>
+        <hr>
+
+        <!-- Create Group -->
+        <form method="POST" class="mb-6 space-y-3">
+            {% csrf_token %}
+            <input 
+                type="text" 
+                name="group-name" 
+                placeholder="➕ Create group..."
+                required
+                class="w-full px-4 py-2 border rounded-xl shadow-sm bg-white/70 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+            >
+            <button 
+                type="submit" 
+                class="w-full bg-gradient-to-r from-indigo-600 to-purple-400 text-white py-2 rounded-xl shadow hover:scale-105 transition transform"
+            >
+                Create Group
+            </button>
+        </form>
+
+
+
+        <!-- Group List -->
+        <ul class="space-y-2 overflow-y-auto flex-1 pr-2">
+            {% for groupnm in groupname %}
+            <li>
+                <a href="/group/{{ groupnm.groupname }}" 
+                    class="text-center text-gray-900 font-bold block px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500/70 to-cyan-100/40 hover:from-purple-300 hover:to-pink-300 shadow transition">
+                    {{ groupnm.groupname }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <!-- Back -->
+        <a href="/index" 
+           class="mt-6 block w-full text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-2 rounded-xl shadow hover:scale-105 transition transform">
+           ⬅ Back To Home
+        </a>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="flex-1 flex flex-col">
+
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-cyan-500/70 to-cyan-200/40 backdrop-blur-lg border-b border-white/30 shadow p-4 flex justify-between items-center">
+            <h2 class="text-2xl font-bold text-indigo-700 flex items-center gap-2">💬 Room</h2>
+            <span class="text-lg font-bold text-gray-700">
+                Group: <strong class="text-green-600"> {{ group_name }}</strong>
+            </span>
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="msg-box" class="flex-1 overflow-y-auto relative bg-cover bg-center p-6 space-y-4" 
+             style="background-image: url('{% static 'images/wall.jpg' %}'); min-height: 0;">
+
+            <!-- Blur overlay -->
+            <div class="absolute inset-0 bg-white/20  pointer-events-none"></div>
+
+            <!-- Messages wrapper -->
+            <div class="relative z-10 space-y-2">
+                {% for chat_msg in chat_msgs %}
+                    {% if chat_msg.user.username == request.user.username %}
+                        <!-- My message -->
+                        <div class="flex justify-end mt-1 items-end gap-2">
+                            <div class="max-w-xs px-4 py-2 rounded-2xl bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg border border-white/40">
+                                <span class="block text-sm font-semibold text-indigo-950">You {{ chat_msg.time }}</span>
+                                {% if chat_msg.audio %}
+                                    <div class="mt-2 flex items-center space-x-3 bg-white/20 rounded-xl p-1 shadow-inner">
+                                        <button onclick="this.nextElementSibling.play()" class="p-1 bg-white/80 text-green-700 rounded-full">▶</button>
+                                        <audio class="hidden">
+                                            <source src="{{ chat_msg.audio.url }}" type="audio/webm">
+                                        </audio>
+                                        <span class="text-sm">🎤 Voice Message</span>
+                                    </div>
+                                {% else %}
+                                    <p class="mt-1 text-sm text-black">{{ chat_msg.message }}</p>
+                                {% endif %}
+                            </div>
+                            <img src="{{ request.user.userprofile.profile_image.url }}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                        </div>
+                    {% else %}
+                        <!-- Other user message -->
+                        <div class="flex justify-start mt-1 items-end gap-2">
+                            <img src="{{ chat_msg.user.userprofile.profile_image.url }}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                            <div class="max-w-xs px-4 py-2 rounded-2xl bg-gradient-to-r from-purple-300 to-pink-300 text-gray-900 shadow-md border border-white/40">
+                                <span class="block text-sm font-semibold text-indigo-700">{{ chat_msg.user }} {{ chat_msg.time }}</span>
+                                {% if chat_msg.audio %}
+                                    <div class="mt-2 flex items-center space-x-3 bg-white/40 rounded-xl p-1 shadow-inner">
+                                        <button onclick="this.nextElementSibling.play()" class="p-1 bg-purple-600 text-white rounded-full">▶</button>
+                                        <audio class="hidden">
+                                            <source src="{{ chat_msg.audio.url }}" type="audio/webm">
+                                        </audio>
+                                        <span class="text-gray-800 text-sm">🎤 Voice Message</span>
+                                    </div>
+                                {% else %}
+                                    <p class="mt-1 text-gray-900 text-sm">{{ chat_msg.message }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="bg-gray-400 backdrop-blur-md border-t border-white/30 p-4 flex gap-2 shadow-inner">
+            <input 
+                type="text" 
+                id="input-box" 
+                placeholder="💬 Type your message..."
+                class="flex-1 px-4 py-2 border rounded-xl shadow-sm bg-gray-200 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+            >
+            <button id="submit-btn" class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-5 py-2 rounded-xl shadow hover:scale-105 transition transform">Send</button>
+            <button id="record-btn" class="bg-gradient-to-r from-red-400 to-pink-500 text-white px-5 py-2 rounded-xl shadow hover:scale-105 transition transform">🎤 Record</button>
+        </div>
+
+        <!-- Hidden Data -->
+        <h1>{{ group_name|json_script:"group-name" }}</h1>
+        <h1>{{ request.user.username|json_script:"cuser-name" }}</h1>
+
+    </div>
+
+
+    <!-- Scripts (WebSocket + Audio Recording) -->
+    <script>
+        const loggedin_user = JSON.parse(document.getElementById('cuser-name').textContent);
+        const groupname = JSON.parse(document.getElementById('group-name').textContent);
+
+        const ws_scheme = window.location.protocol === "https:" ? "wss" : "ws";
+
+        const ws = new WebSocket(
+            ws_scheme + "://" + window.location.host + "/ws/ac/" + groupname + "/"
+        );
+        
+        ws.onmessage = function(event){
+            var data = JSON.parse(event.data);
+            const cardBody = document.querySelector('#msg-box');
+            const message = document.createElement('div');
+
+            if (data.user === loggedin_user) {
+                message.classList.add("flex","justify-end");
+            } else {
+                message.classList.add("flex","justify-start");
+            }
+
+            const bubble = document.createElement("div");
+            bubble.classList.add("max-w-xs","px-4","py-2","rounded-2xl","shadow");
+            bubble.classList.add(data.user === loggedin_user ? "bg-green-300" : "bg-gray-200");
+
+            const uname = document.createElement("span");
+            uname.classList.add("block","text-sm","font-semibold");
+            uname.innerText = data.user + ":";
+            bubble.appendChild(uname);
+
+            if(data.msg){
+                const txt = document.createElement("p");
+                txt.innerText = data.msg;
+                txt.classList.add(data.user === loggedin_user ? "text-blue-700" : "text-blue-600");
+                bubble.appendChild(txt);
+            } else if(data.audio){
+                const audio = document.createElement("audio");
+                audio.controls = true;
+                audio.src = data.audio;
+                audio.classList.add("mt-2","w-full","rounded");
+                bubble.appendChild(audio);
+            }
+
+            message.appendChild(bubble);
+            cardBody.appendChild(message);
+            cardBody.scrollTop = cardBody.scrollHeight;
+        };
+
+        document.getElementById('submit-btn').onclick = function(){
+            const messageid = document.getElementById('input-box');
+            const message = messageid.value;
+            if(message.trim() !== ""){
+                ws.send(JSON.stringify({'msg': message}));
+                messageid.value = '';
+            }
+        };
+
+        // Audio recording
+        let mediaRecorder;
+        let audioChunks = [];
+        let autoStopTimer;
+
+        document.getElementById("record-btn").onclick = async () => {
+            const btn = document.getElementById("record-btn");
+
+            if (!mediaRecorder || mediaRecorder.state === "inactive") {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+                mediaRecorder.start();
+                btn.innerText = "⏹ Stop";
+
+                mediaRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+                    const formData = new FormData();
+                    formData.append("audio", audioBlob, "voice.webm");
+                    formData.append("group", groupname);
+
+                    let response = await fetch("/upload-audio/", {
+                        method: "POST",
+                        headers: { "X-CSRFToken": getCookie("csrftoken") },
+                        body: formData
+                    });
+
+                    let data = await response.json();
+                    ws.send(JSON.stringify({'audio': data.url}));
+                    btn.innerText = "🎤 Record";
+                };
+
+                autoStopTimer = setTimeout(() => {
+                    if (mediaRecorder.state === "recording") mediaRecorder.stop();
+                }, 20000);
+
+            } else if (mediaRecorder.state === "recording") {
+                clearTimeout(autoStopTimer);
+                mediaRecorder.stop();
+            }
+        };
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+</body>
+</html> {% endcomment %}
+
+
+
+

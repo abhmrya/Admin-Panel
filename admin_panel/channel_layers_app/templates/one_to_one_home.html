@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+  {% block content %} 
+    <div class="container mt-5 d-flex">
+        <div class="container my-5">
+            <div class="row">
+              <div class="col-12 col-md-3 border-end mb-3">                <ul class="list-unstyled">
+                <h5>Name:{{request.user.get_full_name}}</h5>
+
+
+                <h4>Chat with: </h4>
+                
+              <!-- {% for user_profile in users %}
+                    {% if user_profile != request.user %}
+                        <li class="d-grid fs-7">
+                            <a href="/one/{{ user_profile.username }}" class="btn btn-warning">
+                              <span id="status-{{ user_profile.username }}" class="text-danger">Offline</span>
+                              
+
+                        {{ user_profile.get_full_name }}<br>
+                                
+                            </a>
+                        </li><br>
+                        {% endif %}
+                    {% endfor %} -->
+              
+
+                <!-- {% for user_profile in users %}
+                    {% if user_profile.user != request.user %}
+                        <li class="d-grid fs-7">
+                            <a href="/one/{{ user_profile.user.username }}" class="btn btn-warning">
+                              {{ user_profile.user.get_full_name }}<br>
+                                {% if user_profile.online %}
+                                    <span class="text-success">&#9679;Online</span> 
+                                {% else %}
+                                    <span class="text-muted">&#9679;Offline</span> 
+                                {% endif %}
+                                
+                            </a>
+                        </li><br>
+                        {% endif %}
+                    {% endfor %} -->
+                {% for user in users %}
+                {% if user != request.user %}
+                {% if user.userprofile.online %}
+               <li class="d-grid"><a  href="/one/{{user.username}}" class="" >{{user.get_full_name}}</a>
+                <p id="{{user.username}}_status" style="color: green;">Online</p>
+              </a></li><br>
+               {% else %}
+               <li class="d-grid"><a href="/one/{{user.username}}" class="">{{user.get_full_name}}</a>
+                <p id="{{user.username}}_status" style="color: red;">Offline</p></li><br>
+               {% endif %}
+               <!-- <li class="d-grid"><a href="/index/teachers" class="btn btn-primary">Teacher</a></li><br> -->
+                {% endif %} 
+               {% endfor %} 
+               <li class="d-grid"><a href="/index" class="btn btn-danger">Back To Home</a></li><br> 
+               
+              </ul>
+             </div>
+          <div class="col-12 col-md-9">
+            <div class="card">
+              <div class="card-header">Chat</div>
+              <div class="card-body chat-box" id="msg-box">
+                    {% for chat_msg in chat_msgs %}
+                    <div class="alert alert-primary mb-2 w-25">
+                        <p><strong>{{ chat_msg.send_from.get_full_name }}</strong>: {{ chat_msg.message }}</p>
+                        <p class="time">{{ chat_msg.time }}</p>
+                    </div>
+                    {% endfor %}
+                    <!-- {{chat_msg.user}}: {{chat_msg.message}}
+                    
+                </div> -->
+                
+                  </div>
+                  <!-- Messages will be displayed here -->
+                
+              <div class="card-footer">
+                <input type="text" class="form-control" placeholder="Type your message..." id="input-box">
+                <button class="btn btn-primary mt-2" id="submit-btn">Send</button>
+                <h1>{{request.user.username|json_script:"user-name"}}</h1>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<script>
+  const loggedin_user = JSON.parse(document.getElementById('user-name').textContent)
+
+const ws_scheme =
+    window.location.protocol === "https:" ? "wss" : "ws";
+
+const ws = new WebSocket(
+    ws_scheme + "://" + window.location.host + "/ws/online-status/"
+);
+    ws.onopen = function(event){ 
+      console.log("connected......")
+      ws.send(JSON.stringify({
+        'username':loggedin_user,
+        'type':'open'
+      }))
+      };
+
+    window.addEventListener("beforeunload", function(event){
+      ws.send(JSON.stringify({
+        'username':loggedin_user,
+        'type':'offline'
+      }))
+    })
+    ws.onmessage = function(event) {
+       const data = JSON.parse(event.data);
+       console.log("onmeassage......", data);
+       if(data.username != loggedin_user){
+          const user_to_change = document.getElementById(`${data.username}_status`)
+          console.log("uuuuuuuuuuuuuu", user_to_change)
+          if(data.status == true){
+            user_to_change.innerText = "Online"
+            user_to_change.style.color = 'green'
+          }else{
+            user_to_change.innerText = "Offline"
+            user_to_change.style.color = 'red'
+          }
+       }
+      }
+    ws.onopen = function () {
+    console.log("Online Status Connected");
+};
+
+ws.onerror = function (e) {
+    console.log("WebSocket Error", e);
+};
+
+ws.onclose = function (e) {
+    console.log("WebSocket Closed", e);
+};
+    
+    ws.onclose = function(event) {
+     
+      console.log("disconnected...:");
+      
+    };
+        
+</script>
+{% endblock content %} 

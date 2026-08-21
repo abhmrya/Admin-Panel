@@ -1,0 +1,90 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 to-rose-400">
+
+  <div class="bg-white/20 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-md">
+    <h2 class="text-3xl font-bold text-white text-center mb-6">Welcome Back</h2>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-4">
+      <input name="username" type="text" placeholder="Username" required
+             class="w-full px-4 py-2 rounded-md bg-white/80 focus:ring-2 focus:ring-blue-400 outline-none">
+      <input name="password" type="password" placeholder="Password" required
+             class="w-full px-4 py-2 rounded-md bg-white/80 focus:ring-2 focus:ring-blue-400 outline-none">
+      <button type="submit"
+              class="w-full py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition">
+        Login
+      </button>
+    </form>
+
+    <!-- Google Login -->
+    <a href="{% url 'social:begin' 'google-oauth2' %}"
+       class="mt-4 flex items-center justify-center gap-2 px-6 py-2 bg-white/80 border border-gray-300 rounded-md shadow-sm hover:bg-gray-100 transition duration-200 text-gray-800 font-medium">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5" />
+      Login with Google
+    </a>
+
+    <!-- Error message -->
+    <p id="loginError" class="text-red-500 mt-4 text-center hidden"></p>
+
+    <p class="text-center mt-4 text-gray-900">
+      Don’t have an account? <a href="{% url 'register' %}" class="underline text-emerald-900">Register here</a>
+    </p>
+  </div>
+
+  <!-- JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const loginForm = document.getElementById("loginForm");
+      const loginError = document.getElementById("loginError");
+
+      loginForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const data = {
+          username: loginForm.username.value,
+          password: loginForm.password.value,
+        };
+
+        // Debug logs
+        console.log("Username:", data.username);
+        console.log("Password:", data.password);
+
+        try {
+          const res = await fetch("/api/login/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          const resData = await res.json();
+
+          if (res.ok) {
+            // Save JWT tokens
+            localStorage.setItem("access", resData.access || resData.tokens?.access);
+            localStorage.setItem("refresh", resData.refresh || resData.tokens?.refresh);
+
+            // Redirect to index page
+            window.location.href = "/index/";
+          } else {
+            loginError.textContent = resData?.detail || "Invalid login";
+            loginError.classList.remove("hidden");
+          }
+        } catch (err) {
+          loginError.textContent = "Something went wrong!";
+          loginError.classList.remove("hidden");
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
