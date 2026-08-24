@@ -223,7 +223,7 @@ CACHES = {
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=100),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 
     "ROTATE_REFRESH_TOKENS": True,
@@ -257,12 +257,12 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Asia/Kolkata"
 
-CELERY_BEAT_SCHEDULE = {
-    "send-test-email-every-minute": {
-        "task": "common.tasks.send_test_email",
-        "schedule": 10.0,   # 10 secound
-    },
-}
+# CELERY_BEAT_SCHEDULE = {
+#     "send-test-email-every-minute": {
+#         "task": "common.tasks.send_test_email",
+#         "schedule": 10.0,   # 10 secound
+#     },
+# }
 
 INTERNAL_IPS = ["127.0.0.1",]
 

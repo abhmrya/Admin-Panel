@@ -32,6 +32,9 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     def get_department(self, obj):
 
+        print(obj)
+        # breakpoint()
+
         profile = getattr(obj, "profile", None)
 
         if profile and profile.department:

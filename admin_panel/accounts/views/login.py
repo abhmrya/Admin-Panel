@@ -9,7 +9,7 @@ from django.contrib.auth import login
 
 from rest_framework.throttling import UserRateThrottle
 from common.throttles import LoginThrottle
-from common.tasks import send_test_email
+# from common.tasks import send_test_email
 class LoginAPIView(APIView):
     """
     
@@ -40,7 +40,7 @@ class LoginAPIView(APIView):
         every 10 secound send email for testing
         '''
 
-        send_test_email.delay(user.id)
+        # send_test_email.delay(user.id)
 
         return Response(
             {

@@ -36,26 +36,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         print(user)
         return user 
-    
-# Login Serializer
-# class LoginSerializer(serializers.Serializer):
-#     username = serializers.CharField()
-#     password = serializers.CharField(write_only=True)
-#     recaptcha_token = serializers.CharField(write_only=True, required=False)
 
-#     def validate(self, data):
-#         # print("data------------",data)
-#         print("Validating login:", data)
-#         user = authenticate(username=data['username'], password=data['password'])
-#         print("Auth result:", user)
-#         if user is not None:
-#             print(get_tokens_for_user(user))
-#             return {
-#                     "user": user,
-#                     "tokens": get_tokens_for_user(user)
-#                 }
-#         if user is None:
-#             raise AuthenticationFailed("Invalid username or password")
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)

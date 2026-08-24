@@ -24,9 +24,16 @@ class LoginService:
             )
 
         refresh = RefreshToken.for_user(user)
+        refresh["name"] = "Abhay"
+        refresh["user_id"] = str(user.id)
+        refresh["email"] = user.email
+        refresh["username"] = user.username
+        refresh["role"] = user.role
+
+        # breakpoint()
 
         return {
             "user": user,
             "access": str(refresh.access_token),
-            "refresh": str(refresh),
+            "refresh": str(refresh)
         }

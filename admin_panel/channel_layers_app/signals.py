@@ -22,6 +22,11 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=UserProfile)
 def send_online_status(sender, instance, created, **kwargs):
 
+    print(f'instance......',instance)
+    print(f'created.......',created)
+    print(sender)
+
+
     if not created:
         channel_layer = get_channel_layer()
 

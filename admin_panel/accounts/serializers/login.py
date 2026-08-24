@@ -8,4 +8,10 @@ class LoginSerializer(serializers.Serializer):
         write_only=True,
     )
 
-    
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError(
+                "Password must be at least 8 characters."
+            )
+
+        return value

@@ -7,11 +7,17 @@ import json
 class OnlineStatusConsumer(AsyncConsumer):
 
     async def websocket_connect(self, event):
+        print(f'dir........',dir(event))
+        print(f'repr.....',repr(event))
+        print(f'self.........',self)
+        print(event)
         self.room_group_name = "online_users"
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.send({"type": "websocket.accept"})
 
     async def websocket_receive(self, event):
+        print(self)
+        print(event)
         data = json.loads(event["text"])
         username = data["username"]
         connection_type = data["type"]
@@ -107,6 +113,8 @@ class OneToOneAsyncConsumer(AsyncConsumer):
         from django.contrib.auth import get_user_model
         from .models import OneToOneMessage
         User = get_user_model()
+        print(event)
+        print(dir(event))
 
         data = json.loads(event["text"])
         data["user"] = self.scope["user"].username
